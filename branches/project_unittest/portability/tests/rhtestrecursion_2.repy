@@ -1,4 +1,0 @@
-include rhtestrecursion_3.repy
-
-def two():
-  print "hello, and welcome to 2"
