@@ -1,0 +1,58 @@
+"""
+  This program runs as a server that receives a message sent via reliable_sendmess
+  from a client and checks that the user-defined configurations work for the 0 retries case.
+  The server component seems rather vacuous in that it only checks that a packet was received.
+  
+  It prints error messages if the message was resent.
+  
+  This program must be started before the client program is started.
+
+
+  Arguments needed:
+	myport - the local port number to listen on
+
+"""
+
+def process_mess(remoteip, remoteport, packet, commhandle):
+
+
+  """
+  <Purpose>
+	Receives a packet from a client and prints an acknowledgement that it was received.
+
+  <Arguments>
+	remoteip - ip address of the client
+	remoteport - port number of the client
+	packet - string that has the header and message contents received
+	commhandle - handle to the client, not used here
+
+  <Exceptions>
+	None.
+
+  <Side Effects>
+	None.
+
+  <Returns>
+	Nothing.
+  """
+
+
+  print 'Packet received:  '+str(packet)
+
+  ifmycontext['pack_num'] != 0 :
+    print 'Test failed.  The packet was retransmitted.'
+
+  mycontext['pack_num'] = mycontext['pack_num'] + 1
+
+
+
+
+
+if callfunc == 'initialize':
+
+  # Port number of the client computer
+  mycontext['myport'] = int(callargs[0])
+  mycontext['pack_num'] = 0
+
+  #receive the message with a normal recvmess and process it with process_mess
+  recvmess(getmyip(), mycontext['myport'], process_mess)

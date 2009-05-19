@@ -1,0 +1,68 @@
+def grade(test_log_string):
+
+  """
+  <Purpose>
+    Grades log output produced from running the test
+  <Arguments>
+    test_log_string:  string output from running the test
+  <Exceptions>
+     None.
+  <Side Effects>
+     None.
+  <Returns>
+     Returns a string stating that the test either passed or failed.
+  """
+  if(test_log_string.find('test completed') != -1):
+    return 'SUCCESS'
+  else:
+    return 'FAILURE'
+
+
+
+
+def test_client_time_out():
+  """
+  <Purpose>
+    Test the timeout limit for the server by sending data after the limit has passed.
+  <Arguments>
+    None.
+  <Exceptions>
+    None.
+  <Side Effects>
+    None.
+  <Returns>
+    Returns a string indication whether the test passed or failed.
+
+  """
+  try:
+    conn = openconn(mycontext['host'], mycontext['port'])
+    sleep(10)
+  except Exception, e:
+    return "test indeterminant:   " + str(e)
+
+  try:
+    conn.send("blah")
+    data = conn.recv(10000)
+  except:
+    # Server timed out.
+    return 'test completed'
+
+  else:
+    conn.close()
+    return 'The server processed client request after timeout period'
+
+
+
+
+
+
+if callfunc == 'initialize':
+  if len(callargs) != 2:
+    raise Exception("Wrong number of  call args.  This program takes two arguements <server_ip> <port_number>")
+  else:
+    mycontext['host'] = callargs[0]
+    mycontext['port'] = int(callargs[1])
+    client_ip = getmyip()
+    
+    passed = test_client_time_out()
+    print passed

@@ -1,0 +1,92 @@
+Detailed Description
+====================
+
+Seattle is a platform for networking and distributed systems
+research. It is community-driven -- universities donate available
+compute and network resources on multi-user machines to the
+platform. These donations can come from systems with a wide assortment
+of operating systems and architectures, removing the need for a
+dedicated infrastructure.
+
+Seattle's architecture is comprised of several components. At the
+lowest level the *sandbox* component guarantees security and resource
+control for an individual program. Programs are written to the Seattle
+API in a subset of the Python programming language we call Repy
+(restricted python). This API provides portable access to low level
+operations (like opening files and sending messages). At a higher
+layer, the *node manager* determines which sandboxed programs get to
+run on the local computer. A public key infrastructure is used to
+authorize control over sandboxed programs. Lastly, the *experiment
+manager* lets students control their program instances across
+computers.
+
+Seattle is surprisingly flexible and supports a variety of pedagogical
+uses because it represents a common denominator platform for cloud
+computing, grid computing, peer-to-peer networking, distributed
+systems, and networking. Seattle programs are portable as students'
+code can run across different operating systems and architectures
+without change, while the Seattle programming language is expressive
+enough for experimentation at a fine-grained level.
+
+Seattle runs on end user systems on diverse platforms in a safe and
+contained manner. Users install and run Seattle with little to no
+impact on system security and performance. Sandboxes are established
+on user's computer to limit the consumption of resources such as cpu,
+memory/disk usage, and network bandwidth. Programs are only allowed to
+operate inside of a sandbox, ensuring that other files and programs
+on the computer are kept private and safe. This allows researchers
+and students to safely run code without impacting performance or
+security of the host.
+
+
+Talk Outline
+============
+
+- Motivation and Purpose
+- Seattle Architecture
+- Classroom Use and Demos
+
+Motivation and Purpose
+----------------------
+
+* Preparing a generation of students coding for the web
+* Challenges of Cloud Computing, P2P, Distributed Systems
+* Inadequacy of existing resources (e.g. FishNet)
+
+
+Seattle Architecture
+--------------------
+
+* Sandbox and Repy (restricted python)
+
+  * Limiting resource consumption
+  * Preventing insecure actions
+
+* Seattle API
+
+  * file, network
+  * timer, locking
+  * misc
+
+* Node Manager
+* Experiment Manager
+
+Classroom Use and Demos
+-----------------------
+
+* A simple UDP ping client/server with web interface
+
+  * Explanation with emphasis on use of restricted python/Seattle API
+  * Demo
+
+* A take-home assignment used at our University to demonstrate internet non-transitivity
+  
+  * Explanation with emphasis on how one might attempt to study non-transitivity at a global scale
+  * Demo with audience participation (audience members may install Seattle and participate in the demo)
+
+* A 300 line implementation of a popular Distributed Hash Table (DHT) called Chord
+
+  * Explanation of why DHTs are useful -- a distributed systems primitive for storing key-value pairs
+  * Demo with audience participation -- audience may join the DHT ring and submit get/put requests to the DHT
+
+  

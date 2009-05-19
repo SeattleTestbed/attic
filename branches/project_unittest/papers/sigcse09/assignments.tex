@@ -1,0 +1,107 @@
+\section{Seattle in the Classroom}
+\label{sec-assignments}
+
+This section describes educational resources available to the student and 
+instructor.   The resources are divided into two areas.   There is a student
+portal which contains resources for students who are learning the basics of
+Seattle.   There is also an educator portal that contains resources for 
+educators to help them use Seattle in the classroom.   
+
+\subsection{Student Resources}
+To aid students learning Seattle, we provide a student portal with
+tutorials describing how to program and use Seattle, documentation for the API,
+a resources and restrictions guide, and other documentation.   The tutorials 
+provide code snippets demonstrating the API, and explains how to use the 
+experiment manager to perform different tasks.
+Our experience has shown that students can quickly learn the Python
+programming language~\cite{611980, Cappos_WORLDS_2005} and quickly learn
+to program in Seattle.   Our experience is that undergraduates who had no 
+previous networking experience can implement programs like overlay 
+multicast and TCP forwarding with a few hours of effort after completing 
+the tutorial.
+% JAC: Should this be removed? Is mentioning ease of learning a distraction?
+% ib: i think this should stay, an important characteristic for teaching with Seattle
+
+To illustrate how easy it is to program Seattle, 
+A popular first project for networking students is the Echo
+client/server. The two \emph{complete} Seattle programs are both
+concise and simple. The echo client is just 6 lines of code:
+
+{\scriptsize
+\begin{verbatim}
+# Handle an incoming message
+def got_reply(srcip, srcport, mess, ch):
+  print 'received:',mess,"from",srcip,srcport
+
+if callfunc == 'initialize':
+  # when a message arrives on my IP, port 43210, 
+  # start an event to call the function 'got_reply'
+  recvmess(getmyip(), 43210, got_reply)  
+  # send a hello message to my IP, port 54321
+  sendmess(getmyip(), 54321, 'hello', getmyip(), 43210)  
+  # exit in one second
+  settimer(1,exitall,())
+\end{verbatim}
+}
+
+The echo server consists of just 4 lines of code:
+
+{\scriptsize
+\begin{verbatim}
+# Handle an incoming message
+def got_message(srcip, srcport, mess, ch):
+  sendmess(srcip,srcport,mess)
+
+if callfunc == 'initialize':
+  recvmess(getmyip(), 54321, got_message)  
+\end{verbatim}
+}
+
+
+Furthermore, a first project for many students in distributed systems is to 
+measure the connectivity characteristics between pairs of
+computers~\cite{AllPairsPing}.  The Appendix lists a complete 30 line Seattle
+program that performs an all-pairs-ping and displays its results in a webpage 
+when contacted.
+
+
+\subsection{Educator Resources}
+
+To aid instructors in integrating Seattle into their existing curriculum, 
+we also provide an educator portal.   The first item on the educator 
+portal is a description of instructor experiences with Seattle.   After
+Seattle has been used, we have asked the students to fill out a survey 
+outlining how they felt the platform impacted their experience.   We recorded
+the results on the web page.
+
+Besides information about experiences with Seattle, the educator portal also 
+contains course materials such as handouts and example assignments.   
+One special-purpose assignment called the TakeHomeAssignment requires 
+no programming and takes about 1 hour to do.   The purpose of the 
+TakeHomeAssignment is to show the student or instructor the practical effects 
+of non-transitive connectivity and NATs on the Internet today, while 
+introducing them to Seattle.
+
+In addition, the educator portal provides a collection of ready-to-go 
+programming assignments for use with Seattle.   The assignments include implementing a 
+reliable protocol on top of UDP, performing overlay routing using link-state 
+routing on the Internet, building application level services like a webserver, and 
+understand layering of services by creating a chat server that operates 
+over HTTP.   
+
+The educator portal also provides assignment ideas that are appropriate 
+for course long projects or graduate assignments.   For example, students 
+may implement a DHT (such as Chord~\cite{Stoica_SIGCOMM_2001}) to better 
+understand non-transitive connectivity.   A simple implementation will work
+well on LAN environments but will fail horribly on the Internet due to 
+non-transitive connectivity and other network effects.   After measuring
+these effects and then understanding the reason behind Chord's poor 
+performance, the students can discuss solutions to these
+problems. Students can then implement and test these solutions to achieve
+better performance and reliability. 
+This assignment emphasizes good software engineering practices (since code is
+reused), that test and deployment environments may differ significantly, 
+and encourages students to come up with unique solutions to the problem yet 
+is easily evaluated using a small set of metrics.
+
+

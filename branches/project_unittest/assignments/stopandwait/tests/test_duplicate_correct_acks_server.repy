@@ -1,0 +1,84 @@
+"""
+  This program runs as a server that receives multiple messages sent via reliable_sendmess
+  calls from a client.  It checks for how duplicate correct acks are handled 
+  (eg 2 acks with the same header are sent back).  reliable_sendmess should just take the first 
+  ack and send then the next packet while ignoring the second ack.
+
+  
+  This program must be started before the client program is started.
+
+
+  Arguments needed:
+	myport - the local port number to listen on
+
+"""
+
+
+
+
+
+def process_mess(remoteip, remoteport, packet, commhandle):
+
+
+  """
+  <Purpose>
+	Receives a message from the client and sends 2 acks back. 
+	It checks that the message isn't a duplicate and that reliable_sendmess
+	gracefully processes the second ack.
+
+  <Arguments>
+	remoteip - ip address of the client, not used
+	remoteport - port number of the client, not used
+	packet - string that has the header and message contents received
+	commhandle - handle to the client, not used here
+
+  <Exceptions>
+	None.
+
+  <Side Effects>
+	None.
+
+  <Returns>
+	Nothing.
+  """
+
+
+
+  header = packet[0]
+  message = packet[2:]
+
+  # check if the packet is a repeat
+  if mycontext['prev_mess'] == message :
+    print 'Test failed.  The message was resent after the acks were sent.'
+    return
+  
+  # update variables
+  mycontext['prev_mess'] = message
+  mycontext['packet_num'] = mycontext['packet_num'] + 1
+
+  #send an ack back
+  ack = packet[:2]
+  try:
+
+    print 'sending acks for packet '+ str(mycontext['packet_num'])
+    sendmess(remoteip, mycontext['myport'], str(ack))
+    sendmess(remoteip, mycontext['myport'], str(ack))
+
+  except Exception, e:
+    print 'test indeterminate:  error while sending ack.\n The error is:  ' + str(e)
+    return
+
+
+
+
+
+
+if callfunc == 'initialize':
+
+  # Port number of the client computer
+  mycontext['myport'] = int(callargs[0])
+  mycontext['prev_mess'] = 'no prev packet'
+  mycontext['packet_num'] = 0
+
+  #receive the message with a normal recvmess and process it with process_mess
+  recvmess(getmyip(), mycontext['myport'], process_mess)

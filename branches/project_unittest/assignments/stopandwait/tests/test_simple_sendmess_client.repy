@@ -1,0 +1,56 @@
+"""
+  This program runs as a client that sends a single properly formatted message 
+  to a server using the reliable_sendmess function from the reliable library.
+  
+  It prints an affirmative message if everything went correctly.  
+  Otherwise it prints the error that occurred.
+  
+  This program must be started after the server program is started.
+
+
+  Arguments needed:
+	serverip - the dot-decimal notation ip address of the server
+	port - the port number of the server computer
+
+"""
+
+
+
+include reliable.repy
+
+
+
+
+if callfunc == 'initialize':
+
+  #check that you have arguments for the ip and port and nothing extra
+  if len(callargs) != 2 :
+    print 'Wrong number of call args used.  The test could not be run.'
+    return
+
+  # serverip is the ip address in dot-decimal notation of the server computer with which you are trying to connect
+  serverip = callargs[0]
+
+  # port is the port number of the server computer
+  port = int(callargs[1])
+
+
+  data = "Testing stop_and_wait reliable_sendmess"
+  print 'message being sent:  ' + data
+ 
+
+  try:
+    
+    # send the server a message using the reliable_sendmess from the library
+    num_bytes_sent = reliable_sendmess(serverip, port, data)
+
+    # check that the whole message was sent by checking that the number of bytes sent equals the number of bytes of the entire message
+    if num_bytes_sent == len(data) :
+      print "test completed"
+    else:
+      print "test failed:  " + str(len(data)) + " bytes were sent and reliable_sendmess returned "+ str(num_bytes_sent) +" bytes"
+ 
+  except Exception, e:
+    print "test indeterminant:  " + str(e)
+
+  exitall()

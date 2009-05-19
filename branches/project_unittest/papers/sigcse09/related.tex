@@ -1,0 +1,103 @@
+\section{Related Work}
+\label{sec-relatedwork}
+
+%As the
+%future of cloud computing is far from clear, Seattle benefits courses
+%varying in their coverage of parallel processing and distributed
+%computing~\cite{SIGCSE98}.
+
+%Seattle's Python-based interface is simple to learn, and easy to
+%master. Yet, it retains much power in the hands of the programmer.
+%Seattle can provide a fun experience for students without them having
+%to master advanced networking API features nor organize the
+%distribution of their code to other platforms or having to organize a
+%testbed of machines.
+
+There are many different cloud computing platforms in use today.
+Amazon runs a cloud of RedHat servers to provide computing
+resources~\cite{AmazonEC2},
+which %and a storage back end~\cite{AmazonS3}.
+are similar in purpose to Seattle but provide a virtual machine
+instead of a programming language instance. This leads to better
+performance, but is not flexible to support donated resources and is
+not free. Their storage back end is functionally similar to the global
+data store proposed as an assignment on Seattle's educator portal.
+
+Microsoft proposes a software plus services~\cite{MicrosoftMemo}
+architecture where the cloud is used as an auxiliary to enhance the
+capabilities of local software. While Microsoft has announced the
+pending availability of a developer toolkit, to the best of our
+knowledge it is not available at this time. % for further comparison.
+
+Google provides a cloud computing-like infrastructure with
+AppEngine~\cite{GoogleAppEngine}, which executes programs written in a
+constrained version of the Python language and supports high level
+abstractions (like a global database). While useful for building
+locality-oblivious web applications, its transparent handling of
+scalability and locality makes it unsuitable for teaching these
+fundamental distributed systems topics.
+
+IBM has announced plans for a cloud computing product called ``Blue
+Cloud''~\cite{IBMBlueCloud}, which supports OS images using Xen and
+PowerVM Linux. Blue Cloud also supports Hadoop~\cite{Hadoop} for
+MapReduce-type query processing and is intended to support high
+performance computing. %so that organizations can migrate supercomputer
+%tasks to Blue Cloud.
+Hadoop has also been used to teach cluster computing for large data
+processing~\cite{SIGCSE08}. The MapReduce~\cite{MapReduce} paradigm
+used by Hadoop simplifies distributed data processing. However, this
+simplifying abstraction also limits the scope of systems concepts that
+may be taught with Hadoop. We believe that a more general platform
+should be used to teach the system concepts that power Hadoop's
+implementation. These concepts may then be applied more broadly to
+other distributed computing abstractions, and cloud computing more
+generally.
+
+In addition to cloud computing, there are a variety of grid computing
+and volunteer computing platforms. Globus~\cite{Globus} is a popular
+Grid toolkit, which has been used to build a variety of
+service-oriented applications. BOINC~\cite{BOINC} is a volunteer
+computing platform supporting the SETI@Home and Folding@Home projects.
+BOINC leverages donated CPU cycles for computation, particularly spare
+resources on home machines. %To BOINC, getting 1\% of the
+%time on 1000 computers is similar to getting 100\% on 10 computers
+%(for similar computers). With Seattle, it is much more useful to get
+%1\% on 1000 computers because the research and educational programs
+%are trying to understand how to write scalable programs that run on
+%many computers at the same time.
+Globus and BOINC both target distributed computation and strive to
+hide locality and similar information from the programmer. Seattle is
+lighter-weight software that exposes locality and is therefore suited
+for students in distributed systems courses. Seattle also comes with a
+widely accessible ready-to-use platform of thousands of machines. We
+are not aware of any Globus- or BOINC-powered testbeds available for
+educational use.
+
+%The problems and
+%programs become interesting when there are thousands of computers.
+
+%% Also most volunteer computing platforms like BOINC use CPU cycles only
+%% when the system would be idle so as to avoid interfering with the
+%% user.  BOINC typically uses almost all of the CPU when it's idle.
+%% With Seattle, it is more desirable to constantly have a small
+%% percentage of the resources (to allow a more constant set of resources
+%% to be used over a longer time period).
+
+Limited compute resources have been a key constraint in teaching
+distributed systems~\cite{SIGCSE94}. Seattle is architected to do this
+safely and efficiently. % across a variety of architectures.
+Recent efforts engaged undergraduates in distributed computing with
+simple-to-use platforms designed for cluster
+computing. %~\cite{SIGCSE07}.
+The DCEZ platform offers a simple interface that students can use
+without any prior knowledge of distributed
+computing~\cite{SIGCSE07}. %With minimal assistance, students were
+%shown to install and use a small cluster with DCEZ within 5 to 10
+%minutes.
+We have likewise endeavored to make Seattle simple to use, but
+target teaching of distributed systems issues that arise at Internet
+scales. Lastly, because Seattle runs on a variety of embedded
+platforms with limited resources, such as cellular phones and PDAs,
+our platform complements prior work on platforms for teaching
+ubiquitous computing~\cite{SIGCSE03}.
+

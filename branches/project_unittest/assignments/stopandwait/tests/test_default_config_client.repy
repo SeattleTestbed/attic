@@ -1,0 +1,44 @@
+"""
+  This program runs as a client that sends a message 
+  to a server using the reliable_sendmess function from 
+  the reliable library.  This client seems rather vacuous
+  but tests the library for the default configurations.
+  
+  It prints an affirmative message if everything went correctly.  
+  Otherwise it prints the error that occurred.
+  
+  This program must be started after the server program is started.
+
+
+  Arguments needed:
+	serverip - the dot-decimal notation ip address of the server
+	port - the port number of the server computer
+
+"""
+
+include reliable.repy
+
+
+if callfunc == 'initialize':
+
+  #checks for the right number of arguments
+  if len(callargs) != 2 :
+    print 'Wrong number of call args used.  The test could not be run.'
+    return
+
+  #gets the ip of the server and the port number
+  serverip = callargs[0]
+  port = int(callargs[1])
+
+  #makes message contents to send to the server
+  data = "Testing stop_and_wait TimeoutException"
+  print 'message being sent:  ' + data
+ 
+  try:
+    #sends message to the server using the function from the library
+    reliable_sendmess(serverip, port, data)
+ 
+  except TimeoutError, e:
+    print "test completed"
+
+  exitall()

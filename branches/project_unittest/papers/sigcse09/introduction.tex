@@ -1,0 +1,103 @@
+\section{Introduction}
+
+Cloud computing is rapidly increasing in popularity as many organizations
+outsource hardware and maintenance and instead focus on 
+software~\cite{AmazonEC2, AmazonS3, GoogleAppEngine, GoogleDocs, HPCloud, 
+IBMBlueCloud, MicrosoftMemo}.   
+%Amazon
+%has built an infrastructure for Elastic Cloud Computing (EC2)~\cite{AmazonEC2} 
+%on top of RedHat servers.   Google has provided a programming API and platform
+%called AppEngine~\cite{GoogleAppEngine} that transparently provides scalability
+%while hiding locality information from applications.   Google also provides
+%applications like Google Docs~\cite{GoogleDocs} which are built using cloud
+%computing principles.  Other major industry players like 
+%Microsoft~\cite{MicrosoftMemo} and IBM~\cite{IBMBlueCloud} have announced their
+%own cloud computing platforms and HP, Intel, and Yahoo!~\cite{HPCloud} have 
+%announced a joint pushes for cloud computing research.   
+%%%%%
+%%%% An attempt where I talk about client software as well as cloud differences
+%However, despite all of the focus on cloud computing, there
+%is a lot of disparity in industry in terms of what cloud computing 
+%really means.   RedHat / Amazon's EC2~\cite{AmazonEC2} provides cloud
+%computing as a collection of Linux boxes along with
+%storage functionality~\cite{AmazonS3} while leaving the client interaction
+%with the cloud up to the developer.   Google provides automatic scaling of
+%cloud computing programs written to a custom programming 
+%API~\cite{GoogleAppEngine} and tends to have clients access cloud resources 
+%using their web browser~\cite{GoogleDocs}.   Microsoft views it as a 
+%virtualization layer between the hardware and OS and is releasing 
+%developer toolkits to be used in a ``software plus service'' architecture where
+%the client runs custom cloud software on their local 
+%machine~\cite{MicrosoftMemo}.
+%%%%%
+However, despite the attention, there is a lot of disparity in what
+cloud computing means. RedHat / Amazon's EC2~\cite{AmazonEC2} provides
+cloud computing as a collection of Linux machines with storage
+functionality~\cite{AmazonS3}. Google's platform for cloud computing
+hides locality and scalability issues from the programmer who writes
+programs to a custom programming API~\cite{GoogleAppEngine}. Microsoft
+views it as a virtualization layer between the hardware and the OS and
+is releasing a developer toolkit for providing the user with
+``software plus service.''~\cite{MicrosoftMemo}
+
+We provide an educational platform called Seattle that is a common
+denominator for a wide range of these definitions. Seattle's simple to
+learn programming language, a subset of the Python language, is
+expressive enough to allow students to build algorithms for
+inter-machine interaction (like a global store or a DHT). As a result,
+Seattle is useful in many pedagogical contexts ranging from courses in
+cloud computing, networking, and distributed systems, to parallel
+programming, grid computing, and peer-to-peer computing.
+
+Seattle is a community-driven effort that depends on resources donated
+by users of the software (and as such is free to use). A user can
+install Seattle onto their personal computer to enable Seattle
+programs to run using a portion of the computer's resources. Seattle
+programs are sandboxed and securely isolated from other programs
+running on the same computer. Seattle provides hard resource
+guarantees that an erroneous or malicious program cannot circumvent.
+
+In addition, Seattle runs on a variety of different operating systems
+and architectures including Windows, Mac OS-X, Linux, FreeBSD, and even
+portable devices like Nokia N800s and jail broken iPhones. Code written
+for Seattle is automatically (and transparently) portable to different
+architectures and runs the same across all systems.
+
+Seattle has a preexisting base of installed computers and is already
+widely deployed on almost one thousand computers that are spread
+across hundreds of universities worldwide. Seattle users can run their
+programs on computers spanning the Internet -- a feature that is
+currently being used by several classes at major universities.
+
+%While Seattle is useful as a cloud computing platform, there are
+%other important pedagogical concepts that Seattle can illustrate.
+%The first concept is that the characteristics of links between computing 
+%resources 
+%matters.  In other words, two computers in a data center behave differently 
+%than two computers connected by a trans-atlantic cable.   The second concept is
+%that the grouping of resources is important.   It is possible to efficiently 
+%solve different sets of problems with 100\% of one CPU than 10\% of 10 
+%computers.   The third concept is that failure handling is important.   In 
+%globally distributed applications, communications failures due to routing
+%black holes or DNS issues are commonplace~\cite{Katz_NSDI_2008}.   Applications
+%that seek to provide high uptime must handle failures well.
+
+%\subsection{Map}
+This paper describes the architecture of the Seattle cloud computing
+platform (Section~\ref{sec-architecture}) including the
+programming API (Section~\ref{sec-API}), 
+the sandboxing mechanism (Section~\ref{sec-repy}), 
+the control of sandboxes on a
+host computer (Section~\ref{sec-nodemanager}), and the way in which
+students manage their running programs
+(Section~\ref{sec-experimentmanager}). Following this, we describe the
+computational resources available to classes using Seattle and how we
+expect this platform to grow in the future
+(Section~\ref{sec-deployment}).  Next, we provide some example
+assignments to demonstrate how Seattle can be used in courses
+(Section~\ref{sec-assignments}). We then discuss related work
+(Section~\ref{sec-relatedwork}) and conclude
+(Section~\ref{sec-conclusion}).
+
+
+

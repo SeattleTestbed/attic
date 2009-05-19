@@ -1,0 +1,40 @@
+Each test has three programs.
+1. t[number]_server.repy
+2. t[number]_client.repy
+3. t[number]_grade.repy
+
+The server program has to be started before running the client program for every test.
+The grade program contains a function named grade.
+
+The server programs take 1 arguement, the port number port number for the server.
+The client progams for test 1 through 8 take 2 arguements, the server ip address and then the server port number.
+The client program for test 9 takes 3 arguements, the server ip followed by the server port number followed by the local port number.
+The grade function takes 2 strings, the client log and then the server log.
+
+
+Descriptions of the current tests:
+
+test_simple_sendmess:    Tests if reliable_sendmess works at all.  It tries to send 1 message and see if it goes through. The server sends ack back.
+
+
+test_header_alternation:    Tests that the headers alternate between packets.
+
+
+test_default_config:    checks the default configs for the number of retries and timeoutinms.
+
+
+test_user_config:    Checks the user defined/non-default configs for the number of retries and timeoutinms.
+
+
+test_zero_retries:    Checks 0 retries for no retransmits and no TimeoutError and a timeoutinms delay before returning from reliable_sendmess.
+
+test_zero_timeouts:    Checks 0 timeoutinms for no retransmits and no TimeoutError and no time delay before returning from reliable_sendmess.
+
+test_duplicate_correct_acks:    Checks for how duplicate correct acks are handled (eg 2 acks with the same header are sent back).  
+reliable_sendmess should just take the first ack and send then the next packet while ignoring the second ack.
+
+test_wrong_ack:    Checks for good behavior from reliable_sendmess if the server sends a wrong ack back (eg it's waiting for 0 and gets a 1 ack back). 
+reliable_sendmess should keep resending the data.
+
+test_reiable_recvmess:    Checks reliable_recv to see if it sends appropriate acks back and sends only 1 ack per message received.
+

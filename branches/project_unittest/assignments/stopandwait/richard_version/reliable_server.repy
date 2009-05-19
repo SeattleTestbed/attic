@@ -1,0 +1,53 @@
+include reliable.repy
+
+def write_message(ip, port, mess, ch):
+  print "Server: Received " + str(mess) + " from " + str(ip) + ":" + str(port)
+  
+  # Write to our file
+  mycontext['fileobj'].write(mess)
+
+  # stop the previous timer...
+  canceltimer(mycontext['stopevent'])
+
+  # Reset the final timeout.  This timer will
+  # shutdown an inactive server.
+  # start a new one for some seconds from now...
+  eventhandle = settimer(mycontext['timeout'], stop_listening, (ch,))
+  mycontext['stopevent'] = eventhandle
+
+def stop_listening(ch):
+  print "Server: Shutting down"
+  mycontext['fileobj'].close()
+  stopcomm(ch)
+  exitall()
+
+if callfunc == 'initialize':
+  if len(callargs) < 2:
+    print "Usage: reliable_server.repy outfile portnum [final_timeout]\n"
+    raise Exception, "wrong number of callargs %s" % len(callargs)
+
+  # Read in call ags
+  fn = callargs.pop(0) # save to write to
+  mycontext['fileobj'] = open(fn, "a")
+  port = int(callargs.pop(0))
+  
+  if callargs:
+    mycontext['timeout'] = callargs.pop(0)
+  else:
+    DEFAULT_TIMEOUT = 10 # ten seconds
+    mycontext['timeout'] = DEFAULT_TIMEOUT
+
+  # Who am i?
+  ip = getmyip()
+
+  print "Server: Starting on " + ip + ":" + str(port)
+
+  # What do I do with a message?
+  ch = reliable_recvmess(ip, port, write_message)
+
+  # Initial timeout.
+  # Shutdown the server if we haven't recved a message
+  # in a minute.
+  eventhandle = settimer(60, stop_listening, (ch,))
+  mycontext['stopevent'] = eventhandle
+

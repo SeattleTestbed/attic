@@ -1,0 +1,475 @@
+"""
+   Author: Justin Cappos
+
+   Program: nanny.py
+
+   Start Date: 1 July 2008
+
+
+   Description:
+
+   This module handles the policy decisions and accounting to detect if there 
+   is a resource violation.  The actual "stopping", etc. is done in the
+   nonportable module.
+"""
+
+# for sleep
+import time
+
+# needed for cpu, disk, and memory handling
+import nonportable
+
+# needed for locking
+import threading
+
+# needed for handling internal errors
+import tracebackrepy
+
+# These are resources that drain / replenish over time
+renewable_resources = ['cpu', 'filewrite', 'fileread', 'netsend', 'netrecv',
+	'loopsend', 'looprecv', 'lograte', 'random']
+
+# These are resources where the quantity of use may vary by use 
+quantity_resources = ["cpu", "memory", "diskused", "filewrite", "fileread", 
+	'loopsend', 'looprecv', "netsend", "netrecv", "lograte", 'random']
+
+# These are resources where the number of items is the quantity (events because
+# each event is "equal", insockets because a listening socket is a listening 
+# socket)
+fungible_item_resources = ['events', 'filesopened', 'insockets', 'outsockets']
+
+# resources where there is no quantity.   There is only one messport 12345 and
+# a vessel either has it or the vessel doesn't.   The resource messport 12345
+# isn't fungible because it's not equal to having port 54321.   A vessel may
+# have more than one of the resulting individual resources and so are
+# stored in a list.
+individual_item_resources = ['messport', 'connport']
+
+# Include resources that are fungible vs those that are individual...
+item_resources = fungible_item_resources + individual_item_resources
+
+
+# This is used by restrictions.py to set up our tables
+known_resources = quantity_resources + item_resources 
+
+# Whenever a resource file is attached to a vessel, an exception should
+# be thrown if these resources are not present.  If any of these are left
+# unassigned, mysterious node manager errors will arise -Brent
+must_assign_resources = ["cpu", "memory", "diskused"]
+
+# The restrictions on how resources should be used.   This is filled in for
+# me by the restrictions module
+# keys are the all_resources, a value is a float with meaning to me...
+resource_restriction_table = {}
+
+
+# The current quantity of a resource that is used.   This should be updated
+# by calling update_resource_consumption_table() before being used.
+resource_consumption_table = {}
+
+
+# Locks for resource_consumption_table
+# I only need to lock the renewable resources because the other resources use
+# sets (which handle locking internally)
+renewable_resource_lock_table = {}
+for init_resource in renewable_resources:
+  renewable_resource_lock_table[init_resource] = threading.Lock()
+
+
+# This lock is used to prevent race conditions for tattle_add_item and 
+# tattle_remove_item.   
+fungible_resource_lock_table = {}
+for init_resource in fungible_item_resources:
+  fungible_resource_lock_table[init_resource] = threading.Lock()
+
+
+# Set up renewable resources to start now...
+renewable_resource_update_time = {}
+for init_resource in renewable_resources:
+  renewable_resource_update_time[init_resource] = nonportable.getruntime()
+
+
+
+# Set up individual_item_resources to be in the restriction_table (as a set)
+for init_resource in individual_item_resources:
+  resource_restriction_table[init_resource] = set()
+
+
+# Updates the values in the consumption table (taking the current time into 
+# account)
+def update_resource_consumption_table(resource):
+
+  thetime = nonportable.getruntime()
+
+  # I'm going to reduce all renewable resources by the appropriate amount given
+  # the amount of elapsed time.
+
+  elapsedtime = thetime - renewable_resource_update_time[resource]
+
+  renewable_resource_update_time[resource] = thetime
+
+  if elapsedtime < 0:
+    # A negative number (likely a NTP reset).   Let's just ignore it.
+    return
+
+  # Remove the charge
+  reduction = elapsedtime * resource_restriction_table[resource]
+    
+  if reduction > resource_consumption_table[resource]:
+
+    # It would reduce it below zero (so put it at zero)
+    resource_consumption_table[resource] = 0.0
+  else:
+
+    # Subtract some for elapsed time...
+    resource_consumption_table[resource] = resource_consumption_table[resource] - reduction
+
+
+
+# I want to wait until a resource can be used again...
+def sleep_until_resource_drains(resource):
+
+  # It'll never drain!
+  if resource_restriction_table[resource] == 0:
+    raise Exception, "Resource '"+resource+"' limit set to 0, won't drain!"
+    
+
+  # We may need to go through this multiple times because other threads may
+  # also block and consume resources.
+  while resource_consumption_table[resource] > resource_restriction_table[resource]:
+
+    # Sleep until we're expected to be under quota
+    sleeptime = (resource_consumption_table[resource] - resource_restriction_table[resource]) / resource_restriction_table[resource]
+
+    time.sleep(sleeptime)
+
+    update_resource_consumption_table(resource)
+
+
+
+
+
+
+
+############################ Externally called ########################
+
+
+
+def start_resource_nanny():
+  """
+   <Purpose>
+      Initializes the resource nanny.   Sets the resource table entries up.
+
+   <Arguments>
+      None.
+         
+   <Exceptions>
+      None.
+
+   <Side Effects>
+      Starts a process or thread to monitor disk, memory, and CPU
+
+   <Returns>
+      None.
+  """
+
+  # init the resource_consumption_table
+  for resource in quantity_resources:
+    resource_consumption_table[resource] = 0.0
+
+  for resource in item_resources:
+    # double check there is no overlap...
+    if resource in quantity_resources:
+      raise Exception, "Resource cannot be both quantity and item based!"
+
+    resource_consumption_table[resource] = set()
+
+
+  nonportable.monitor_cpu_disk_and_mem()
+
+
+# Armon: This is an extremely basic wrapper function, that just allows
+# for pre/post processing if required in the future
+def resource_limit(resource):
+  """
+  <Purpose>
+    Returns the limit or availability of a resource.
+    
+  <Arguments>
+    resource:
+      The resource about which information is being requested.
+  
+  <Exceptions>
+    KeyError if the resource does not exist.
+    
+  <Side Effects>
+    None
+  
+  <Returns>
+    The resource availability or limit.
+  """
+  
+  return resource_restriction_table[resource]
+
+
+# let the nanny know that the process is consuming some resource
+# can also be called with quantity '0' for a renewable resource so that the
+# nanny will wait until there is some free "capacity"
+def tattle_quantity(resource, quantity):
+  """
+   <Purpose>
+      Notify the nanny of the consumption of a renewable resource.   A 
+      renewable resource is something like CPU or network bandwidth that is 
+      speficied in quantity per second.
+
+   <Arguments>
+      resource:
+         A string with the resource name.   
+      quantity:
+         The amount consumed.   This can be zero (to indicate the program 
+         should block if the resource is already over subscribed) but 
+         cannot be negative
+
+   <Exceptions>
+      None.
+
+   <Side Effects>
+      May sleep the program until the resource is available.
+
+   <Returns>
+      None.
+  """
+
+
+  # I assume that the quantity will never be negative
+  if quantity < 0:
+    # This will cause the program to exit and log things if logging is
+    # enabled. -Brent
+    tracebackrepy.handle_internalerror("Resource '" + resource + 
+        "' has a negative quantity " + str(quantity) + "!", 132)
+    
+  # get the lock for this resource
+  renewable_resource_lock_table[resource].acquire()
+  
+  # release the lock afterwards no matter what
+  try: 
+    # update the resource counters based upon the current time.
+    update_resource_consumption_table(resource)
+
+    # It's renewable, so I can wait for it to clear
+    if resource not in renewable_resources:
+      # Should never have a quantity tattle for a non-renewable resource
+      # This will cause the program to exit and log things if logging is
+      # enabled. -Brent
+      tracebackrepy.handle_internalerror("Resource '" + resource + 
+          "' is not renewable!", 133)
+  
+
+    resource_consumption_table[resource] = resource_consumption_table[resource] + quantity
+    # I'll block if I'm over...
+    sleep_until_resource_drains(resource)
+  
+  finally:
+    # release the lock for this resource
+    renewable_resource_lock_table[resource].release()
+    
+
+
+
+
+
+def tattle_add_item(resource, item):
+  """
+   <Purpose>
+      Let the nanny know that the process is trying to consume a fungible but 
+      non-renewable resource.
+
+   <Arguments>
+      resource:
+         A string with the resource name.   
+      item:
+         A unique identifier that specifies the resource.   It is used to
+         prevent duplicate additions and removals and so must be unique for
+         each item used.
+         
+   <Exceptions>
+      Exception if the program attempts to use too many resources.
+
+   <Side Effects>
+      None.
+
+   <Returns>
+      None.
+  """
+
+  fungible_resource_lock_table[resource].acquire()
+
+  # always unlock as we exit...
+  try: 
+
+    if len(resource_consumption_table[resource]) > resource_restriction_table[resource]:
+      raise InternalError, "Should not be able to exceed resource count"
+
+    if len(resource_consumption_table[resource]) == resource_restriction_table[resource]:
+      # it's clobberin time!
+      raise Exception, "Resource '"+resource+"' limit exceeded!!"
+
+    # add the item to the list.   We're done now...
+    resource_consumption_table[resource].add(item)
+
+  finally:
+    fungible_resource_lock_table[resource].release()
+
+    
+
+
+
+def tattle_remove_item(resource, item):
+  """
+   <Purpose>
+      Let the nanny know that the process is releasing a fungible but 
+      non-renewable resource.
+
+   <Arguments>
+      resource:
+         A string with the resource name.   
+      item:
+         A unique identifier that specifies the resource.   It is used to
+         prevent duplicate additions and removals and so must be unique for
+         each item used.
+         
+   <Exceptions>
+      None.
+
+   <Side Effects>
+      None.
+
+   <Returns>
+      None.
+  """
+
+  fungible_resource_lock_table[resource].acquire()
+
+  # always unlock as we exit...
+  try: 
+    
+    try:
+      resource_consumption_table[resource].remove(item)
+    except KeyError:
+      # may happen because removal is idempotent
+      pass
+
+  finally:
+    fungible_resource_lock_table[resource].release()
+
+
+
+# used for individual_item_resources
+def tattle_check(resource, item):
+  """
+   <Purpose>
+      Check if the process can acquire a non-fungible, non-renewable resource.
+
+   <Arguments>
+      resource:
+         A string with the resource name.   
+      item:
+         A unique identifier that specifies the resource.   It has some
+         meaning to the caller (like a port number for TCP or UDP), but is 
+         opaque to the nanny.   
+         
+   <Exceptions>
+      Exception if the program attempts to use an invalid resource.
+
+   <Side Effects>
+      None.
+
+   <Returns>
+      None.
+  """
+
+  if item not in resource_restriction_table[resource]:
+    raise Exception, "Resource '"+resource+" "+str(item)+"' not allowed!!!"
+
+  resource_consumption_table[resource].add(item)
+
+
+
+
+########################## Used Internally for resource monitoring and metering #########
+
+# Data structures and functions for a cross platform CPU limiter
+
+# Intervals to retain for rolling average
+ROLLING_PERIOD = 1
+rollingCPU = []
+rollingIntervals = []
+
+# Debug purposes: Calculate real average
+#appstart = time.time()
+#rawcpu = 0.0
+#totaltime = 0.0
+
+def calculate_cpu_sleep_interval(cpulimit,percentused,elapsedtime):
+  """
+  <Purpose>
+    Calculates proper CPU sleep interval to best achieve target cpulimit.
+  
+  <Arguments>
+    cpulimit:
+      The target cpu usage limit
+    percentused:
+      The percentage of cpu used in the interval between the last sample of the process
+    elapsedtime:
+      The amount of time elapsed between last sampling the process
+  
+  <Exceptions>
+    ZeroDivisionError if elapsedtime is 0.
+  
+  <Returns>
+    Time period the process should sleep
+  """
+  global rollingCPU, rollingIntervals
+  # Debug: Used to calculate averages
+  #global totaltime, rawcpu, appstart
+
+  # Return 0 if elapsedtime is non-positive
+  if elapsedtime <= 0:
+    return 0
+    
+  # Update rolling info
+  if len(rollingCPU) == ROLLING_PERIOD:
+    rollingCPU.pop(0) # Remove oldest CPU data
+    rollingIntervals.pop(0) # Remove oldest Elapsed time data
+  rollingCPU.append(percentused*elapsedtime) # Add new CPU data
+  rollingIntervals.append(elapsedtime) # Add new time data
+
+  # Caclulate Averages
+  # Sum up cpu data
+  rollingTotalCPU = 0.0
+  for i in rollingCPU:
+    rollingTotalCPU += i
+
+  # Sum up time data
+  rollingTotalTime = 0.0
+  for i in rollingIntervals:
+    rollingTotalTime += i
+
+  rollingAvg = rollingTotalCPU/rollingTotalTime
+
+  # Calculate Stoptime
+  #  Mathematically Derived from:
+  #  (PercentUsed * TotalTime) / ( TotalTime + StopTime) = CPULimit
+  stoptime = max(((rollingAvg * rollingTotalTime) / cpulimit) - rollingTotalTime , 0)
+
+  # Print debug info
+  #rawcpu += percentused*elapsedtime
+  #totaltime = time.time() - appstart
+  #print totaltime , "," , (rawcpu/totaltime) , "," ,elapsedtime , "," ,percentused
+  #print percentused, elapsedtime
+  #print "Stopping: ", stoptime
+
+  # Return amount of time to sleep for
+  return stoptime
+  
+

@@ -1,0 +1,41 @@
+\section{Deployment}
+\label{sec-deployment}
+
+Since it is unclear what the future of cloud computing will be, we are
+interested in providing students with the most diverse set of
+resources possible. Seattle runs on Linux, FreeBSD, Mac OS-X, XO (one
+laptop per child)\footnote[1]{Some threading libraries and operating
+  systems do not provide accurate CPU and/or memory information. As a
+  result, certain resources cannot be effectively sandboxed}, and
+Windows platforms. Seattle also runs on mobile devices like the
+iPhone\footnotemark[1] (if jail broken) and Nokia N800\footnotemark[1].
+We are interested in adding support for other platforms as users
+express interest in running Seattle on new platforms.
+
+In addition to platform diversity, network connection diversity is
+also important. Seattle is already widely deployed at universities
+around the world. An instance of Seattle is running on each 
+PlanetLab~\cite{PlanetLab} node, giving a presence on close to one thousand
+nodes at hundreds of universities.  
+
+PlanetLab provides access to computers at a large number of well
+connected locations, although most only have two computers per site
+available. As we are now publicly releasing Seattle for educational
+use, we expect to see an increase in resource diversity.  We
+anticipate that universities will install Seattle on most of the
+computers in their lab. Such deployments will provide a distributed
+environment that effectively emulates cluster computing. We also
+anticipate that many students will load Seattle on their home
+computers. This will allow for emulation of peer-to-peer computing as
+home computers will typically have connectivity characteristics
+representative of the average Internet user.
+
+We believe that the diversity of platforms and network connections
+enables a wide range of pedagogical uses. Students can experiment with
+cluster computing, grid computing, peer-to-peer, and cloud computing
+by simply varying where their program is deployed. Additionally, the
+same program will run in any of these environments. Of course, the
+characteristics of the environment will determine the efficiency and
+scalability of the employed distributed algorithm --- a crucial
+distributed systems lesson for students.
+
