@@ -59,7 +59,7 @@ LOGIN_URL = 'login'
 # This will allow pages that use the standard @login_required
 # decorator to use the OpenID login page.
 # Once a user is logged in, he gets redirected here.
-#LOGIN_REDIRECT_URL = 'profile'
+#LOGIN_REDIRECT_URL = 'html/profile'
 #LOGIN_REDIRECT_URL = 'done'
 
 ######################################
@@ -68,10 +68,10 @@ LOGIN_URL = 'login'
 
 # Users will be redirected to SOCIAL_AUTH_LOGIN_ERROR_URL in case of error/user cancellation
 # during login or association (account linking).
-SOCIAL_AUTH_LOGIN_ERROR_URL ='error2'
+SOCIAL_AUTH_LOGIN_ERROR_URL ='associate_error'
 
 # If a OpenID/OAuth backend itself has an error(not a user or Seattle Clearinghouse's fault) 
-# a user will get redirected here .
+# a user will get redirected here.
 SOCIAL_AUTH_BACKEND_ERROR_URL = 'error'
 
 #LOGIN_ERROR_URL='error2'
@@ -88,7 +88,7 @@ SOCIAL_AUTH_LOGIN_URL = 'login'
 
 # when a logged in user links a new OpenID/OAuth account ex google,yahoo.github etc he
 # gets redirected to this page.  This should always be the profile page.
-SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = 'done'
+SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = 'profile'
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -222,7 +222,7 @@ AUTHENTICATION_BACKENDS = (
   'social_auth.backends.google.GoogleBackend',
   'social_auth.backends.yahoo.YahooBackend',
   'social_auth.backends.contrib.github.GithubBackend',
-  #'social_auth.backends.OpenIDBackend',
+  #'social_auth.backends.OpenIDBackend',  #needed???
   #'social_auth.backends.browserid.BrowserIDBackend',
   'social_auth.backends.contrib.live.LiveBackend',
   # Django default this is always needed and must always be last.

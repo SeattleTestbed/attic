@@ -1,0 +1,26 @@
+{% extends "control/control_base.html" %}
+
+{% block heading %}Error!{% endblock %}
+{{ block.super }}
+{% block nav_login %}
+<td class="active"><a href="{% url login %}">Login</a></td>
+{% endblock nav_login %}
+{% block content %}
+
+<div id="middle">
+</br>
+  <p>Sorry but this <strong> {{backend}} </strong> account is already associated and in use by another Seattle Clearninghouse user.</p>
+
+  {% if messages %}
+    {% for msg in messages %}
+        <p class="warning2">{{ msg.message }} ({{ msg.extra_tags }})</p>
+    {% endfor %}
+  {% endif %}
+  {% if error_msg %}
+    <p>Details:</p>
+    <p class="warning2">{{ error_msg }}</p>
+  {% endif %}
+
+  <p>Please try again <a href="{% url done %}">Profile</a></p>
+</div>
+{% endblock %}

@@ -15,7 +15,7 @@ urlpatterns = patterns('seattlegeni.website.html.views',
                        #OPENID django social auth
                        #(r'', include('social_auth.urls')),
 		                   #(r'^done$', 'done',{}, 'done'),
-		                   #(r'^error$', 'error',{}, 'error'),
+		                   (r'^error$', 'error',{}, 'error'),
 		                   (r'^form/$', 'form',{},'form'),
   			               #(r'^form2/$', 'form2',{},'form2'),
                        # Top level urls and functions:

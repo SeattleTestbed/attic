@@ -1,10 +1,13 @@
 from django.conf.urls.defaults import *
 
 from django.conf import settings
-#from django.views.generic.simple import redirect_to
+from django.views.generic.simple import redirect_to
+from django.views.generic import RedirectView
+from django.shortcuts import render_to_response, redirect
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 #from seattlegeni.website.html.views import done, logout, error, form, form2, social_register, associate_error
+from seattlegeni.website.html.views import error, associate_error, profile
 admin.autodiscover()
 
 # We override the default error handler because we want to pass a RequestContext
@@ -26,11 +29,12 @@ urlpatterns = patterns('',
     #url(r'^logout/$', logout, name='logout'),
     #url(r'^social_register/$', social_register, name='social_register'),
     ##url(r'^done$', done, name='done'),
-    #url(r'^complete/(?P<backend>[^/]+)/error', error, name='error'),
-    #url(r'^complete/(?P<backend>[^/]+)/associate_error', associate_error, name='associate_error'),
+    url(r'^complete/(?P<backend>[^/]+)/error', RedirectView.as_view(url='/html/error')),
+    url(r'^complete/(?P<backend>[^/]+)/associate_error', RedirectView.as_view(url='/html/associate_error')),
     #url(r'^complete/(?P<backend>[^/]+)/profile', profile, name='profile'),
+    url(r'^complete/(?P<backend>[^/]+)/profile', RedirectView.as_view(url='/html/profile')),
     #url(r'^complete/(?P<backend>[^/]+)/social_register', social_register, name='social_register'),
-    #url(r'^disconnect/(?P<backend>[^/]+)/done',done, name='done'),
+    url(r'^disconnect/(?P<backend>[^/]+)/profile', RedirectView.as_view(url='/html/profile')),
     #url(r'^disconnect/(?P<backend>[^/]+)/(?P<association_id>[^/]+)/done',done, name='done'),
     (r'', include('social_auth.urls')),
     

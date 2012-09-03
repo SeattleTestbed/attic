@@ -36,7 +36,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.messages.api import get_messages
 from django.shortcuts import render_to_response, redirect   #needed?
 #from social_auth import __version__ as version
-#from social_auth.utils import setting
+from social_auth.utils import setting                       #needed
 from django.template import RequestContext                  #needed?
 #from django.shortcuts import render
 #from seattlegeni.website.control.models import GeniUser
@@ -154,7 +154,7 @@ def associate_error(request,backend):
 #  return HttpResponseRedirect('login.html')
 
 
-def form(request):
+def form(request,backend=None):
   """
   <Purpose>
   RENAME TO AUTO REGISTER or get new username?? add decoractors. add username checking
@@ -188,7 +188,7 @@ def form(request):
     backend = request.session[name]['backend']
     #username = request.session[name]['username']
     return redirect('socialauth_complete', backend=backend)
-  return render_to_response('form.html', {'backend' : request.session['backend']}, RequestContext(request))
+  return render_to_response('form.html', {'backend' : backend}, RequestContext(request))
 
 
 
