@@ -32,6 +32,15 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
+#####NEEDED FOR OPENID????######
+from django.contrib.messages.api import get_messages
+from django.shortcuts import render_to_response, redirect   #needed?
+#from social_auth import __version__ as version
+#from social_auth.utils import setting
+from django.template import RequestContext                  #needed?
+#from django.shortcuts import render
+#from seattlegeni.website.control.models import GeniUser
+
 # Any requests that change state on the server side (e.g. result in database
 # modifications) need to be POST requests. This is for protecting against
 # CSRF attacks (part, but not all, of that is our use of the CSRF middleware
@@ -104,9 +113,143 @@ ACCEPTDONATIONS_STATE_PUBKEY = _state_key_file_to_publickey_string("acceptdonati
 
 
 
+def error(request,backend):
+  """
+  <Purpose>
+  If a OpenID/OAuth backend itself has an error(not a user or Seattle Clearinghouse's fault) 
+  a user will get redirected here.
+
+  <Arguments>
+
+  <Exceptions>
+
+  <Side Effects>
+
+  <Returns>
+  """
+  messages = get_messages(request)
+  return render_to_response('control/error.html', {'messages': messages,'backend': backend},RequestContext(request))
+
+
+
+
+
+def associate_error(request,backend):
+  """
+  <Purpose>
+
+  <Arguments>
+
+  <Exceptions>
+
+  <Side Effects>
+
+  <Returns>
+  """
+  messages = get_messages(request)
+  return render_to_response('control/associate_error.html', {'messages': messages,'backend': backend},RequestContext(request))
+#def logout(request):
+#  """Logs out user"""
+#  auth_logout(request)
+#  return HttpResponseRedirect('login.html')
+
+
+def form(request):
+  """
+  <Purpose>
+  RENAME TO AUTO REGISTER or get new username?? add decoractors. add username checking
+
+  Part of the SOCIAL_AUTH_PIPELINE whose order is mapped in settings.py.  If
+  a user logs in with a OpenID/OAuth account and that account is not yet linked
+  with a Clearinghouse account, he gets redirected here.  
+
+  A user enters a desired username and if valid
+ 
+  <Arguments>
+    request:
+
+  <Exceptions>
+
+  <Side Effects>
+
+  <Returns>
+    If a user passes in a valid username he gets put back on the pipeline and moved
+    foward in the auto register process.
+  """
+  # Check if a username is provided 
+  if request.method == 'POST' and request.POST.get('username'):
+    name = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
+#    try:
+#      interface.login_user(request, request.POST['username'], request.POST['password'])
+#    except DoesNotExistError:
+#      return _show_login(request, ltemplate, {'err' : "Wrong username or password."}, form)
+    request.session['saved_username'] = request.POST['username']
+    #request.session['username'] = request.POST['username']
+    backend = request.session[name]['backend']
+    #username = request.session[name]['username']
+    return redirect('socialauth_complete', backend=backend)
+  return render_to_response('form.html', {'backend' : request.session['backend']}, RequestContext(request))
+
+
+
+
+
+def form2(request):
+  """
+  <Purpose>
+   NOT USED##########
+  <Arguments>
+
+  <Exceptions>
+
+  <Side Effects>
+
+  <Returns>
+  """
+  if request.method == 'POST' and request.POST.get('first_name'):
+    request.session['saved_first_name'] = request.POST['first_name']
+    name = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
+    backend = request.session[name]['backend']
+    return redirect('socialauth_complete', backend=backend)
+  return render_to_response('form2.html', {}, RequestContext(request))
+  
+
+
+
+
+def social_register(request):
+  """
+  <Purpose>
+   NOT USED#################3
+  <Arguments>
+
+  <Exceptions>
+
+  <Side Effects>
+
+  <Returns>
+  """
+  if request.method == 'POST':# and request.POST.get('social_signup'):
+    request.session['saved_first_name'] = "bob"#request.POST['first_name']
+    name = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
+    backend = request.session[name]['backend']  
+    username =  request.session['username']
+    password = "123456"
+    affiliation = "none!"
+    email = "none@whatevera.com"  #request.session['email']#"none@whatevera.com"#request.session['username.email']
+    #pubkey = 1
+    interface.register_user(username, password, email, affiliation)
+    #return redirect("done")
+    return redirect('socialauth_complete', backend=backend)
+  return render_to_response('accounts/social_register.html', {}, RequestContext(request))  
+
+
+
+
+
 @log_function_call_without_return
 @login_required
-def profile(request, info="", error_msg=""):
+def profile(request, info="", error_msg="",backend=None,association_id=None):
   """
   <Purpose>
     Display information about the user account.
@@ -443,7 +586,7 @@ def getdonations(request):
     return _show_failed_get_geniuser_page(request)
   
   domain = "https://" + request.get_host()
-  
+ 
   return direct_to_template(request, 'control/getdonations.html',
                             {'username' : user.username,
                              'domain' : domain})
@@ -791,12 +934,12 @@ def download(request, username):
   templatedict = {}
   templatedict['username'] = username
   templatedict['validuser'] = validuser
-
+  templatedict['domain'] = "http://" + request.get_host()
   # I need to build a URL for android to download the installer from.   (The
   # same installer is downloaded from the Google Play store for all users.) 
   # The URL is escaped twice (ask Akos why) and inserted in the referrer 
   # information in the URL.   
-  templatedict['android_installer_link'] = urllib.quote(urllib.quote(request.build_absolute_uri(),safe=''),safe='')
+  #templatedict['android_installer_link'] = urllib.quote(urllib.quote(domain,safe=''),safe='')
 
   return direct_to_template(request, 'download/installers.html', templatedict)
 
@@ -993,6 +1136,6 @@ def _validate_and_get_geniuser(request):
 
 def _show_failed_get_geniuser_page(request):
   err = "Sorry, we can't display the page you requested. "
-  err += "If you are logged in as an administrator, you'll need to logout, and login with a SeattleGENI account. "
+  err += "If you are logged in as an administrator, you'll need to logout, and login with a Seattle Clearinghouse account. "
   err += "If you aren't logged in as an administrator, then this is a bug. Please contact us!"
   return _show_login(request, 'accounts/login.html', {'err' : err})

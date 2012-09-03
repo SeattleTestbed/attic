@@ -3,12 +3,12 @@ $(document).ready(function() {
 });
 
 function detectOs() {
-	var os;
-	if ((navigator.userAgent.match(/(android)/i))) {
-		os = "Android";
-	} else {
-		os = $.browser.OS();
-	}
+  var os;
+  if ((navigator.userAgent.match(/(android)/i))) {
+    os = "Android";
+  } else {
+      os = $.browser.OS();
+    }
 	switch (os) {
 		case "Windows":
 			$("#downloads").prepend($("#win"));
@@ -19,9 +19,9 @@ function detectOs() {
 		case "Linux":
 			$("#downloads").prepend($("#linux"));
 			break;
-		case "Android":
-			$("#downloads").prepend($("#android"));
-			break;
+    case "Android":
+      $("#downloads").prepend($("#android"));
+      break;
 		default:
 			break;
 	}

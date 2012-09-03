@@ -51,7 +51,7 @@ SLEEP_SECONDS_BETWEEN_RUNS = 60
 # when this is run as a script. This is independent of the readonly argument
 # that can be passed to check_node() if check_node() is called directly from
 # another module.
-READONLY = False
+READONLY = True
 
 
 

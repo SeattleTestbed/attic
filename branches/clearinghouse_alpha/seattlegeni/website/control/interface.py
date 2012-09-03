@@ -1244,6 +1244,9 @@ def get_total_vessel_credits(geniuser):
   return maindb.get_user_total_vessel_credits(geniuser)
 
 
+
+
+
 def get_free_vessel_credits_amount(geniuser):
   """
   <Purpose>
@@ -1261,6 +1264,9 @@ def get_free_vessel_credits_amount(geniuser):
   assert_geniuser(geniuser)
 
   return maindb.get_user_free_vessel_credits(geniuser)
+
+
+
 
 
 def get_available_vessel_credits(geniuser):

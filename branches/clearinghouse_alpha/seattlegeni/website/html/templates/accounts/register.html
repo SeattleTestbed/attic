@@ -1,7 +1,48 @@
 {% extends "accounts/accounts_base.html" %}
 
+{% comment %}
+<Program>
+  register.html
+
+<Author>
+  Originally by?:
+  Justin Samuel 2009
+
+  Modified:
+  Gaetano Pressimone 2012
+  
+<Purpose>
+  Django template file for Seattle Clearinghouse's 'register' page.  The page 
+  allows a visitor to create a new account.
+
+<Extends>
+  accounts/accounts_base.html
+
+<Stylesheet>
+  common.css
+  account.css
+
+<Scripts>
+  register.js
+
+<Template Variables>
+  page_top_errors:
+		Error messages to display.
+	
+  form: 
+		New user registration form.  See GeniUserCreationForm in forms.py for more info.
+    .username:
+		.password1: 
+		.password2: 
+    .affiliation:  
+		.email:  
+    .pubkey:  
+    .gen_upload_choice: 
+
+{% endcomment %}
+
 {% block title %}
-Profile - Clearinghouse
+Register - Clearinghouse
 {% endblock title %}
 
 {% block script %}

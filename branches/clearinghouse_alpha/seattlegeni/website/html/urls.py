@@ -12,7 +12,12 @@ urlpatterns = patterns('seattlegeni.website.html.views',
                        (r'^logout$', 'logout',{},'logout'),
                        (r'^accounts_help$', 'accounts_help',{},'accounts_help'),
                        #(r'^simplelogin$', 'simplelogin',{},'simplelogin'), 
-                       
+                       #OPENID django social auth
+                       #(r'', include('social_auth.urls')),
+		                   #(r'^done$', 'done',{}, 'done'),
+		                   #(r'^error$', 'error',{}, 'error'),
+		                   (r'^form/$', 'form',{},'form'),
+  			               #(r'^form2/$', 'form2',{},'form2'),
                        # Top level urls and functions:
                        # show the user info page for this user listing the public/private keys, and user information
                        (r'^profile$', 'profile', {}, 'profile'), # was user_info
@@ -51,6 +56,9 @@ urlpatterns = patterns('seattlegeni.website.html.views',
                        # download the user's public key (from form)
                        (r'^pub_key$', 'pub_key', {}, 'pub_key'),
                        
+		       
+#                       (r'^login/$', redirect_to, {'url': '/login/github'}),
+#                       (r'^private/$', 'home.views.private'),
 #                      # create a new share with another use (from form)
 #                      (r'^new_share$', 'new_share', {}, 'new_share'),
 #                      # delete an existing share with another user (from form)

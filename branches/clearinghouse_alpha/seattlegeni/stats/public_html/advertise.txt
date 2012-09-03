@@ -2,3 +2,4 @@
 # The comma-separated fields are:
 # date, acceptdonation, canonical, movingto_onepercentmanyevents, onepercent_manyevents, v2
 # For example: 2009-11-06 16:00,25,15,12,2461,4493
+2012-05-18 11:17,0,0,0,0,503

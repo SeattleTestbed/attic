@@ -90,7 +90,7 @@ def main():
     ("movingto_twopercent", "canonical", node_transition_lib.combine_vessels, 
      node_transition_lib.noop, mark_node_inactive)]
  
-  sleeptime = 10
+  sleeptime = 600
   process_name = "canonical_to_twopercent"
   parallel_instances = 10
 

@@ -58,11 +58,16 @@ function update_shares() {
 	$("#usagenames").empty();
 	$("#usageotherstable tr:gt(0)").empty();
 	var total_percent = 0;
+
 	
 	add_cell("shares", "Me", {{ percent_total_used }});
-	total_percent += {{ percent_total_used }};
 	
+	total_percent += {{ percent_total_used }};
+
+	//{% if total_percent < 0 %}
 	add_cell("shares", "Free", 100 - total_percent);
+	//{% endif %}
+
 	$("#vesselsused").text({{ used_vessel_credits }} + " vessels used");
 	$("#vesselsavailable").text("(" + {{ avail_vessel_credits }} + " available)");
 	$("#usageotherstable tr:odd").addClass("odd");

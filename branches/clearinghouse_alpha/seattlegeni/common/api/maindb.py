@@ -484,9 +484,6 @@ def create_node(node_identifier, last_known_ip, last_known_port, last_known_vers
   return node
 
 
-
-
-
 def get_allowed_user_ports():
   """
   <Purpose>

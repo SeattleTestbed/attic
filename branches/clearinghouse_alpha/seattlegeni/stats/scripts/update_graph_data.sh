@@ -1,17 +1,17 @@
-export PYTHONPATH=$PYTHONPATH:/home/geni/live:/home/geni/live/seattle
+export PYTHONPATH=$PYTHONPATH:/home/guypesto/deploy:/home/guypesto/deploy/seattle
 export DJANGO_SETTINGS_MODULE='seattlegeni.website.settings'
 
 CURRENT_VERSION="0.1o"
-
+#/home/guypesto/deploy/seattlegeni/dev/scripts/graphs
 name=node_overview
-/home/geni/scripts/print_data_point.py $name $CURRENT_VERSION >>/var/www/stats/seattlegeni/$name.txt 2>>/var/www/stats/seattlegeni/$name.err
+/home/guypesto/deploy/seattlegeni/stats/scripts/print_data_point.py $name $CURRENT_VERSION >>/home/guypesto/deploy/seattlegeni/stats/public_html/$name.txt 2>>/home/guypesto/deploy/seattlegeni/dev/scripts/graphs$name.err
 
 name=node_type
-/home/geni/scripts/print_data_point.py $name >>/var/www/stats/seattlegeni/$name.txt 2>>/var/www/stats/seattlegeni/$name.err
+/home/guypesto/deploy/seattlegeni/stats/scripts/print_data_point.py $name >>/home/guypesto/deploy/seattlegeni/stats/public_html/$name.txt 2>>/home/guypesto/deploy/seattlegeni/dev/scripts/graphs/$name.err
 
 name=vessels
-/home/geni/scripts/print_data_point.py $name >>/var/www/stats/seattlegeni/$name.txt 2>>/var/www/stats/seattlegeni/$name.err
+/home/guypesto/deploy/seattlegeni/stats/scripts/print_data_point.py $name >>/home/guypesto/deploy/seattlegeni/stats/public_html/$name.txt 2>>/home/guypesto/deploy/seattlegeni/dev/scripts/graphs/$name.err
 
 name=advertise
-/home/geni/scripts/print_data_point.py $name >>/var/www/stats/seattlegeni/$name.txt 2>>/var/www/stats/seattlegeni/$name.err
+/home/guypesto/deploy/seattlegeni/stats/scripts/print_data_point.py $name >>/home/guypesto/deploy/seattlegeni/stats/public_html/$name.txt 2>>/home/guypesto/deploy/seattlegeni/dev/scripts/graphs/$name.err
 

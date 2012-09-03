@@ -55,3 +55,61 @@ div.simplelogininner {
     margin: 0pt 0em 0pt 0.2em;
     padding-left: 0;
 }
+#openid-wrap
+	{
+	    background-color: #000;
+	    padding: 10px;
+	    
+	    margin-bottom: 10px;
+	}
+#openid-wrap p
+	{
+	    font-size: 18px;
+	    text-align: center;
+	    margin: 5px 140px 14px;
+	    line-height: 30px;
+	}
+#openid-wrap span
+	{
+	    margin: 3px;
+	}
+
+
+#openid-wrap input
+	{
+	    border: 2px solid #fba424;
+	    height: 36px;
+	    width: 500px;
+	}
+
+#openid-providers
+	{
+	    overflow: auto;
+	    text-align: center;
+	}
+#openid-providers ul
+	{
+	    display: inline-block;
+	    list-style: none;
+	}
+#openid-providers li
+ 	{
+ 	    margin: 10px;
+ 	    padding: 0;
+ 	    float: left;
+ 	    width: 150px;
+ 	    height: 50px;
+ 	    background: transparent url(../images/openid_sprite.png') no-repeat 0 0;
+ 	}
+ 	li#openid       { background-position: 0 0; }
+ 	li#myopenid     { background-position: 0 -50px; }
+ 	li#twitter      { background-position: 0 -100px; }
+ 	li#facebook     { background-position: 0 -150px; }
+ 	li#google       { background-position: 0 -200px; }
+ 	li#yahoo        { background-position: 0 -250px; }
+ 	li#openid:hover       { background-position: -150px 0; cursor: pointer; }
+ 	li#myopenid:hover     { background-position: -150px -50px; cursor: pointer; }
+ 	li#twitter:hover      { background-position: -150px -100px; cursor: pointer; }
+ 	li#facebook:hover     { background-position: -150px -150px; cursor: pointer; }
+ 	li#google:hover       { background-position: -150px -200px; cursor: pointer; }
+	li#yahoo:hover        { background-position: -150px -250px; cursor: pointer; }

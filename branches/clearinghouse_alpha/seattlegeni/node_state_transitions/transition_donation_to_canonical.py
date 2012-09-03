@@ -49,7 +49,7 @@ def main():
 
   state_function_arg_tuplelist = [("acceptdonation", "canonical",  node_transition_lib.noop, node_transition_lib.noop, False)]
 
-  sleeptime = 10
+  sleeptime = 600
   process_name = "donation_to_canonical"
   parallel_instances = 10
 

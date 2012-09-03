@@ -48,7 +48,7 @@ def main():
     ("twopercent", "twopercent", node_transition_lib.update_database, 
      node_transition_lib.noop, mark_node_active, node_transition_lib.update_database_node)]
 
-  sleeptime = 10
+  sleeptime = 600
   process_name = "twopercent_to_twopercent"
   parallel_instances = 10
 

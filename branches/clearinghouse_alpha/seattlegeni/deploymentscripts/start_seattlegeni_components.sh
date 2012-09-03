@@ -16,19 +16,19 @@
 #    Once started, the processes will not exit until its children have. To kill
 #    all components of seattlegeni (except apache), send a SIGINT or SIGTERM to
 #    this process.
-
-export PYTHONPATH="/home/geni/live/:/home/geni/live/seattle:/usr/local/lib/python2.5/site-packages"
+#export PYTHONPATH="/home/guypesto/deploy:/home/guypesto/deploy/seattle:/usr/local/lib/python2.5/site-packages"
+export PYTHONPATH="/home/guypesto/deploy:/home/guypesto/deploy/seattle"
 export DJANGO_SETTINGS_MODULE="seattlegeni.website.settings"
 
 # The seattlegeni/ directory in the directory deployed to (by the deployment script)
-SEATTLECLEARINGHOUSE_DIR="/home/geni/live/seattlegeni"
+SEATTLEGENI_DIR="/home/guypesto/deploy/seattlegeni"
 
 # The directory that output to stdout/stderr will be logged to.
-LOG_DIR="/home/geni/logs"
+LOG_DIR="/home/guypesto/deploy/seattlegeni/logs"
 
 # A sude cmd to run processes as the user 'geni' with the correct environment
 # variables for django.
-SUDO_CMD="sudo -u geni PYTHONPATH=$PYTHONPATH DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE"
+SUDO_CMD="sudo -u guypesto PYTHONPATH=$PYTHONPATH DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE"
 
 # When run via crontab, the $USER environment variable may not be set.
 if [ "$USER" == "" ]; then
@@ -69,8 +69,8 @@ echo "Starting backend."
 $SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/backend/backend_daemon.py >>$LOG_DIR/backend.log 2>&1 &
 sleep 1 # Wait a moment to make sure it has started (backend is used by other components).
 
-echo "Gracefully restarting apache."
-apache2ctl graceful
+#echo "Gracefully restarting apache."
+#apache2ctl graceful
 
 echo "Starting check_active_db_nodes.py."
 $SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/polling/check_active_db_nodes.py >>$LOG_DIR/check_active_db_nodes.log 2>&1 &

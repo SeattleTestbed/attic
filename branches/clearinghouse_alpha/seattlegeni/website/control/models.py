@@ -25,7 +25,7 @@ import django
 
 from django.db import models
 from django.contrib.auth.models import User as DjangoUser
-
+from django.contrib.auth.models import UserManager
 from seattlegeni.common.util import log
 
 
@@ -116,7 +116,8 @@ class GeniUser(DjangoUser):
   # Have the database keep track of when each record was created and modified.
   date_created = models.DateTimeField("Date added to DB", auto_now_add=True, db_index=True)
   date_modified = models.DateTimeField("Date modified in DB", auto_now=True, db_index=True)
-  
+  objects = UserManager() 
+
   
   def __unicode__(self):
     """
