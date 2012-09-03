@@ -1,0 +1,57 @@
+"""
+<Program Name>
+  lookup_methods.py
+
+<Started>
+  Jun 25, 2009
+
+<Author>
+  Eric Kimbrel
+
+<Purpose>
+   Provide an interface to the a lookup service for use by shims
+
+
+"""
+
+include session.repy
+
+# suffle returned results
+include random.repy 
+
+include advertise.repy
+
+
+#TODO add a cache for more productive lookups
+
+TTLVAL = 120
+
+
+
+def external_lookup(key):
+  return advertise_lookup(key)
+  
+
+def external_advertise(key,value):
+  advertise_announce(key,value,TTLVAL)
+
+
+def forwarder_advertise(key,port,prefix):
+# advertise the location of a forwarder (a hop) of a certain type
+  ad_value = key+','+str(port)
+  external_advertise(prefix,ad_value)
+
+def forwarder_lookup(prefix):
+# returns a list of tuples (key,port)
+  response_list = external_lookup(prefix)
+  tuple_list = []
+  for item in response_list:
+    if item != '':
+      try:
+        (k,p) = item.split(',')
+        p = int(p)
+      except:
+        raise Exception, 'malformed string returned to forwarder_lookup'
+      tuple_list.append((k,p))
+  return tuple_list
+

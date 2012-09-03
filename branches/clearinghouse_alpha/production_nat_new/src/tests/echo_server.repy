@@ -1,0 +1,29 @@
+include session.repy
+include ShimStackInterface.repy
+
+shim = ShimStackInterface('(RSAShim)(NatBranchingShim)')
+mycontext['count'] = 0
+mycontext['handle'] = None
+lock = getlock()
+
+def echo(rip, rport, sock, th, lh):
+    print("zzzz callback: from %s:%s: sock: %s" % (rip,rport,sock))
+    msg = session_recvmessage(sock)
+
+    session_sendmessage(sock, "good")
+
+    print("\nFrom %s:%s - '%s'" % (rip, rport, msg))
+
+
+
+if callfunc == 'initialize':
+
+    try:
+        myip = callargs[0]
+        myport = int(callargs[1])
+    except:
+        print "usage: myhostkey myport"
+        exitall()
+
+    mycontext['handle'] = shim.waitforconn(myip, myport, echo)
+    print "Ready. Listening on %s:%s..." % (myip, myport)

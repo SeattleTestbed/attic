@@ -1,0 +1,64 @@
+"""
+<Author>
+  Andreas Sekine
+
+<Start Date>
+  January 2009
+
+<Description>
+  A sample application to test the functionality of the reliable module.
+  Part of the StopAndWait assignment implementation.
+  
+  Takes a local file and uses the reliable API to send it to a server
+  also running this StopAndWait protocol. 
+  
+<Usage>
+  Takes 6 arguments:
+   inputfile:
+   	 The file to send to the remote host 
+   host:
+     The host to send the file to
+   portnum:
+     The port of the remote host to send to 
+   maxdgramsize:
+   	 The maximum size of each datagram of the file to send.
+   nretries:
+     The number of times to retry sending each packet
+   timeoutms:
+     The time to wait before a packet times out
+  
+"""
+
+include reliable.repy
+
+#Print an error message for illegal argument usage
+def print_error():
+  print "Error: Invalid number of arguments"
+  print "Arguments:"
+  print "  inputfile host portnum [srchost srcportnum] maxdgramsize nretries timeoutms"
+
+  
+ #Send inputfile to host:portnul using srcip:srcport. Leave the partitioning 
+ #and reliability to reliable.repy
+def send_file(inputfile, host, portnum, srcip=None, srcport=None):
+  fh = open(inputfile)
+  filedata = fh.read()
+  fh.close()
+  print "Sending data now, data is", len(filedata), "characters long"
+  reliable_sendmess(host, int(portnum), filedata, srcip, srcport)
+  print "Finished!"
+  
+    
+
+if callfunc == 'initialize':
+  if len(callargs) == 6:
+    reliable_config(int(callargs[3]), int(callargs[4]), int(callargs[5]))
+    send_file(callargs[0], callargs[1], int(callargs[2]))
+  elif len(callargs) == 8:
+    reliable_config(int(callargs[5]), int(callargs[6]), int(callargs[7]))
+    send_file(callargs[0], callargs[1], int(callargs[2]), callargs[3], int(callargs[4]))
+    
+  else:
+    print_error()
+
+

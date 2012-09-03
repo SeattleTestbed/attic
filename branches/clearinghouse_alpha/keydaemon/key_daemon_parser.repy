@@ -1,0 +1,163 @@
+"""
+<Program Name>
+  key_daemon_parser.repy
+
+<Started>
+  April 27, 2009
+
+<Author>
+  n2k8000@u.washington.edu
+  Konstantin Pik
+
+<Purpose>
+  This file is to be imported in whatever file is performing the acquisition
+  of keys.  Once imported, the get_keypair method can be used to return a 
+  pub/priv keypair.
+  
+  See function definition for sample usage.
+"""
+
+
+  
+def keydaemon_parser_connection_timeout(socketobj):
+  """
+  <Purpose>
+    Triggered when the timeout is reached for a response, and so it sets 
+    a flag and triggers a false value to be returned by get_keypair
+    
+  <Arguments>
+    socketobj:   the daemon socket
+    
+  <Exceptions>
+    None
+
+  <Side Effects>
+    None.
+
+  <Returns>
+    None.
+  """
+  
+  mycontext['key_daemon_timer_trigger'] = True
+  socketobj.close()
+  
+  
+ 
+def get_keypair(ip, port, verbose = True, default_timeout = 180):
+  """
+  <Purpose>
+    This function connects to ip:port and waits until
+    a keypair is sent, and then the function returns the public and private
+    keys as a list.
+    
+  <Arguments>
+    ip:                     The IP that the key_daemon is running on. 
+                            Does not have to be remote, can be local loopback.
+    port:                   The port that the key_daemon is running on.
+    verbose:                Optional. Default is True.  This prints out the
+                            progress of key acquisition. 
+    default_timeout:        Optional. Default is 3 minutes.  Sets the timeout
+                            (in seconds) for the function to return False if 
+                            no response has been received within this 
+                            amount of time.
+  <Exceptions>
+    Socket errors on connection closed.
+
+  <Side Effects>
+    None.
+
+  <Returns>
+    A list is returned for both success and failure.
+    
+    (success_status, string1, string2)
+   
+    On success:
+    (True, public_key, private_key)
+    
+    On failure:
+    (False, error, error_description_string)
+    
+    You should always check the first element in the returned list to see 
+    whether the function returned successfully.
+    
+  <Sample Usage>
+    get_keypair('127.0.0.1', 12345)
+    get_keypair('1.2.3.4', 3344, False)
+    get_keypair('1.2.3.4', 3344, True, 60)
+  """
+  
+  try: # Try connecting
+    if verbose:
+      print 'Connecting...'
+      
+    # Open the connection and set the timeout (and flag denoting the timeout)
+    mycontext['key_daemon_timer_trigger'] = False
+    daemon_socket = openconn(ip, int(port))
+    timeout_timer = settimer(default_timeout, 
+      keydaemon_parser_connection_timeout, (daemon_socket,))
+    
+    if verbose:
+      print 'Connected! Sending key request...'
+    
+    # request the newkey
+    daemon_socket.send('newkey\n')
+  except Exception, e:
+    if verbose:
+      print e
+      
+    return (False, 'Socket Error', 'Trouble connecting to host ('+str(ip)+ \
+      ':'+str(port)+')')
+
+  else: # Connected
+    newline_counter = 0 # will count \n's that we receive on our socket
+    incoming_data = '' # incoming data buffer
+    
+    if verbose:
+      print 'Waiting for key...'
+    
+    # we need to loop until we get two \n's, but we have to also check
+    # that the timeout hasn't been hit (this is the timer_trigger)
+    while newline_counter < 2 and not mycontext['key_daemon_timer_trigger']:
+        try:
+          # receive data
+          incoming_data += daemon_socket.recv(512)
+          # count the \n's
+          newline_counter = incoming_data.count('\n')
+        except Exception, e:
+          if verbose:
+            print e
+            print 'Stopped recv(). Most likely because of timeout.'
+          # catches socket closed, then exits while loop because of flag
+          continue
+    
+    # if the timeout flag has been triggered and we haven't gotten
+    # two \n's this means that we haven't received all of the 
+    # necessary data.
+    if mycontext['key_daemon_timer_trigger'] and newline_counter < 2:
+      if verbose:
+        print 'Socket timed out. Exiting function with timeout error.'
+        
+      return (False, 'Timeout Error', 'A response could not be obtained' + \
+          ' in the specified amount of time ('+str(default_timeout)+' seconds).')
+        
+    # Cancel timer so we can release resources.
+    canceltimer(timeout_timer)
+
+    if verbose:
+      print 'Key received successfully!'
+      
+    # [pubkey]\n[privkey]\n -> becomes array of two items after splitlines()
+    # in the case that it's not a key, we'll have
+    # \n\n
+    keypair = incoming_data.splitlines()
+    public_key_string = keypair[0]
+    private_key_string = keypair[1]
+    
+    # now we need to check whether we actually received a key or if the server
+    # is out of keys
+    if public_key_string and private_key_string:
+      # good, non empty strings so we've got our keys, return those
+      return (True, public_key_string, private_key_string)
+    else:
+      # oops, no more keys :(
+      return (False, 'Server Error', 'Server is out of keys')

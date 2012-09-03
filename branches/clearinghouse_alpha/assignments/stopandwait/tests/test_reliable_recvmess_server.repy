@@ -1,0 +1,34 @@
+"""
+  This program runs as a server that receives a single messages sent from a client.   
+  It uses reliable_recvmess from the reliable library to get the message.  This function
+  should send an ack back to the client.
+
+  
+  This program must be started before the client program is started.
+
+
+  Arguments needed:
+	myport - the local port number to listen on
+
+"""
+
+
+
+
+include reliable.repy
+
+if callfunc == 'initialize':
+
+  # Port number of the client computer
+  mycontext['myport'] = int(callargs[0])
+
+  try:
+
+    reliable_recvmess(getmyip(), mycontext['myport'])
+
+  except Exception, e:
+
+    print 'Test indeterminate.  The following error occured: '+ str(e)
+    return
+ 
+  print 'test completed'

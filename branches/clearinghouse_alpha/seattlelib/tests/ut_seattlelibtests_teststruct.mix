@@ -1,0 +1,224 @@
+#pragma repy
+
+include struct.repy
+
+if callfunc == 'initialize':
+
+  #### GOOD Calcsize
+
+  # let's check the size of some strings...
+  assert(1 == struct_calcsize('s'))
+  assert(4 == struct_calcsize('>i'))
+  assert(4 == struct_calcsize('!I'))
+  assert(29 == struct_calcsize('1s>2i!5I'))
+  assert(123 == struct_calcsize('123s'))
+  assert(0 == struct_calcsize(''))
+  assert(0 == struct_calcsize('0s0s0s0s0s'))
+
+
+  #### BAD Calcsize
+
+  # okay time for a few invalid strings (reverse the endianness, repeatcount).
+  try:
+    bad = struct_calcsize('1s2>i5!I')
+  except TypeError, e:
+    pass
+  else:
+    print "bad calcsize 1:",bad
+
+  # multiple endiannesses
+  try:
+    bad = struct_calcsize('!!i')
+  except TypeError, e:
+    pass
+  else:
+    print "bad calcsize 2:",bad
+
+  # Not an integer
+  try:
+    bad = struct_calcsize(47)
+  except TypeError, e:
+    pass
+  else:
+    print "bad calcsize 3:",bad
+
+
+  # Integer, no endianness
+  try:
+    bad = struct_calcsize('I')
+  except ValueError, e:
+    pass
+  else:
+    print "bad calcsize 4:",bad
+
+  # string with endianness
+  try:
+    bad = struct_calcsize('!s')
+  except ValueError, e:
+    pass
+  else:
+    print "bad calcsize 5:",bad
+
+  # negative repeatcount
+  try:
+    bad = struct_calcsize('30s-2s')
+  except TypeError, e:
+    pass
+  else:
+    print "bad calcsize 6:",bad
+
+
+
+  #### GOOD pack / unpack
+
+
+  # let's try some valid pack / unpack of things first
+  a = struct_pack('0s!i!2I10s0s','',-1,2,123,'helloworld','')
+
+  result = struct_unpack('0s!i!2I10s0s',a)
+
+  if result != ['',-1,2,123,"helloworld",'']:
+    print result,'does not match expected value'
+
+  # integer boundary conditions
+  a = struct_pack('!I!I!i!i',0, 2**32-1, -2**31, -1)
+
+  result = struct_unpack('!I!I!i!i',a)
+
+  if result != [0,2**32-1, -2**31, -1L]:
+    print result,'does not match expected value', [0,2**32-1, -2**31, -1]
+
+
+  # let's check endianness!!!
+
+  assert('\x00\x00\x00\x01' == struct_pack('!i',1))
+  assert('\x00\x00\x00\x01' == struct_pack('>i',1))
+  assert('\x01\x00\x00\x00' == struct_pack('<i',1))
+
+
+###### PACK ERROR TESTS !!!#####
+
+  try:
+    bad =  struct_pack('10s','helloworld!')  # too long
+  except TypeError, e:
+    pass
+  else:
+    print "bad XX",bad
+
+  try:
+    bad =  struct_pack('12s','helloworld!')  # too short
+  except TypeError, e:
+    pass
+  else:
+    print "bad askjdf",bad
+
+  try:
+    bad =  struct_pack('!i',2**31)  # too big
+  except ValueError, e:
+    pass
+  else:
+    print "bad qioweru",bad
+
+
+  try:
+    bad =  struct_pack('!i',-2**31-1)  # too small
+  except ValueError, e:
+    pass
+  else:
+    print "bad asljdf",bad
+
+
+  try:
+    bad =  struct_pack('!I',-1)  # too small
+  except ValueError, e:
+    pass
+  else:
+    print "bad mxc",bad
+
+
+  try:
+    bad =  struct_pack('!I',2**32)  # too big
+  except ValueError, e:
+    pass
+  else:
+    print "bad iuqwe",bad
+
+
+
+  try:
+    bad =  struct_pack('I',22)  # no endianness
+  except TypeError, e:
+    pass
+  else:
+    print "bad cxmn,lj",bad
+
+
+
+
+  try:
+    bad =  struct_pack('2s1s','hi')  # missing arg
+  except ValueError, e:
+    pass
+  else:
+    print "bad xcmcvnm",bad
+
+
+  try:
+    bad =  struct_pack('2s1s','hi','a','b')  # extra arg
+  except ValueError, e:
+    pass
+  else:
+    print "bad qiwoeus",bad
+
+
+
+
+###### UNPACK ERROR TESTS!!!#####
+
+
+
+  try:
+    bad =  struct_unpack('2s1s','hiab')  # extra data
+  except ValueError, e:
+    pass
+  else:
+    print "bad upajksf",bad
+
+
+
+
+  try:
+    bad =  struct_pack('2s1s','hi')  # not enough
+  except ValueError, e:
+    pass
+  else:
+    print "bad upash",bad
+
+
+
+  try:
+    bad =  struct_pack('!i','\x00\x00\x00')  # not enough
+  except TypeError, e:
+    pass
+  else:
+    print "bad",bad
+
+
+
+  try:
+    bad =  struct_pack('!i','\x00\x00\x00\x00\x00')  # too much
+  except TypeError, e:
+    pass
+  else:
+    print "bad",bad
+
+
+
+  try:
+    bad =  struct_pack('i','\x00\x00\x00\x00')  # no endianness
+  except TypeError, e:
+    pass
+  else:
+    print "bad",bad
+
+

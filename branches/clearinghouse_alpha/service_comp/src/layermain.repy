@@ -1,0 +1,175 @@
+"""
+<Program Name>
+  conn_framework.py
+
+<Started>
+  Jun 25, 2009
+
+<Author>
+  Eric Kimbrel
+
+<Purpose>
+  
+ A high level wrapper around shim stack objects that allows calls to openconn,
+ waitforconn, .. etc
+
+ WARNING, Functionality in this wrapper may be obsolete, work has been done 
+ at the shim stack level that may not have been re applied here.  This needs
+ cleaned up for future use.
+
+ for use a global constant DEFAULT_SHIM_STACK_NAMES must be defined.  
+ this is the shim stack that will be created for any calls.
+
+"""
+
+
+# to allow for advertisement and lookups, used by coordination shim
+include lookup_methods.repy
+include ShimStack.repy
+
+# mapping of comm handles to the associated object
+# used to implement layered_stopcomm
+COMM_HANDLE_DICT = {'next_handle_id':0,'lock':getlock()} 
+
+
+
+
+
+###  Top level calls used by users to use service comp   ###
+
+def layered_openconn(host,port,localip=None,localport=None,timeout=5):
+  #instantiates a shim stack and calls openconn
+
+  # get a new shim_stack  
+  shim_stack = ShimStack(DEFAULT_SHIM_STACK_NAMES)
+  return shim_stack.openconn(host,port,localip,localport,timeout)
+
+
+def layered_sendmess(host,port,message,localhost=None,localport=None):
+  # instanties a shim stack and calls sendmess
+  
+  shim_stack = ShimStack(DEFAULT_SHIM_STACK_NAMES)
+  return shim_stack.sendmess(host,port,message,localhost,localport)
+
+
+def layered_waitforconn(host,port,callback):
+  """
+  <Purpose>
+   Performs a service compostion waitforconn
+
+  <Arguments>
+    host: A string that is a unique id for the server
+    
+    for others see waitforconn
+
+  <Exceptions>
+    see waitforconn
+
+  <Side Effects>
+     None
+
+  <Returns>
+    a commhandle that can be used with layered_stopcomm
+  """  
+  
+  # instantiate the defaulte layer stack
+  shim_stack = ShimStack(DEFAULT_SHIM_STACK_NAMES)
+
+  # do the waitforconn
+  handle = shim_stack.waitforconn(host,port,callback)
+
+  # map the handle to the correct stopcomm function
+  COMM_HANDLE_DICT['lock'].acquire()
+  handle_id = COMM_HANDLE_DICT['next_handle_id']
+  COMM_HANDLE_DICT['next_handle_id'] = handle_id + 1
+  COMM_HANDLE_DICT[handle_id] = shim_stack.stopcomm
+  COMM_HANDLE_DICT['lock'].release()
+
+  # return the handle
+  return (handle_id,handle)
+
+
+
+
+
+
+def layered_recvmess(host,port,callback):
+  # instantiates a default shim stack
+  # and calls recvmess
+
+  shim_stack = ShimStack(DEFAULT_SHIM_STACK_NAMES)
+  handle = shim_stack.recvmess(host,port,callback)
+
+  # map the handle to the correct stopcomm function
+  COMM_HANDLE_DICT['lock'].acquire()
+  handle_id = COMM_HANDLE_DICT['next_handle_id']
+  COMM_HANDLE_DICT['next_handle_id'] = handle_id + 1
+  COMM_HANDLE_DICT[handle_id] = shim_stack.stopcomm
+  COMM_HANDLE_DICT['lock'].release()
+
+  return (handle_id,handle)
+
+
+
+
+
+
+def layered_stopcomm(handle):
+  """
+  <Purpose>
+    stops a listener returned by a layered_waitforconn
+
+  <Arguments>
+    handle:
+      a commhandle returned by layered_waitforconn
+
+    
+  <Exceptions>
+    None
+
+  <Side Effects>
+     None
+
+  <Returns>
+    True if success, otherwise False
+  """
+  # un-pack the handle
+  (handle_id,handle) = handle
+  
+  try:
+    # get the stopcomm from the correct object  
+    COMM_HANDLE_DICT['lock'].acquire()
+    current_stopcomm = COMM_HANDLE_DICT[handle_id]
+    del COMM_HANDLE_DICT[handle_id]  
+    COMM_HANDLE_DICT['lock'].release()
+  except Exception:
+    COMM_HANDLE_DICT['lock'].release()
+    return False
+    
+  # do the stop comm
+  return current_stopcomm(handle)
+
+  
+ 
+
+def getmykey():
+  # not implemnted, raise an exception if i call it to remind me
+  raise Exception('GET MY KEY IS NOT IMPLEMENTED')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

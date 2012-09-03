@@ -1,0 +1,279 @@
+"""
+<Program Name>
+  StandardShims
+
+<Started>
+  Jun 25, 2009
+
+<Author>
+  Eric Kimbrel
+
+<Purpose>
+  Provide a set of shims that will commonly be used with the
+  service compostion framework
+
+  Contatins:
+
+    EmptyShim: The base class for all shims
+    CoordinationShim: A layer that advertises and does lookups
+    PhysConn: Used to link to the underlying API
+    ClientServerShim: Splits the default stack into a client and sever stack
+
+
+"""
+
+include layermain.repy
+
+# include lookup_methods for the CoordinationShim
+include lookup_methods.repy
+
+
+class EmptyShim:
+
+  # default class for all shims
+  # simply calls the next shim
+
+  # this allows shims to implement only that portion of the network
+  # API that they want to interpose on.
+
+  name = 'EmptyShim'
+
+
+  def __init__(self,next_shim=None,optional_args=None):
+    self.shim_stack = ShimStack(next_shim)
+
+  def waitforconn(self,host,port,callback):
+    return self.shim_stack.waitforconn(host,port,callback)
+
+  def recvmess(self,host,port,callback):
+    return self.shim_stack.recvmess(host,port,callback)
+
+  def openconn(self,host,port,localhost=None,localport=None,timeout=5):
+    return self.shim_stack.openconn(host,port,localhost,localport,timeout)
+
+  def sendmess(self,host,port,msg,localhost=None,localport=None):
+    return self.shim_stack.sendmess(host,port,msg,localhost,localport)
+
+  def stopcomm(self,handle):
+    return self.shim_stack.stopcomm(handle)
+
+  
+  def get_names(self):
+    
+    # Each shim implements this method
+    # by adding its name, and optional arguments to 
+    # each item in the list provided by the shim below.
+    # Branches result in more items in the list.
+
+    # the strings in the list created are of the form required
+    # to be used with the Shim Stack constructor so calling
+    # new_stack = ShimStack(old_stack.get_names[index]) would create
+    # a compatiable stack
+
+    name_list = self.shim_stack.get_names()
+    new_name_list = []
+    for name in name_list:
+      name = '('+self.name+')'+name
+      new_name_list.append(name)
+    return new_name_list
+
+
+
+
+class NullShim():
+
+  name = 'NullShim'
+
+  def __init__(self,next_shim=None,optional_args=None):
+    # Place holder arguemnts are to conform with standards only
+    # this arguments should never be used
+    if next_shim is not None or optional_args is not None:
+      raise Exception('Arguments passed into NullShim by error')
+
+  def waitforconn(self,host,port,callback):
+    return waitforconn(host,port,callback)
+
+  def openconn(self,host,port,localhost=None,localport=None,timeout=5):
+    return openconn(host,port,localhost,localport,timeout)
+
+  def recvmess(self,host,port,callback):
+    return recvmess(host,port,callback)
+
+  def sendmess(self,host,port,msg,localhost=None,localport=None):
+    sendmess(host,port,msg,localhost,localport)
+
+  def stopcomm(self,handle):
+    stopcomm(handle)
+
+
+
+
+
+
+class CoordinationShim(EmptyShim):
+  # intended to sit at the top of the a layer stack,
+  # uses get_names() on the server side to advertise 
+  # a servers connection info
+
+  # on the client side lookups up the servers info and bulds
+  # a compatible stack
+
+
+  name = 'CoordinationShim'
+  advertise_wait_interval = 60
+
+  def __init__(self,next_shim=None,optional_args=None):
+    self.listener_active = False
+    EmptyShim.__init__(self,next_shim,optional_args)
+
+  def waitforconn(self,host,port,callback):
+    handle = self.shim_stack.waitforconn(host,port,callback)
+    advertise_key = str(host)+','+str(port)+',TCP'
+    self.listener_active = True
+    settimer(0,self.advertise_thread,[advertise_key])
+    return handle
+
+  def recvmess(self,host,port,callback):
+    handle = self.shim_stack.recvmess(host,port,callback)
+    advertise_key = str(host)+','+str(port)+',UDP'
+    advertise_value_list = self.shim_stack.get_names()
+    for advertise_value in advertise_value_list:
+      external_advertise(advertise_key,advertise_value)
+    return handle
+
+  def advertise_thread(self,advertise_key):
+    while self.listener_active:
+      advertise_value_list = self.shim_stack.get_names()
+      for advertise_value in advertise_value_list:
+        try:
+          external_advertise(advertise_key,advertise_value)
+          # TODO remove this print
+          print 'advertising '+str(advertise_value)+'at key '+str(advertise_key)
+        except Exception,e:
+          #TODO, change this to quietly ignore advertise errors
+          print 'ADVERTISE EXCEPTION: '+str(e)
+      sleep(self.advertise_wait_interval)
+    
+
+  def openconn(self,host,port,localhost=None,localport=None,timeout=5):
+    # use a lookup service to coordinate the shim stack
+
+    lookup_results = external_lookup(str(host)+','+str(port)+',TCP')
+    if len(lookup_results) < 1:
+      raise Exception("host could not be found by coordiantion layer")
+    # TODO something smarter with branches,
+    # for now iterate through until we get a connection
+    exception_list = ''
+    sock = None
+    for result in lookup_results:
+      shim_stack = ShimStack(result)
+      try:
+        sock = shim_stack.openconn(host,port,localhost,localport,timeout)
+      except Exception,e:
+        exception_list +=' Exception: '+str(e)
+      else:
+        break
+
+    if sock is None:
+      # TODO raise correct type of exception
+      raise Exception(exception_list)
+    else:
+      return sock
+
+    
+
+  def sendmess(self,host,port,msg,localhost=None,localport=None):
+    
+    # use a lookup service to coordinate the shim stack
+    lookup_results = external_lookup(str(host)+','+str(port)+',UDP')
+    
+    # TODO something smarter with branches,
+    # for now iterate through until we get a connection
+    exception_list = ''
+    sock = None
+    for result in lookup_results:
+      shim_stack = ShimStack(result)
+      try:
+        return shim_stack.sendmess(host,port,msg,localhost,localport)
+      except Exception,e:
+        exception_list +=' Exception: '+str(e)  
+        print 'EXCEPTION!!!!!!!!: '+str(e)
+       
+      raise Exception('Failed to sendmess with exceptions: '+exception_list)
+
+
+  def stopcomm(self,handle):
+    self.listener_active = False
+    return self.shim_stack.stopcomm(handle)
+
+ 
+
+
+
+class ClientServerShim:
+
+  # This is a special shim that creates a seperate stack for a client
+  # or a server call
+
+  # the deault_stack string is set to 
+  # '(ClientServerShim,<CLIENTSTACK>,<SEVERSTACK>)
+  #  the CLIENTSTACK and SEVERSTACK are the same as the normal convention
+  #  except that '+' is used as a seperator isntead of ','
+  #                [ ] is used instead of ( )
+  #  This convention is changed so the framework does not split up the stacks
+  #  into seperate arguments.
+
+
+  name = 'ClientServerShim'
+
+
+  def __init__(self,next_shim=None,optional_args=None):
+    if len(optional_args) != 2:
+      raise Exception('Bad arguemnts given to ClientSeverShim Constructor')
+    
+    # change the stacks to the normal convention
+    client = optional_args[0].replace('+',',')
+    client = client.replace('[','(')
+    client = client.replace(']',')')
+    server = optional_args[1].replace('+',',')
+    server = server.replace('[','(')
+    server = server.replace(']',')')
+    
+    
+    self.client_stack = ShimStack(client)
+    self.server_stack = ShimStack(server)
+  
+  def waitforconn(self,host,port,callback):
+    return self.server_stack.waitforconn(host,port,callback)
+
+  def recvmess(self,host,port,callback):
+    return self.server_stack.recvmess(host,port,callback)
+
+  def openconn(self,host,port,localhost=None,localport=None,timeout=5):
+    return self.client_stack.openconn(host,port,localhost,localport,timeout)
+
+  def sendmess(self,host,port,msg,localhost=None,localport=None):
+    return self.client_stack.sendmess(host,port,msg,localhost,localport)
+
+  def stopcomm(self,handle):
+    return self.server_stack.stopcomm(handle)
+
+  def get_names(self):
+    return self.server_stack.get_names()
+
+
+
+
+
+
+# Register layers with framework
+shimstack_reg_layer('ClientServerShim',{'class':ClientServerShim})
+shimstack_reg_layer('CoordinationShim',{'class':CoordinationShim})
+shimstack_reg_layer('EmptyShim',{'class':EmptyShim})
+shimstack_reg_layer('NullShim',{'class':NullShim})
+
+
+
+
+
+

@@ -1,0 +1,105 @@
+-- Winter 2009
+Sliding Window Protocol
+
+--==[ About ]==--
+This code is an implementation of Sliding Window assignment
+found at:
+ https://seattle.cs.washington.edu/wiki/SlidingWindowAssignment
+All instructions below should, hopefully, work on any Linux 
+machine.
+
+--==[ Dependencies ]==--
+You must have Repy, Repypp, and Seash.
+For example, to download them for Linux type:
+ $ wget https://seattlegeni.cs.washington.edu/geni/download/flibble/seattle_linux.tgz
+ $ tar xgf seattle_linux.tgz
+You should then see a folder named "seattle_repy."
+
+--==[ Manifest ]==--
+The Makefile expects the following layout:
+ extra_reliable/Makefile
+ extra_reliable/README
+ extra_reliable/extra_reliable_client.repy
+ extra_reliable/extra_reliable_server.repy
+ extra_reliable/extra_reliable.repy
+ extra_reliable/test/restrictions.default
+ extra_reliable/test/in.file
+ extra_reliable/seattle_repy
+Where seattle_repy is your Seattle download.
+
+--==[ Running the code locally ]==--
+To run the local example, type:
+ $ make test
+Check test/junk_test.out.  Correct output is:
+ $ cat test/junk_test.out
+ hello world!!  Foo bar baz.  Goodbye!
+
+--==[ Getting remotely setup ]==--
+For instructions on getting Clearinghouse setup go to:
+  https://seattle.cs.washington.edu/wiki/SeattleShell
+  https://seattle.cs.washington.edu/wiki/TakeHomeAssignment
+  https://seattle.cs.washington.edu/wiki/RepyTutorial
+Write down your Clearinghouse port.  You'll see it on the "User Info" tab.
+Grab at least two nodes from the "Used Resources" tab.  
+Put your Clearinghouse keys into the extra_reliable/test/ directory.
+
+--==[ Running the code remotely ]==--
+Make sure the code is linked:
+ $ make
+You should have test/extra_reliable_client and test/extra_reliable_server.
+To run remotely, cd into test and start seash:
+ $ cd test && python ../seattle_linux/seash.py
+Load your keys and bring up vessels:
+ !> loadkeys roger
+ !> as roger
+ roger@ !> browse
+ roger@ !> on browsegood
+Upload the file:
+ roger@browsegood !> on %1 upload in.file
+Then, run the client on one node and the server on another:
+ roger@browsegood !> on %2 run extra_reliable_server junk_test.out <Clearinghouseport>
+ roger@browsegood !> on %1 run extra_reliable_client in.file <IP of %2> <Clearinghouseport> <IP of %1>
+Replace the <IP of %x> with the IP of the remote vessel.  You can see
+these by doing:
+ roger@browsegood !> list
+Replace <Clearinghouseport> with your unique port from the Clearinghouse website.
+
+--==[ Examining remote output ]==--
+Check the logs:
+ roger@browsegood !> show log
+Example log:
+"""
+  roger@browsegood !> show log
+  Log from '128.112.139.75:1224:v4':
+  Client: Sending hello world!!  Foo bar baz.  Goodbye!
+   from 128.112.139.75:63111 to 128.112.139.108:63111
+  Client: Finished sending
+
+  Log from '128.112.139.108:1224:v12':
+  Server: Starting on 128.112.139.108:63111
+  Server: Received hello from 128.112.139.75:63111
+  Server: Received  worl from 128.112.139.75:63111
+  Server: Received d!!   from 128.112.139.75:63111
+  Server: Received Foo b from 128.112.139.75:63111
+  Server: Received ar ba from 128.112.139.75:63111
+  Server: Received z.  G from 128.112.139.75:63111
+  Server: Received oodby from 128.112.139.75:63111
+  Server: Received e!
+   from 128.112.139.75:63111
+  Server: Shutting down
+"""
+Download the file:
+ roger@browsegood !> on %2 download junk_test.out
+ $ cat junk_test.out
+Example output:
+ hello world!!  Foo bar baz.  Goodbye!
+
+--==[ Notes ]==--
+Here are a few non-obvious details about the protocol:
+(1) Bytes always increase from DEFAULT_START_BYTE to infinity.
+(2) An ACK with byte X tells the sender that the receiver has
+gotten all bytes < X.  Ex. (8, 'ack...') acks 0 <= bytes < 8.
+The sender should stop sending all bytes below 8, *even if* the
+sender has not received their ACKs.
+(3) The window size is hard coded to three times the maxdgramsize.
+Change WINDOW_SIZE_MULTIPLIER if desired.
