@@ -267,7 +267,7 @@ SOCIAL_AUTH_PIPELINE = (
   'social_auth.backends.pipeline.associate.associate_by_email',
   #'social_auth.backends.pipeline.user.get_username',
   'social_auth.backends.pipeline.misc.save_status_to_session',
-  'seattlegeni.website.pipeline.redirect_to_form',
+  'seattlegeni.website.pipeline.redirect_to_auto_register',
   'seattlegeni.website.pipeline.username',
   #'social_auth.backends.pipeline.misc.save_status_to_session',
   #'seattlegeni.website.pipeline.redirect_to_form2',
@@ -294,8 +294,9 @@ SOCIAL_AUTH_COMPLETE_URL_NAME  = 'socialauth_complete'
 #SOCIAL_AUTH_COMPLETE_URL_NAME  = 'done'
 #SOCIAL_AUTH_PROCESS_EXCEPTIONS = 'social_auth.utils.process_exceptions'
 
-SOCIAL_AUTH_RAISE_EXCEPTIONS = False
-#SOCIAL_AUTH_RAISE_EXCEPTIONS = True
+# This should be false for production. Useful for debugging social_auth problems.
+#SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+SOCIAL_AUTH_RAISE_EXCEPTIONS = True
 #SOCIAL_AUTH_USER_MODEL = 'control.GeniUser'
 SOCIAL_AUTH_LAST_LOGIN = 'social_auth_last_login_backend'
 SOCIAL_AUTH_CREATE_USERS = True

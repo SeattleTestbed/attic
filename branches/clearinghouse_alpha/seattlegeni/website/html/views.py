@@ -113,7 +113,7 @@ ACCEPTDONATIONS_STATE_PUBKEY = _state_key_file_to_publickey_string("acceptdonati
 
 
 
-def error(request,backend):
+def error(request,backend=None):
   """
   <Purpose>
   If a OpenID/OAuth backend itself has an error(not a user or Seattle Clearinghouse's fault) 
@@ -128,13 +128,14 @@ def error(request,backend):
   <Returns>
   """
   messages = get_messages(request)
+  backend=request.session['partial_pipeline']['backend']
   return render_to_response('control/error.html', {'messages': messages,'backend': backend},RequestContext(request))
 
 
 
 
 
-def associate_error(request,backend):
+def associate_error(request,backend=None):
   """
   <Purpose>
 
@@ -147,6 +148,7 @@ def associate_error(request,backend):
   <Returns>
   """
   messages = get_messages(request)
+  backend=request.session['partial_pipeline']['backend']
   return render_to_response('control/associate_error.html', {'messages': messages,'backend': backend},RequestContext(request))
 #def logout(request):
 #  """Logs out user"""
@@ -154,7 +156,7 @@ def associate_error(request,backend):
 #  return HttpResponseRedirect('login.html')
 
 
-def form(request,backend=None):
+def auto_register(request,backend=None):
   """
   <Purpose>
   RENAME TO AUTO REGISTER or get new username?? add decoractors. add username checking
@@ -188,7 +190,8 @@ def form(request,backend=None):
     backend = request.session[name]['backend']
     #username = request.session[name]['username']
     return redirect('socialauth_complete', backend=backend)
-  return render_to_response('form.html', {'backend' : backend}, RequestContext(request))
+  backend=request.session['partial_pipeline']['backend']
+  return render_to_response('auto_register.html', {'backend' : backend}, RequestContext(request))
 
 
 

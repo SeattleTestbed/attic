@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from social_auth.backends.exceptions import AuthException
 from social_auth.backends.pipeline.social import social_auth_user
 from seattlegeni.website.control import interface
+from seattlegeni.website.control.models import UserManager
 from uuid import uuid4
 
 from social_auth.utils import setting
@@ -17,10 +18,10 @@ from social_auth.signals import socialauth_not_registered, \
                                 socialauth_registered, \
                                 pre_update
                                 
-def redirect_to_form(*args, **kwargs):
+def redirect_to_auto_register(*args, **kwargs):
     if not kwargs['request'].session.get('saved_username') and \
        kwargs.get('user') is None:
-        return HttpResponseRedirect('/html/form/')
+        return HttpResponseRedirect('/html/auto_register/')
 
 
 def username(request, *args, **kwargs):
@@ -68,11 +69,12 @@ def custom_create_user(backend, details, response, uid, username, user=None, *ar
                                        response=response,
                                        details=details)
         return None
-        
-    #email = details.get('email') 
+    password=models.UserManager.make_random_password(10)    
+    email = details.get('email')
+    affiliation= 'auto-register@'+ details.get('backend') 
     #backend = kwargs['backend']  / backend = request.session[name]['backend']
     # or just use backend=backend cuz of parameter autoregister-Facebook
-    user = interface.register_user(username, password='123456', email=details.get('email'), affiliation='none')
+    user = interface.register_user(username, password, email, affiliation)
     return {
         'user': user,
         'is_new': True
