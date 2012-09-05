@@ -1,5 +1,32 @@
 {% extends "accounts/accounts_base.html" %}
 
+{% comment %}
+<Program>
+  error.html
+
+<Author>
+  Originally by:
+  Gaetano Pressimone 2012
+  
+<Purpose>
+  Django template file for Seattle Clearinghouse's 'error' page.  If a 
+  OpenID/OAuth backend itself has an error(not a user or Seattle Clearinghouse's fault) 
+  a user will get redirected here.  This can happen if the backend rejects the vistor.
+
+<Extends>
+  accounts/accounts_base.html
+
+<Stylesheet>
+
+<Scripts>
+  None
+
+<Template Variables>
+  backend:
+		An OpenID/OAuth backend ex google,facebook etc.
+	
+{% endcomment %}
+
 {% block heading %}Error!{% endblock %}
 {{ block.super }}
 {% block nav_login %}

@@ -116,16 +116,23 @@ ACCEPTDONATIONS_STATE_PUBKEY = _state_key_file_to_publickey_string("acceptdonati
 def error(request,backend=None):
   """
   <Purpose>
-  If a OpenID/OAuth backend itself has an error(not a user or Seattle Clearinghouse's fault) 
-  a user will get redirected here.
+    If a OpenID/OAuth backend itself has an error(not a user or Seattle Clearinghouse's fault) 
+    a user will get redirected here.  This can happen if the backend rejects the vistor.
 
   <Arguments>
+    request:
+      An HTTP request object.
+    backend:
+      An OpenID/OAuth backend ex google,facebook etc.
 
   <Exceptions>
+    None
 
   <Side Effects>
+    None
 
   <Returns>
+    An HTTP response object that represents the error page.
   """
   messages = get_messages(request)
   backend=request.session['partial_pipeline']['backend']
@@ -138,14 +145,19 @@ def error(request,backend=None):
 def associate_error(request,backend=None):
   """
   <Purpose>
-
+    If an error occured during the OpenId/OAuth association process a user will get
+  redirected here. 
   <Arguments>
-
+    request:
+      An HTTP request object.
+    backend:
+      An OpenID/OAuth backend ex google,facebook etc.
   <Exceptions>
-
+    None
   <Side Effects>
-
+    None
   <Returns>
+    An HTTP response object that represents the associate_error page.
   """
   messages = get_messages(request)
   backend=request.session['partial_pipeline']['backend']
@@ -169,7 +181,9 @@ def auto_register(request,backend=None):
  
   <Arguments>
     request:
-
+      An HTTP request object.
+    backend:
+      An OpenID/OAuth backend ex google,facebook etc.
   <Exceptions>
 
   <Side Effects>
@@ -181,10 +195,15 @@ def auto_register(request,backend=None):
   # Check if a username is provided 
   if request.method == 'POST' and request.POST.get('username'):
     name = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
+#  try:
 #    try:
-#      interface.login_user(request, request.POST['username'], request.POST['password'])
+#      XXinterface.login_user(request, request.POST['username'], request.POST['password'])
+#      interface.get_user_without_password(request.POST['username'])
+#      raise UsernameAlreadyExistsError
 #    except DoesNotExistError:
 #      return _show_login(request, ltemplate, {'err' : "Wrong username or password."}, form)
+#      err =' '
+#        pass
     request.session['saved_username'] = request.POST['username']
     #request.session['username'] = request.POST['username']
     backend = request.session[name]['backend']

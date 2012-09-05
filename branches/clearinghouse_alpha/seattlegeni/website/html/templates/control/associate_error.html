@@ -1,5 +1,35 @@
 {% extends "control/control_base.html" %}
 
+{% comment %}
+<Program>
+  associate_error.html
+
+<Author>
+  Originally by:
+  Gaetano Pressimone 2012
+  
+<Purpose>
+  Django template file for Seattle Clearinghouse's 'associate_error' page.
+  If an error occured during the OpenId/OAuth association process a user will get
+  redirected here. 
+
+<Extends>
+  control/control_base.html
+
+<Stylesheet>
+
+<Scripts>
+  None
+
+<Template Variables>
+  backend:
+		An OpenID/OAuth backend ex google,facebook etc.
+  msg:
+    
+  error_msg:
+	
+{% endcomment %}
+
 {% block heading %}Error!{% endblock %}
 {{ block.super }}
 {% block nav_login %}
@@ -21,6 +51,6 @@
     <p class="warning2">{{ error_msg }}</p>
   {% endif %}
 
-  <p>Please try again <a href="{% url done %}">Profile</a></p>
+  <p>Please try again <a href="{% url profile %}">Profile</a></p>
 </div>
 {% endblock %}

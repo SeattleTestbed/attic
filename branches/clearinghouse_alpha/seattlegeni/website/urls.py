@@ -31,6 +31,7 @@ urlpatterns = patterns('',
     ##url(r'^done$', done, name='done'),
     url(r'^complete/(?P<backend>[^/]+)/error', RedirectView.as_view(url='/html/error')), #wrong doesnt send backend as parameter
     url(r'^complete/(?P<backend>[^/]+)/associate_error', RedirectView.as_view(url='/html/associate_error')),
+    #url(r'^complete/(?P<backend>[^/]+)/login', RedirectView.as_view(url='/html/login')),
     #url(r'^complete/(?P<backend>[^/]+)/profile', profile, name='profile'),
     url(r'^complete/(?P<backend>[^/]+)/profile', RedirectView.as_view(url='/html/profile')),
     #url(r'^complete/(?P<backend>[^/]+)/social_register', social_register, name='social_register'),

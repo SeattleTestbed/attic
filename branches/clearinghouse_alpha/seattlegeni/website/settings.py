@@ -89,6 +89,8 @@ SOCIAL_AUTH_LOGIN_URL = 'login'
 # when a logged in user links a new OpenID/OAuth account ex google,yahoo.github etc he
 # gets redirected to this page.  This should always be the profile page.
 SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = 'profile'
+#TODO documentation
+SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email',]
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 

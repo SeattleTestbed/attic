@@ -1,13 +1,12 @@
 """
-TODO add documentation
+Custom pipeline functions used in Seattle Clearinghouse.
 
 """
-
 from django.http import HttpResponseRedirect
 from social_auth.backends.exceptions import AuthException
 from social_auth.backends.pipeline.social import social_auth_user
 from seattlegeni.website.control import interface
-from seattlegeni.website.control.models import UserManager
+from seattlegeni.website.control import models
 from uuid import uuid4
 
 from social_auth.utils import setting
@@ -31,17 +30,18 @@ def username(request, *args, **kwargs):
         username = request.session.get('saved_username')
     return {'username': username}
 
+#NOT USED
+#def redirect_to_form2(*args, **kwargs):
+#    ''' NOT USED '''
+#    if not kwargs['request'].session.get('saved_first_name'):
+#        return HttpResponseRedirect('/social_register/')
 
-def redirect_to_form2(*args, **kwargs):
-    if not kwargs['request'].session.get('saved_first_name'):
-        return HttpResponseRedirect('/social_register/')
 
-
-def first_name(request, *args, **kwargs):
-    if 'saved_first_name' in request.session:
-        user = kwargs['user']
-        user.first_name = request.session.get('saved_first_name')
-        user.save()
+#def first_name(request, *args, **kwargs):
+#    if 'saved_first_name' in request.session:
+#        user = kwargs['user']
+#        user.first_name = request.session.get('saved_first_name')
+#        user.save()
         
 def custom_social_auth_user(*args, **kwargs):
     try:
@@ -56,6 +56,7 @@ def custom_create_user(backend, details, response, uid, username, user=None, *ar
                 **kwargs):
     """Create user. Depends on get_username pipeline."""
     if user:
+				#request.session['backend'] = form.cleaned_data
         return {'user': user}
     if not username:
         return None
@@ -69,6 +70,7 @@ def custom_create_user(backend, details, response, uid, username, user=None, *ar
                                        response=response,
                                        details=details)
         return None
+    #set a random password 10 characters long
     password=models.UserManager.make_random_password(10)    
     email = details.get('email')
     affiliation= 'auto-register@'+ details.get('backend') 
