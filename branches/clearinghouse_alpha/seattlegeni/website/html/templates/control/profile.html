@@ -188,7 +188,7 @@ Profile - Seattle Clearinghouse
 					<td class="key">Linked Accounts<img class="help" src="{{ MEDIA_URL }}images/help-icon.png"title="When you link a account you may than use it to login to the Clearinghouse."/></td>
 					<td class="value">
 					      
-					{% if social_auth.associated %}
+					
         	  {% for type, accounts in social_auth.associated.items %}
   					  {% for account in accounts %}
 								{% if account.provider == "facebook"%}
@@ -212,7 +212,7 @@ Profile - Seattle Clearinghouse
 								 {% endcomment %}
    					 {% endfor %}
  					 {% endfor %}
-					{% endif %}
+					
 				{% for name, accounts in social_auth.not_associated.items %}
    				
 					{% for name in accounts %}

@@ -22,6 +22,8 @@
   None
 
 <Template Variables>
+  messages:
+    error messages
   backend:
 		An OpenID/OAuth backend ex google,facebook etc.
 	
@@ -42,10 +44,6 @@
     {% for msg in messages %}
         <p class="warning2">{{ msg.message }} ({{ msg.extra_tags }})</p>
     {% endfor %}
-  {% endif %}
-  {% if error_msg %}
-    <p>Details:</p>
-    <p class="warning2">{{ error_msg }}</p>
   {% endif %}
 
   <p>Please try again <a href="{% url login %}">Home</a></p>

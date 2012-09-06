@@ -162,13 +162,12 @@ def associate_error(request,backend=None):
   messages = get_messages(request)
   backend=request.session['partial_pipeline']['backend']
   return render_to_response('control/associate_error.html', {'messages': messages,'backend': backend},RequestContext(request))
-#def logout(request):
-#  """Logs out user"""
-#  auth_logout(request)
-#  return HttpResponseRedirect('login.html')
 
 
-def auto_register(request,backend=None):
+
+
+
+def auto_register(request,backend=None,error_msgs=''):
   """
   <Purpose>
   RENAME TO AUTO REGISTER or get new username?? add decoractors. add username checking
@@ -193,77 +192,26 @@ def auto_register(request,backend=None):
     foward in the auto register process.
   """
   # Check if a username is provided 
+  username_form = forms.AutoRegisterForm()
   if request.method == 'POST' and request.POST.get('username'):
     name = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
-#  try:
-#    try:
-#      XXinterface.login_user(request, request.POST['username'], request.POST['password'])
-#      interface.get_user_without_password(request.POST['username'])
-#      raise UsernameAlreadyExistsError
-#    except DoesNotExistError:
-#      return _show_login(request, ltemplate, {'err' : "Wrong username or password."}, form)
-#      err =' '
-#        pass
-    request.session['saved_username'] = request.POST['username']
-    #request.session['username'] = request.POST['username']
-    backend = request.session[name]['backend']
-    #username = request.session[name]['username']
-    return redirect('socialauth_complete', backend=backend)
+    username_form = forms.AutoRegisterForm(request.POST)
+    if username_form.is_valid():
+      username = username_form.cleaned_data['username']
+      try:
+        interface.get_user_without_password(username)
+#        #XXinterface.get_user_without_password(request.POST['username'])
+        error_msgs ='That username is already in use.'
+        #raise UsernameAlreadyExistsError
+      except DoesNotExistError:
+        request.session['saved_username'] = request.POST['username']
+        backend = request.session[name]['backend']
+        return redirect('socialauth_complete', backend=backend)
+#    request.session['saved_username'] = request.POST['username']
+#    backend = request.session[name]['backend']
+#    return redirect('socialauth_complete', backend=backend)
   backend=request.session['partial_pipeline']['backend']
-  return render_to_response('auto_register.html', {'backend' : backend}, RequestContext(request))
-
-
-
-
-
-def form2(request):
-  """
-  <Purpose>
-   NOT USED##########
-  <Arguments>
-
-  <Exceptions>
-
-  <Side Effects>
-
-  <Returns>
-  """
-  if request.method == 'POST' and request.POST.get('first_name'):
-    request.session['saved_first_name'] = request.POST['first_name']
-    name = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
-    backend = request.session[name]['backend']
-    return redirect('socialauth_complete', backend=backend)
-  return render_to_response('form2.html', {}, RequestContext(request))
-  
-
-
-
-
-def social_register(request):
-  """
-  <Purpose>
-   NOT USED#################3
-  <Arguments>
-
-  <Exceptions>
-
-  <Side Effects>
-
-  <Returns>
-  """
-  if request.method == 'POST':# and request.POST.get('social_signup'):
-    request.session['saved_first_name'] = "bob"#request.POST['first_name']
-    name = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
-    backend = request.session[name]['backend']  
-    username =  request.session['username']
-    password = "123456"
-    affiliation = "none!"
-    email = "none@whatevera.com"  #request.session['email']#"none@whatevera.com"#request.session['username.email']
-    #pubkey = 1
-    interface.register_user(username, password, email, affiliation)
-    #return redirect("done")
-    return redirect('socialauth_complete', backend=backend)
-  return render_to_response('accounts/social_register.html', {}, RequestContext(request))  
+  return render_to_response('auto_register.html', {'backend' : backend, 'error_msgs' : error_msgs, 'username_form' : username_form}, RequestContext(request))
 
 
 
