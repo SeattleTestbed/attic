@@ -1,7 +1,0 @@
-# some names to import...
-name1 = 7
-
-def name2():
-  pass
-
-_name3 = name1

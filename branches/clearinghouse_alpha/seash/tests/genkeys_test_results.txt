@@ -1,3 +1,0 @@
-Created identity 'joe'
-Created identity 'bob'
-Created identity 'john'
