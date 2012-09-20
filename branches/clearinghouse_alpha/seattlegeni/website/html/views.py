@@ -22,6 +22,7 @@ import sys
 import shutil
 import subprocess
 import xmlrpclib
+import hashlib
 
 # Needed to escape characters for the Android referrer...
 import urllib
@@ -135,8 +136,8 @@ def error(request,backend=None):
     An HTTP response object that represents the error page.
   """
   messages = get_messages(request)
-  backend=request.session['partial_pipeline']['backend']
-  return render_to_response('control/error.html', {'messages': messages,'backend': backend},RequestContext(request))
+  #backend=request.session['partial_pipeline']['backend']
+  return render_to_response('accounts/error.html', {'messages': messages,'backend': backend},RequestContext(request))
 
 
 
@@ -176,7 +177,7 @@ def auto_register(request,backend=None,error_msgs=''):
   a user logs in with a OpenID/OAuth account and that account is not yet linked
   with a Clearinghouse account, he gets redirected here.  
 
-  A user enters a desired username and if valid
+  If a valid username is entered then a new Seattle Clearinghouse user is created.
  
   <Arguments>
     request:
@@ -186,11 +187,12 @@ def auto_register(request,backend=None,error_msgs=''):
   <Exceptions>
 
   <Side Effects>
-
+    A new Seattle Clearinghouse user is created.
   <Returns>
     If a user passes in a valid username he gets put back on the pipeline and moved
     foward in the auto register process.
   """
+  
   # Check if a username is provided 
   username_form = forms.AutoRegisterForm()
   if request.method == 'POST' and request.POST.get('username'):
@@ -200,21 +202,23 @@ def auto_register(request,backend=None,error_msgs=''):
       username = username_form.cleaned_data['username']
       try:
         interface.get_user_without_password(username)
-#        #XXinterface.get_user_without_password(request.POST['username'])
         error_msgs ='That username is already in use.'
-        #raise UsernameAlreadyExistsError
       except DoesNotExistError:
-        request.session['saved_username'] = request.POST['username']
+        request.session['saved_username'] = request.POST['username'] #username# request.POST['username']
         backend = request.session[name]['backend']
-        return redirect('socialauth_complete', backend=backend)
-#    request.session['saved_username'] = request.POST['username']
-#    backend = request.session[name]['backend']
-#    return redirect('socialauth_complete', backend=backend)
-  backend=request.session['partial_pipeline']['backend']
-  return render_to_response('auto_register.html', {'backend' : backend, 'error_msgs' : error_msgs, 'username_form' : username_form}, RequestContext(request))
-
-
-
+        return redirect('socialauth_complete', backend=backend)  
+  name = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
+  backend=request.session[name]['backend']
+  return render_to_response('accounts/auto_register.html', {'backend' : backend, 'error_msgs' : error_msgs, 'username_form' : username_form}, RequestContext(request))
+  
+  """
+  if request.method == 'POST' and request.POST.get('username'):
+    name = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
+    request.session['saved_username'] = request.POST['username']
+    backend = request.session[name]['backend']
+    return redirect('socialauth_complete', backend=backend)
+  return render_to_response('accounts/auto_register.html', {}, RequestContext(request))
+  """
 
 
 @log_function_call_without_return
@@ -313,11 +317,14 @@ def register(request):
     
     #TODO: what if the form data isn't in the POST request? we need to check for this.
     form = forms.GeniUserCreationForm(request.POST, request.FILES)
-    
+    ###TODO join all fields into 1 string
+    ###hasstring = haslib.sha1(fields_tring)
     # Calling the form's is_valid() function causes all form "clean_..." methods to be checked.
     # If this succeeds, then the form input data is validated per field-specific cleaning checks. (see forms.py)
     # However, we still need to do some checks which aren't doable from inside the form class.
+    ### if request.session.get('sessionform') != hashstring
     if form.is_valid():
+    ### request.session['session_form'] = hashstring
       username = form.cleaned_data['username']
       password = form.cleaned_data['password1']
       affiliation = form.cleaned_data['affiliation']

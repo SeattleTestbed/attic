@@ -20,7 +20,7 @@ from social_auth.signals import socialauth_not_registered, \
 def redirect_to_auto_register(*args, **kwargs):
     if not kwargs['request'].session.get('saved_username') and \
        kwargs.get('user') is None:
-        return HttpResponseRedirect('/html/auto_register/')
+        return HttpResponseRedirect('/html/auto_register')
 
 
 def username(request, *args, **kwargs):
@@ -47,7 +47,7 @@ def custom_social_auth_user(*args, **kwargs):
     try:
         return social_auth_user(*args, **kwargs)
     except AuthException:# Raise AuthException if UserSocialAuth entry belongs to another user.:
-    	 return HttpResponseRedirect('associate_error')
+    	 return HttpResponseRedirect('html/associate_error')
     #except UserSocialAuth.DoesNotExist:	 
     #	 return HttpResponseRedirect('social_register')              
     
@@ -56,7 +56,6 @@ def custom_create_user(backend, details, response, uid, username, user=None, *ar
                 **kwargs):
     """Create user. Depends on get_username pipeline."""
     if user:
-				#request.session['backend'] = form.cleaned_data
         return {'user': user}
     if not username:
         return None
@@ -71,12 +70,13 @@ def custom_create_user(backend, details, response, uid, username, user=None, *ar
                                        details=details)
         return None
     #set a random password 10 characters long
-    password=models.UserManager.make_random_password(10)    
-    email = details.get('email')
-    affiliation= 'auto-register@'+ details.get('backend') 
+    #password=models.UserManager.make_random_password(10)    
+    #email = details.get('email')
+    #affiliation= 'auto-register@'+ details.get('backend') 
     #backend = kwargs['backend']  / backend = request.session[name]['backend']
     # or just use backend=backend cuz of parameter autoregister-Facebook
-    user = interface.register_user(username, password, email, affiliation)
+    #user = interface.register_user(username, password, email, affiliation)
+    user = interface.register_user(username, password='123456', email=details.get('email'), affiliation='auto-register@'+ backend.name)
     return {
         'user': user,
         'is_new': True

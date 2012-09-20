@@ -40,7 +40,10 @@
     .gen_upload_choice: 
 
 {% endcomment %}
-
+{% block meta %}
+<meta HTTP-EQUIV="Pragma" content="no-cache"> and 
+<meta HTTP-EQUIV="Expires" content="-1">
+{% endblock meta %}
 {% block title %}
 Register - Clearinghouse
 {% endblock title %}
@@ -117,7 +120,7 @@ Register - Clearinghouse
 			  </tr>
 		    <tr>
 		      <td class="key"></td>
-		      <td class="value"><input type="submit" value="Register" /></td>
+		      <td class="value"><input type="submit" value="Register" onclick="this.disabled=true,this.form.submit();"/></td>
 		    </tr>
 		  </table>
 		  </form>

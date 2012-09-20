@@ -74,7 +74,7 @@ SOCIAL_AUTH_LOGIN_ERROR_URL ='associate_error'
 # a user will get redirected here.
 SOCIAL_AUTH_BACKEND_ERROR_URL = 'error'
 
-#LOGIN_ERROR_URL='error2'
+LOGIN_ERROR_URL='error'
 
 # When a logged in user removes a new OpenID/OAuth account ex google,yahoo.github etc he
 # gets redirected to this page.  This should always be the profile page.  If not defined
@@ -90,7 +90,7 @@ SOCIAL_AUTH_LOGIN_URL = 'login'
 # gets redirected to this page.  This should always be the profile page.
 SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = 'profile'
 #TODO documentation
-SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email',]
+SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email','First name','Last name']
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -104,8 +104,8 @@ ADMINS = (
 # To be able to send mail to ADMINS when there is an error, django needs to
 # know about an SMTP server it can use. That info is defined here.
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'gppressi@gmail.com'
-EMAIL_HOST_PASSWORD = '153Chatterton'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
@@ -234,13 +234,10 @@ AUTHENTICATION_BACKENDS = (
 # own method to acquire keys.  Yahoo and Google are OpenID so we  
 # dont need keys for them.
 
-FACEBOOK_APP_ID                   = '154143918042976'
-FACEBOOK_API_SECRET               = '32110dc11bd9ff27c1df614956757d8e'
+FACEBOOK_APP_ID                   = '442982662420964'
+FACEBOOK_API_SECRET               = '738b356376a6ad6bb8a00893713ad7ab'
 LIVE_CLIENT_ID                    = '000000004C0C9B60'
 LIVE_CLIENT_SECRET                = 'OM5kCZZ000pmMG439jJ8Q9jN-k7X4uVU'
-#SOCIAL_AUTH_CREATE_USERS          = True
-#SOCIAL_AUTH_FORCE_RANDOM_USERNAME = False
-#SOCIAL_AUTH_DEFAULT_USERNAME      = 'socialauth_user'
 SOCIAL_AUTH_ERROR_KEY             = 'socialauth_error'
 GITHUB_APP_ID                     = 'c65e763ea91786b3eb5e'
 GITHUB_API_SECRET                 = 'd2d20d01a49d7f3a4c66da086fe74d65e7358498'

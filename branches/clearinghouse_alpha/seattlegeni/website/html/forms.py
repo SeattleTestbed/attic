@@ -171,7 +171,16 @@ class AutoRegisterForm(forms.ModelForm):
   class Meta:
     model = GeniUser
     fields = ('username',)
-    
+
+  def clean_username(self):
+    value = self.cleaned_data['username']
+    try:
+      validations.validate_username(value)
+    except ValidationError, err:
+      raise forms.ValidationError, str(err)
+    return value
+  
+  '''    
   def clean(self):
     data = self.cleaned_data
     try:
@@ -179,7 +188,7 @@ class AutoRegisterForm(forms.ModelForm):
     except ValidationError, err:
       raise forms.ValidationError, str(err)
     return data    
-    
+  '''    
     
     
     
