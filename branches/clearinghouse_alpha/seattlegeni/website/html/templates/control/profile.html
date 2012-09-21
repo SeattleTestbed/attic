@@ -188,7 +188,6 @@ Profile - Seattle Clearinghouse
 					<td class="key">Linked Accounts<img class="help" src="{{ MEDIA_URL }}images/help-icon.png"title="When you link a account you may than use it to login to the Clearinghouse."/></td>
 					<td class="value">
 					      
-					
         	  {% for type, accounts in social_auth.associated.items %}
   					  {% for account in accounts %}
 								{% if account.provider == "facebook"%}
@@ -213,30 +212,29 @@ Profile - Seattle Clearinghouse
    					 {% endfor %}
  					 {% endfor %}
 					
-				{% for name, accounts in social_auth.not_associated.items %}
-   				
+				{% for name, accounts in social_auth.not_associated.items %} 				
 					{% for name in accounts %}
-					<a rel="nofollow" href="{% url socialauth_begin name %}">
-					{% if name == "facebook"%}
-						<img src="{{ MEDIA_URL }}images/bw-Facebook-icon.png" title="A Facebook account is not yet associated, click to link it!"/>							
-					{% endif %}
-					{% if name == "google"%}
-						<img src="{{ MEDIA_URL }}images/bw-google-icon.png" title="A Google account is not yet associated, click to link it!"/>
-					{% endif %}
-					{% if name == "github"%}
-						<img src="{{ MEDIA_URL }}images/bw-github-icon.png" title="A Github account is not yet associated, click to link it!"/>
-					{% endif %}
-					{% if name == "live"%}					
-						<img src="{{ MEDIA_URL }}images/bw-windows-icon.png" title="A Windows Live account is not yet associated, click to link it!"/>
-					{% endif %}
-					{% if name == "yahoo"%}
-						<img src="{{ MEDIA_URL }}images/bw-yahoo-icon.png" title="A Yahoo account is not yet associated, click to link it!"/>
-					{% endif %}
-					</a>
-				{% endfor %}
-  		{% endfor %}
-				</td>
-			</table> <br/>
+				  	<a rel="nofollow" href="{% url socialauth_begin name %}">
+				    	{% if name == "facebook"%}
+				  		 <img src="{{ MEDIA_URL }}images/bw-Facebook-icon.png" title="A Facebook account is not yet associated, click to link it!"/>							
+					    {% endif %}
+				    	{% if name == "google"%}
+					    	<img src="{{ MEDIA_URL }}images/bw-google-icon.png" title="A Google account is not yet associated, click to link it!"/>
+				    	{% endif %}
+				    	{% if name == "github"%}
+				    		<img src="{{ MEDIA_URL }}images/bw-github-icon.png" title="A Github account is not yet associated, click to link it!"/>
+			    		{% endif %}
+			    		{% if name == "live"%}					
+			    			<img src="{{ MEDIA_URL }}images/bw-windows-icon.png" title="A Windows Live account is not yet associated, click to link it!"/>
+			    		{% endif %}
+			    		{% if name == "yahoo"%}
+				    		<img src="{{ MEDIA_URL }}images/bw-yahoo-icon.png" title="A Yahoo account is not yet associated, click to link it!"/>
+				    	{% endif %}
+			  		</a>
+			  	{% endfor %}
+  	  	{% endfor %}
+				  </td>
+		    	</table> <br/>
 		<table class="profile">
 			<tr>
 				<td><h3>Your Keys</h3></td>

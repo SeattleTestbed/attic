@@ -63,7 +63,7 @@ table.profile span.hide_this{
 }
 
 table.profile form{ 
-	display:inline;
+	display: inline;
 }
 
 #download {
@@ -124,7 +124,7 @@ table.profile form{
 }
 
 .api_cell {
-  color:red;
+  color: red;
 }
 
 .api_cell:hover {
@@ -151,9 +151,9 @@ img.help {
 #id_affiliation {
   width: 200px;
 }
-
+/*Added Sept 2012 to fix long api keys creating a new line*/
 #api_key {
-  color:red;
+  color: red;
   font-family: courier;
 }
 
@@ -168,3 +168,4 @@ img.help {
   */
   margin-bottom:-50px;
 }
+

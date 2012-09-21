@@ -89,10 +89,8 @@ SOCIAL_AUTH_LOGIN_URL = 'login'
 # when a logged in user links a new OpenID/OAuth account ex google,yahoo.github etc he
 # gets redirected to this page.  This should always be the profile page.
 SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = 'profile'
-#TODO documentation
-SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email','First name','Last name']
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+#TODO fields specificed here will not be automatically changed/updated by social_auth
+SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email',]
 
 # Email addresses of people that should be emailed when a 500 error occurs on
 # the site when DEBUG = False (that is, in production). Leave this to be empty
@@ -224,7 +222,7 @@ AUTHENTICATION_BACKENDS = (
   'social_auth.backends.google.GoogleBackend',
   'social_auth.backends.yahoo.YahooBackend',
   'social_auth.backends.contrib.github.GithubBackend',
-  #'social_auth.backends.OpenIDBackend',  #needed???
+  #'social_auth.backends.OpenIDBackend',
   #'social_auth.backends.browserid.BrowserIDBackend',
   'social_auth.backends.contrib.live.LiveBackend',
   # Django default this is always needed and must always be last.
@@ -241,7 +239,7 @@ LIVE_CLIENT_SECRET                = 'OM5kCZZ000pmMG439jJ8Q9jN-k7X4uVU'
 SOCIAL_AUTH_ERROR_KEY             = 'socialauth_error'
 GITHUB_APP_ID                     = 'c65e763ea91786b3eb5e'
 GITHUB_API_SECRET                 = 'd2d20d01a49d7f3a4c66da086fe74d65e7358498'
-
+# define what extra facebook permissions you would like from a user
 FACEBOOK_EXTENDED_PERMISSIONS = ['email']
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -285,7 +283,6 @@ SOCIAL_AUTH_PIPELINE = (
   #'seattlegeni.website.pipeline.first_name',
 )
 
-# default new user nickname if not provided  --------------------------------------------------------
 # This is important for the partial pipeline, anytime it is broken with a custom
 # function, it must be redirected back to SOCIAL_AUTH_COMPLETE_URL_NAME in order
 # for the pipeline to continue.
@@ -294,16 +291,13 @@ SOCIAL_AUTH_COMPLETE_URL_NAME  = 'socialauth_complete'
 #SOCIAL_AUTH_PROCESS_EXCEPTIONS = 'social_auth.utils.process_exceptions'
 
 # This should be false for production. Useful for debugging social_auth problems.
-#SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 SOCIAL_AUTH_RAISE_EXCEPTIONS = True
-#SOCIAL_AUTH_USER_MODEL = 'control.GeniUser'
 SOCIAL_AUTH_LAST_LOGIN = 'social_auth_last_login_backend'
 SOCIAL_AUTH_CREATE_USERS = True
 SOCIAL_AUTH_ASSOCIATE_BY_MAIL = True
 #SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 # Backends will store extra values from response by default, set this to False to avoid such behavior:
 # SOCIAL_AUTH_EXTRA_DATA = False
-#----------------------------------------------------------------------------------------------------
 # The number of seconds sessions are valid for. Django uses this for the
 # session expiration in the database in addition to the cookie expiration,
 # which is good.

@@ -118,7 +118,7 @@ def error(request,backend=None):
   """
   <Purpose>
     If a OpenID/OAuth backend itself has an error(not a user or Seattle Clearinghouse's fault) 
-    a user will get redirected here.  This can happen if the backend rejects the vistor.
+    a user will get redirected here.  This can happen if the backend rejects the user.
 
   <Arguments>
     request:
@@ -171,8 +171,6 @@ def associate_error(request,backend=None):
 def auto_register(request,backend=None,error_msgs=''):
   """
   <Purpose>
-  RENAME TO AUTO REGISTER or get new username?? add decoractors. add username checking
-
   Part of the SOCIAL_AUTH_PIPELINE whose order is mapped in settings.py.  If
   a user logs in with a OpenID/OAuth account and that account is not yet linked
   with a Clearinghouse account, he gets redirected here.  
@@ -192,7 +190,6 @@ def auto_register(request,backend=None,error_msgs=''):
     If a user passes in a valid username he gets put back on the pipeline and moved
     foward in the auto register process.
   """
-  
   # Check if a username is provided 
   username_form = forms.AutoRegisterForm()
   if request.method == 'POST' and request.POST.get('username'):
@@ -204,21 +201,15 @@ def auto_register(request,backend=None,error_msgs=''):
         interface.get_user_without_password(username)
         error_msgs ='That username is already in use.'
       except DoesNotExistError:
-        request.session['saved_username'] = request.POST['username'] #username# request.POST['username']
+        request.session['saved_username'] = request.POST['username']
         backend = request.session[name]['backend']
         return redirect('socialauth_complete', backend=backend)  
   name = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
   backend=request.session[name]['backend']
   return render_to_response('accounts/auto_register.html', {'backend' : backend, 'error_msgs' : error_msgs, 'username_form' : username_form}, RequestContext(request))
   
-  """
-  if request.method == 'POST' and request.POST.get('username'):
-    name = setting('SOCIAL_AUTH_PARTIAL_PIPELINE_KEY', 'partial_pipeline')
-    request.session['saved_username'] = request.POST['username']
-    backend = request.session[name]['backend']
-    return redirect('socialauth_complete', backend=backend)
-  return render_to_response('accounts/auto_register.html', {}, RequestContext(request))
-  """
+
+
 
 
 @log_function_call_without_return
@@ -322,9 +313,7 @@ def register(request):
     # Calling the form's is_valid() function causes all form "clean_..." methods to be checked.
     # If this succeeds, then the form input data is validated per field-specific cleaning checks. (see forms.py)
     # However, we still need to do some checks which aren't doable from inside the form class.
-    ### if request.session.get('sessionform') != hashstring
     if form.is_valid():
-    ### request.session['session_form'] = hashstring
       username = form.cleaned_data['username']
       password = form.cleaned_data['password1']
       affiliation = form.cleaned_data['affiliation']

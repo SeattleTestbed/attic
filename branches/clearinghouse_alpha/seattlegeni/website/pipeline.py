@@ -22,20 +22,12 @@ def redirect_to_auto_register(*args, **kwargs):
        kwargs.get('user') is None:
         return HttpResponseRedirect('/html/auto_register')
 
-
 def username(request, *args, **kwargs):
     if kwargs.get('user'):
         username = kwargs['user'].username
     else:
         username = request.session.get('saved_username')
     return {'username': username}
-
-#NOT USED
-#def redirect_to_form2(*args, **kwargs):
-#    ''' NOT USED '''
-#    if not kwargs['request'].session.get('saved_first_name'):
-#        return HttpResponseRedirect('/social_register/')
-
 
 #def first_name(request, *args, **kwargs):
 #    if 'saved_first_name' in request.session:
@@ -51,7 +43,6 @@ def custom_social_auth_user(*args, **kwargs):
     #except UserSocialAuth.DoesNotExist:	 
     #	 return HttpResponseRedirect('social_register')              
     
-#def custom_create_user(*args, **kwargs):
 def custom_create_user(backend, details, response, uid, username, user=None, *args,
                 **kwargs):
     """Create user. Depends on get_username pipeline."""
@@ -69,14 +60,14 @@ def custom_create_user(backend, details, response, uid, username, user=None, *ar
                                        response=response,
                                        details=details)
         return None
-    #set a random password 10 characters long
-    #password=models.UserManager.make_random_password(10)    
+    #set a random password
+    password=str(uuid4())
     #email = details.get('email')
-    #affiliation= 'auto-register@'+ details.get('backend') 
+    #affiliation='auto-register@'+ backend.name
     #backend = kwargs['backend']  / backend = request.session[name]['backend']
     # or just use backend=backend cuz of parameter autoregister-Facebook
     #user = interface.register_user(username, password, email, affiliation)
-    user = interface.register_user(username, password='123456', email=details.get('email'), affiliation='auto-register@'+ backend.name)
+    user = interface.register_user(username, password, email=details.get('email'), affiliation='auto-register@'+ backend.name)
     return {
         'user': user,
         'is_new': True
