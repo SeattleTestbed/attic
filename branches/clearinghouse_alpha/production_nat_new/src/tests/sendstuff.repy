@@ -1,0 +1,176 @@
+include ShimStackInterface.repy
+
+
+
+msgsizes = [50, 80, 100, 200, 500, 1000, 1500]
+
+
+def main():
+
+  # read from command line
+  try:
+    shimstr = callargs[0]
+    port = int(callargs[1])
+    packetcount = int(callargs[2])
+  except:
+    print 'Argument: [shimstr (x for none)] [GENIPort] [number of packets per size per peer]'
+    return
+
+  # construct shim stack
+  if shimstr == 'x':
+    shimstr == ''
+  else:
+    shimstr = '(%s)' % shimstr
+  mycontext['sendshim'] = ShimStackInterface(shimstr)
+  mycontext['recvshim'] = ShimStackInterface(shimstr)
+
+
+  # get peer ip
+  try:
+    f = open('config.txt')
+  except Exception, err:
+    print 'Cannot open config file:', str(err)
+    return
+
+  localtest = 'local' in callargs
+  if localtest:
+    print '\nLOCAL TEST MODE'
+  else:
+    print '\nNEW TEST'
+
+  peerlist = []
+  myip = getmyip()
+
+  for line in f:
+    peerip = line.strip()
+    if myip != peerip or localtest: 
+      peerlist.append(peerip)
+
+  f.close()
+
+  # initialize results table
+  mycontext['packets_received'] = {}
+  for size in msgsizes:
+    mycontext['packets_received'][size] = 0
+
+  # start listening
+  handle = mycontext['recvshim'].recvmess(myip, port, recv_callback)
+
+  # get sample contents
+  if localtest:
+    f = open('out.sendstuff.repy')
+  else:
+    f = open('sendstuff.repy')
+  msg = f.read(max(msgsizes))
+  f.close()
+  print 'Original message size:', len(msg), '; Peers:', len(peerlist),
+  print '; Total messages to send per msg size:', packetcount ,
+  print '; Shim Stack:', shimstr ,
+  print '; Message size list:',
+  for msgsize in msgsizes:
+    print msgsize,
+  print ''
+
+  sleep(2)
+
+  mycontext['sendtime'] = {}
+  for msgsize in msgsizes:
+    mycontext['sendtime'][msgsize] = 0
+  
+  # start sending
+  settimer(0, sendpackets, [peerlist[:], port, packetcount, msg])
+
+  # display results when they haven't changed for 4 times (two minutes)
+  prevresult = ''
+  nochangecount = 0
+  print "Percent packets received per 30 seconds:",
+  while nochangecount < 4:
+    resultdict = mycontext['packets_received']
+
+    if str(resultdict) == prevresult:
+      nochangecount += 1
+    else:
+      progress = int(sum(resultdict.values()) * 100 / len(msgsizes) / len(peerlist) / packetcount)
+      print progress,
+      if progress == 100: break
+      prevresult = str(resultdict)
+      nochangecount = 0
+    
+    if localtest:
+      sleep(5)
+    else:
+      sleep(30)
+  recvtimeEnd = getruntime()
+
+  # stop listening
+  mycontext['recvshim'].stopcomm(handle)
+
+  # present result
+  resultstr = '\n* Packets received: '
+  for msgsize in msgsizes:
+    resultstr += '%d ' % resultdict[msgsize]
+  resultstr += '\n* Total send time: %d. Total recv time: %d. ' % (sum(mycontext['sendtime'].values()), 
+                                                                recvtimeEnd - mycontext['recvtimeBegin'])
+  resultstr += 'Individual send time: '
+  for msgsize in msgsizes:
+    resultstr += '%.1f ' % mycontext['sendtime'][msgsize]
+
+  print resultstr
+
+
+def recv_callback(rip, rport, msg, handle):
+  resultdict = mycontext['packets_received']
+  msgsize = len(msg)
+  if msgsize in resultdict.keys():
+    resultdict[msgsize] += 1
+  else:
+    print 'Invalid msgsize', msgsize
+
+  # start timing
+  if not 'recvtimeBegin' in mycontext.keys():
+    mycontext['recvtimeBegin'] = getruntime()
+
+
+
+def sendpackets(iplist, port, totalpacketcount, msg):
+  packetleft = {}
+  for ip in iplist:
+    packetleft[ip] = {}
+    for msgsize in msgsizes:
+      packetleft[ip][msgsize] = totalpacketcount
+
+  def getsum(dic):
+    ret = 0
+    for key in dic.keys():
+      ret += sum(dic[key].values())
+    return ret
+      
+  # while there is still some packets to send, go through all peers
+  while getsum(packetleft) > 0:
+    for ip in iplist:
+
+      # ensures there is some msg size to randomly pick within this peer
+      if sum(packetleft[ip].values()) == 0:
+        continue
+
+      # pick a msg size to send
+      while True:
+        thismsgsize = msgsizes[random_int_below(len(msgsizes))]
+        if packetleft[ip][thismsgsize] > 0:
+          # found a msg size
+          break
+
+      thismsg = msg[0:thismsgsize]
+
+      beginTime = getruntime()
+      mycontext['sendshim'].sendmess(ip, port, thismsg)
+      endTime = getruntime()
+
+      mycontext['sendtime'][thismsgsize] += endTime - beginTime
+      packetleft[ip][thismsgsize] -= 1
+
+
+
+
+if callfunc == 'initialize':
+  main()
