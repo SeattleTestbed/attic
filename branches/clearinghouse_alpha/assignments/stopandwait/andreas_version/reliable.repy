@@ -1,0 +1,293 @@
+"""
+<Author>
+  Andreas Sekine
+
+<Start Date>
+  January 2009
+
+<Description>
+  An implementation of Seattle's Stop and Wait Assignment. Allows users to 
+  specify the number of retries and timeouts. Uses an alternating value (0,1)
+  to distinguish messages being sent. 
+<Usage>
+  This file defines the following API Calls:
+    reliable_config(maxdgramsize, retries, timeoutinms):
+        Set the protocol variables to determine the behavior of the other calls.
+
+    reliable_sendmess(destip, destport, message, srcip=None, srcport=None):
+        Send message to destip:destport from srcip:srcport. 
+
+    reliable_recvmess(srcip, srcport, function):
+        Set up a listener and handle messages.  Sends back ACKs.
+
+  See the docstrings for more details about each
+"""
+
+
+
+class TimeOutError(Exception):
+  """ A send message timed out """
+
+
+
+
+#The header of an acknowledgement message
+ACK_MSG = 'ACK'
+
+
+
+
+def reliable_recvmess(srcip, srcport, function):
+  """
+  <Purpose>
+    Listen for a message on srcport using srcip, and use function as a callback.
+    
+    Modeled after recvmess. 
+  
+  <Arguments>
+    srcip:
+      The local ip to use to listen on
+    srcport:
+      The local port to listen on
+    function:
+      The callback function to call. It should expect the following arguments: 
+      (remoteIP, remoteport, message, commhandle) 
+  
+  <Exceptions>
+    None
+  
+  <Side Effects>
+    Registers an event handler, and saves a handle to the called function in
+    mycontext as 'reliable_recv_callback'
+  
+  <Returns>
+    The recvmess commhandle
+  """
+
+  #save function for the handler to use
+  mycontext['reliable_recv_callback'] = function
+  return recvmess(srcip, int(srcport), handle_recv)
+
+  
+  
+def handle_recv(remoteIP, remoteport, message, commhandle):
+  """
+  Callback wrapper to allow multiple reliable messages to be in use at once. 
+  Uses make_recv_key to get a handle on the callback from mycontext
+   
+  """
+
+  mess_bit = int(message[0:1])
+  mess_body = message[1:]
+  
+  print "received message from %s:%s: %s" % (remoteIP,remoteport, message)
+  
+  sendmess(remoteIP, remoteport, ACK_MSG + str(mess_bit))
+  
+  function = mycontext['reliable_recv_callback']
+  
+  if mycontext['reliable_last_acked'] is mess_bit:
+    #We've already received this message, don't callback again
+    print "Already received this message, not calling back"
+  else:
+    mycontext['reliable_last_acked'] = mess_bit
+    function(remoteIP, remoteport, message[1:], commhandle)
+
+  
+
+#reliable_sendmess should return the number of characters sent and raise an 
+#  Exception if an error occurred. 
+def reliable_sendmess(destip, destport, message, srcip=None, srcport=None):
+  """
+  <Purpose>
+    Send message to destip/destport, using srcip and srcport. The source 
+    ip/port are optional. Partitions the message according to the configured
+    maxdgram size. 
+  
+  <Arguments>
+    destip:
+        The host to send this message to
+    destport:
+        The port of the host to send the message to
+    message:
+        The message to send the host
+    srcip:
+        The local ip to send the message from.
+    srcport:
+        The local port to send the message from
+  
+  <Exceptions>
+    None
+  
+  <Side Effects>
+    Sets up an event listener to handle acknowledgments from the receiver, 
+  
+  <Returns>
+    None.
+  """
+  
+  #print "reliable_sendmess called with args destip=%s desport=%s  srcip=%s srcport=%s message=%s" %(destip, destport, srcip, srcport, message)
+  
+  if srcip is None:
+    srcip = getmyip()
+    
+  if srcport == None:
+    srcport = destport
+
+  #This makes sure that any ack we receive was for this message, and not
+  #for a previous message received.
+  ack_handler = None
+  if mycontext['retries'] > 0:
+    ack_handler = recvmess(srcip, int(srcport), handle_ack)
+    
+  size = 0  
+  
+  for part in partition_message(message):    
+    mycontext['reliable_last_sent'] = toggle_bit(mycontext['reliable_last_sent'])
+    dgram = str(mycontext['reliable_last_sent']) + part
+    size += reliable_send_dgram(destip, destport, dgram, srcip, srcport )
+  
+  if ack_handler is not None:
+    stopcomm(ack_handler)
+  
+  return size
+
+
+#called after the timeout to mark the timeout of waiting for an ack.
+def send_timeout():
+  mycontext['timeout_timer'].release()
+  
+
+#Private helper to reliably send a single datagram to dest. reliably
+#Returns the number of bytes sent. Ensures that mycontext['reliable_lock'] is
+#released
+def reliable_send_dgram(destip, destport, dgram, srcip, srcport):
+  #-1 since the first try isn't a "retry"
+  retries = -1 
+  size = 0
+  
+  #let handler flag us
+  mycontext['ack_received'] = False
+    
+  while retries < mycontext['retries']:
+    retries += 1
+    #send message
+    print "sending message ", dgram
+    mycontext['reliable_lock'].acquire()
+    mycontext['timeout_timer'] = settimer(mycontext['timeout'], send_timeout,())
+    size += sendmess(destip, int(destport), dgram, srcip, srcport)
+    
+    
+    if mycontext['timeout'] == 0:
+      print "returning immediately because timeout is 0"
+      mycontext['reliable_lock'].release()
+      return size
+    
+    #this lock will either be freed by 
+    #  a) the receiver thread, or
+    #  b) the timeout thread
+    mycontext['reliable_lock'].acquire()
+      
+    if mycontext['ack_received']:
+      #print "ack received"
+      mycontext['reliable_lock'].release()
+      return size
+    
+    mycontext['reliable_lock'].release()
+  
+  #send failed to get acked.
+  raise TimeOutError("dgram timed out: " + dgram)
+  
+
+#Private Helper to handle the acknowledgement for a send
+def handle_ack(remoteIP, remoteport, message, commhandle):
+  print "got ack:", message
+  #for now assume reliable only used by 1 program at a time
+  expected = ACK_MSG + str(mycontext['reliable_last_sent'])
+  if message == expected:
+    #print "woo-hoo! this is a good ack!"
+    canceltimer(mycontext['timeout_timer'])
+    mycontext['ack_received'] = True
+    
+    mycontext['reliable_lock'].release()
+    print "released lock"
+  else:
+    print "DROPPING PACKET from %s:%s, expected ACK%s, got %s" % (remoteIP, remoteport, mycontext['reliable_last_sent'], message)
+
+
+
+
+
+def reliable_config(maxdgramsize, retries, timeoutinms):
+  """
+  <Purpose>
+    Configure the behavior of reliable_sendmess and reliable_recvmess,
+    by changing the timeout and number of retries it attempts.
+  
+  <Arguments>
+    maxdgramsize:
+        The maximum size of a packet to send via this protocol. 
+    retries:
+        The number of times to retry sending a packet before giving up. If 0, 
+        then no retransmissions but will delay at least timeoutms before returning
+    timeoutinms:
+        The time to wait before timing out, in milliseconds. After this timeout
+        either the packet will be sent again or reliable_sendmess will give up
+        (depending on number of retries).
+        If 0, retransmission is disabled and unacknowledged datagrams
+        aren't reported
+  
+  <Exceptions>
+    Exception if retries < 0 or timeoutinms < 0
+  
+  <Side Effects>
+    Changes the number of retries reliable_sendmess uses and its timeout
+  
+  <Returns>
+    None.
+    
+  """
+  
+  if retries < 0 or timeoutinms < 0 or maxdgramsize <= 2:
+    raise Exception("Illegal arguments")
+  
+  mycontext['maxdgramsize'] = maxdgramsize
+  mycontext['timeout'] = float(timeoutinms) / 1000
+  if timeoutinms == 0:
+    mycontext['retries'] = 0
+  else:
+    mycontext['retries'] = retries
+  
+	
+	
+#Private method to toggle a bit
+def toggle_bit(bit):
+  return (bit + 1) % 2
+  
+  
+  
+#Partitions the message, and returns a list where each element is a part of
+#The message so that len(part) <= maxgramsize-1 (to save space for bit)
+def partition_message(message):
+  parts = []
+  while message is not '':
+    end = mycontext['maxdgramsize'] - 1
+    if end > len(message):
+      end = None #Grab the rest of the string
+    part = message[:end]
+    message = message[len(part):]
+    parts.append(part)
+  
+  return parts
+
+
+
+
+	
+if callfunc == 'initialize':
+  #set defaults
+  reliable_config(32, 4, 10)
+  mycontext['reliable_lock'] = getlock()
+  mycontext['reliable_last_sent'] = 0
+  mycontext['reliable_last_acked'] = 0
+  

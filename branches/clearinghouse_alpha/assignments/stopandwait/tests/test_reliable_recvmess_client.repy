@@ -1,0 +1,82 @@
+"""
+  This program runs as a client that sends a single message 
+  with the regular repy sendmess function to a server using 
+  the reliable_recvmess function from the reliable library.  
+  This client then uses a recv call to get the ack message from 
+  the server.  It checks that it is properly formatted.
+  
+  It prints an affirmative message if everything went correctly.  
+  Otherwise it prints the error that occurred.
+  
+  This program must be started after the server program is started.
+
+
+  Arguments needed:
+	serverip - the dot-decimal notation ip address of the server
+	serverport - the port number of the server computer
+	localport - the port number the client listens on
+
+"""
+
+
+
+
+
+def process_ack(remoteip, remoteport, packet, commhandle):
+
+  """
+  <Purpose>
+	This function receives an ack from the server and checks that only 
+	one ack is sent per packet.  It prints error messages.
+  <Arguments>
+	remoteip - the dot-dash ip address of the server computer
+	remoteport - the port number of the server computer
+	packet - the ack message received from the server computer
+	commhandle - a handle to the server computer, not used
+
+  <Exceptions>
+	None.
+
+  <Side Effects>
+        None.
+
+  <Returns>
+	Nothing.
+
+  """
+
+
+  print 'Received ack: '+str(packet)
+  mycontext['ack_num'] = mycontext['ack_num'] + 1
+
+  if packet != '0~':
+    print 'Test failed. The ack was improperly formatted.  It should have been 0~'
+
+  elif mycontext['ack_num'] != 1:
+    print 'Test failed.  Multiple acks were sent back for one packet.'
+
+
+
+
+
+
+
+
+if callfunc == 'initialize':
+
+  #setting up variables
+  serverip = callargs[0]
+  serverport = int(callargs[1])
+  localport = int(callargs[2])
+  mycontext['ack_num'] = 0
+  packet = '0~packet 1'
+
+  try:
+    #send the message to the server
+    sendmess(serverip, serverport, packet)
+
+    #receive the ack message
+    recvmess(getmyip(), localport, process_acks)
+
+  except Exception, e:
+    'Test indeterminate. Error was: '+str(e)

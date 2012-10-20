@@ -1,0 +1,367 @@
+"""
+<Author>
+  Richard Jordan
+
+<Start Date>
+  January 7th, 2009
+
+<Description>
+  An implementation of the Sliding Window extension 
+  to Seattle's Stop and Wait Assignment.
+  Sends multiple datagrams at a time.
+
+  See:
+    https://seattle.cs.washington.edu/wiki/StopAndWaitAssignment.
+
+<Usage>
+  Public methods:
+    extra_reliable_config(maxdgramsize, retries, timeoutinms):
+        Set up the protocol variables.
+
+    extra_reliable_sendmess(destip, destport, message, srcip=None, srcport=None):
+        Let the reliable library split up messages into packets.  Then send them.
+	Send multiple packets at a time inside a "window."
+        Listen for ACKs to make sure the receiver gets them.
+
+    extra_reliable_recvmess(srcip, srcport, function):
+        Set up a listener and handle messages.  Send back ACKs.
+
+"""
+
+# Constants
+DEFAULT_MAXDGRAMSIZE = 5 # bytes of payload to send
+DEFAULT_RETRIES = 4 # listen times for ack
+DEFAULT_TIMEOUT = 1000 # miliseconds to wait
+MILLISECONDS_TO_SECONDS = 1/1000.0 # conversion
+DEFAULT_START_BYTE = 0 # start counting from 0
+DELIM = "~" # separates the packet into segments
+
+NET_MAX_DGRAM_SIZE = 64000 # 64 KB max network size of a packet
+
+# extra constant
+WINDOW_SIZE_MULTIPLIER = 3 # number of payloads
+
+########## Public Methods #############
+
+# Set some context variables.
+def extra_reliable_config(maxdgramsize, retries, timeoutinms):
+  """
+    <Purpose>
+      Sets up the passed state variables.
+
+    <Arguments>
+      maxdgramsize:
+             The maximum number of bytes of payload in a message.
+             The default is five bytes per payload.
+
+      retries:
+             Times to try sending a package before giving up.
+             The default is four tries.
+
+      timeoutinms:
+             The time to wait for an ACK.  The default is 100
+             miliseconds.
+
+    <Exceptions>
+      Exception if the maxdgramsize is less than or equal to zero.
+      Exception if the retries or timeout is less than zero.
+
+    <Side Effects>
+      Sets mycontext['_<argname>'].  Ex. mycontext['_maxdgramsize'].
+      Allocates a lock as mycontext['_send_lock'].
+      Sets mycontext['_configured'] to equal True.
+      Sets mycontext['_window_size'] to be WINDOW_SIZE_MULTIPLIER *
+        maxdgramsize.
+
+    <Returns>
+      Nothing.
+  """
+  if maxdgramsize <= 0:
+    raise Exception("maximum datagram size cannot be <= zero")
+  if maxdgramsize > NET_MAX_DGRAM_SIZE:
+    raise Exception("maximum datagram cannot be > " + str(NET_MAX_DGRAM_SIZE))
+  if retries < 0:
+    raise Exception("retries cannot be < zero")
+  if timeoutinms < 0:
+    raise Exception("timeout cannot be < zero")
+
+  mycontext['_maxdgramsize'] = maxdgramsize
+  mycontext['_retries'] = retries
+  mycontext['_timeoutinms'] = timeoutinms
+  mycontext['_window_size'] = WINDOW_SIZE_MULTIPLIER * maxdgramsize
+
+  # Set up a lock for threads.
+  mycontext['_send_lock'] = getlock()
+  # for sleeping
+  mycontext['_sleep_lock'] = getlock()
+
+  # Has the protocol been configured?
+  mycontext['_configured'] = True
+
+# Use the sliding window algorithm to break up and send the message.
+def extra_reliable_sendmess(destip, destport, message, srcip=None, srcport=None):
+  """
+    <Purpose>
+      Fills a byte size window with part of the message.  Sends that chunk
+      of the message until it receives the first datagram.  Then, slides
+      around the window to include the next chunk of the message that will
+      fit inside the window.
+
+      Wraps all the datagrams inside the window in headers, and sends them
+      to the receiver each timeout cycle for retries number of times.  
+      Listens for ACK's to make reliable.  Allows cumulative ACK-ing.
+
+    <Arguments>
+      destip:
+             The ip to communicate to
+
+      destport:
+             The port to communicate to.  The remote node's restrictions file 
+             must allow this port as a messport.
+
+      message:
+             A string of data.  Ex. "hello world!"
+
+      srcip:
+             The ip to communicate from.  Probably is either '127.0.0.1' or
+             the result from getmyip().  Defaults to getmyip().
+
+      srcport:
+             The port to communicate from.  The restrictions file must allow
+             this port as a messport.
+
+    <Exceptions>
+      Exception if times out.
+
+    <Side Effects>
+      Sets up a UDP callback to listen for acks.
+      Uses mycontext['_last_ack'] to keep track of window start.
+      Calls extra_reliable_config() with defaults.
+      Locks mycontext['_send_lock'] when manipulating mycontext['_last_ack'].
+ 
+    <Returns>
+      The bytes sent.
+  """
+
+  # Make sure all the context variables are setup
+  if not '_configured' in mycontext:
+    extra_reliable_config(DEFAULT_MAXDGRAMSIZE, DEFAULT_RETRIES, DEFAULT_TIMEOUT)
+
+  # What should the optional arguments be then?
+  # Let's pick this ip and the same port?
+  # BUG: what about loopback? and if the port is taken?
+  if(srcip == None or srcport == None):
+    srcip = getmyip()
+    srcport = destport
+
+  # According to specs:
+  # (snip)
+  # A timeout of 0 ms disables retransmissions and 
+  # causes reliable_sendmess to never report an unacknowledged datagram.
+  # ...
+  # A retries of 0 also disables retransmissions, but 
+  # delays at least timeoutms before returning. 
+  # Datagrams are never reported as lost. 
+  # (snip)
+  # So let's do it.
+  if mycontext['_timeoutinms'] == 0:
+    return sendmess(destip, destport, message, srcip, srcport)
+  if mycontext['_retries'] == 0:
+    # Ok, this is really stupid, buit it's what they want?
+    sleep(mycontext['_timeoutinms'] * MILLISECONDS_TO_SECONDS)
+    return sendmess(destip, destport, message, srcip, srcport)
+
+  if not '_last_ack' in mycontext.keys():
+    mycontext['_last_ack'] = DEFAULT_START_BYTE
+
+  # Listen for the ack of the message
+  ch = recvmess(srcip, srcport, process_ack)
+
+
+  # BUG: 3/18/09
+  # switch to message based from bytes  
+  # Create all the packets up front
+  # This wouldn't work usually.  But, our
+  # window size is fixed so this is the easier
+  # than creating packets on the fly.
+  packets = packetize(message)
+  # print packets
+
+  unacked = {} # a cache of sent, unacked packets
+
+
+  # mycontext['_last_ack'] = 0
+  last_ack = mycontext['_last_ack']
+  
+  # Send it -- Sliding Window
+  bytes = 0 # bytes sent accounting
+  while packets or unacked:
+    tries = 0 # reset
+
+
+    # BUG: 3/18/09
+    # switch to message based from bytes  
+    # Fill up the unacked with already created
+    # chunks.  The window size is fixed so 
+    # we always know to have WINDOW_SIZE_MULTIPLIER
+    # unacked packets.
+    while packets and len(unacked.keys()) < WINDOW_SIZE_MULTIPLIER:
+      nums = packets.keys()
+      nums.sort()
+      next_num = nums[0]
+      unacked[next_num] = packets[next_num]
+      del packets[next_num]
+
+    # Until we get an ACK back or timeout
+    while True:        
+      mycontext['_sleep_lock'].acquire()
+      # Timeout error
+      if tries > mycontext['_retries']:
+        mycontext['_sleep_lock'].release()
+        stopcomm(ch)
+        raise Exception, "timeout, sent %d bytes" % bytes
+
+      # Make sure our event handler isn't doing the same.
+      mycontext['_send_lock'].acquire()
+
+      if last_ack != mycontext['_last_ack']:
+        last_ack = mycontext['_last_ack']
+        # Cumulatively acked
+        # By the definition of our protocol
+        # all payloads with byte num's beneath
+        # the last ack we've recvd, the server has recvd
+        for datagram in unacked.keys():
+	  if datagram < last_ack:
+            del unacked[datagram] # remove from cache
+        mycontext['_sleep_lock'].release()
+        mycontext['_send_lock'].release()
+        break  # message received!
+      else:      # then try again
+        mycontext['_send_lock'].release()
+        for datagram in unacked:
+          # print pack_mess(datagram, unacked[datagram])
+          bytes += sendmess(destip, destport, pack_mess(datagram, unacked[datagram]), srcip, srcport)
+        tries += 1
+
+      mycontext['_sleep_timer'] = settimer(mycontext['_timeoutinms'] * MILLISECONDS_TO_SECONDS, release_sleep_lock, ())
+
+  stopcomm(ch)
+
+  return bytes
+
+# Setup the callback for when we receive a payload.
+# The callback will send an ack back.
+# Save the application's function.
+def extra_reliable_recvmess(srcip, srcport, function):
+  """
+    <Purpose>
+      Listens for data from a sender.  Sends ACK's back on receipt.
+
+    <Arguments>
+      srcip:
+             The ip to communicate from.  Probably is either '127.0.0.1' or
+             the result from getmyip().
+
+      srcport:
+             The port to communicate from.  The restrictions file must allow
+             this port as a messport.
+      
+      function:
+             A callback to receive the payloads.
+
+    <Exceptions>
+      None
+
+    <Side Effects>
+      Sets up UDP callback.  Sets mycontext['_function'].
+      Sets mycontext['_next_byte'] to ACK.
+      Sets up mycontext['_recv_lock'] for mycontext['_next_byte'].
+
+    <Returns>
+      An event handler.
+  """
+
+  mycontext['_function'] = function
+  mycontext['_next_byte'] = DEFAULT_START_BYTE # waiting for this byte
+  mycontext['_recv_lock'] = getlock()  # Set up a lock for threads.
+
+  return recvmess(srcip, srcport, process_message)
+
+###### Private functions ################
+
+# Send back an "ack" and call the application's
+# function.  Event setup by reliable_recvmess.
+# Thread safe using mycontext['_recv_lock'].
+def process_message(ip, port, mess, ch):
+  mycontext['_recv_lock'].acquire()
+  byte, payload = unpack_mess(mess)
+  # print "message: %s\n" % mess
+  if byte == mycontext['_next_byte']:
+    # print "sending ack...\n"
+    mycontext['_next_byte'] += len(payload)
+    sendmess(ip, port, pack_mess(mycontext['_next_byte'], "ack..."))
+    mycontext['_function'](ip, port, payload, ch)
+  else:
+    # print "server says: duplicate or unexpected\n"
+    sendmess(ip, port, pack_mess(mycontext['_next_byte'], "resending ack..."))
+  mycontext['_recv_lock'].release()
+
+# Set that we received an ack.  Event setup by reliable_sendmess.
+# Thread safe using mycontext['_send_lock'].
+def process_ack(ip, port, mess, ch):
+  mycontext['_send_lock'].acquire()
+  ack, payload = unpack_mess(mess)
+  # print "ack: %s\n" % mess
+  if ack > mycontext['_last_ack']:
+    # print "receiving 'ack'\n"
+    mycontext['_last_ack'] = ack
+    release_sleep_lock()
+  else:
+    # print "old ack\n"
+    pass
+
+  mycontext['_send_lock'].release()
+
+# Flip the bit
+def toggle(bit):
+  if bit:
+    return 0
+  else:
+    return 1
+
+# Unpack a mess into parts
+def unpack_mess(mess):
+  res = mess.split(DELIM)
+  bit = int(res[0])
+  return (bit, ''.join(res[1:]))
+
+# Pack up payload with header
+def pack_mess(bit, payload):
+  bit = str(bit)
+  mess = bit + DELIM + payload
+
+  return mess
+
+# BUGFIX: 2/05/09
+# Timeouts should end immediately
+# when ACK comes. - RJ
+def release_sleep_lock():
+  if '_sleep_timer' in mycontext.keys():
+    canceltimer(mycontext['_sleep_timer'])
+    del mycontext['_sleep_timer']
+    mycontext['_sleep_lock'].release()
+
+# BUGFIX: 3/18/09
+# Change to message based from byte based protocol.
+# slice up data into packets of size maxdgramsize
+def packetize(data):
+  packets = {}
+  num = 0
+  maxnum = len(data)
+  dsize = mycontext['_maxdgramsize']
+
+  while num < maxnum:
+    packets[num + mycontext['_last_ack']] = data[num:num+dsize]
+    num += dsize
+
+  return packets

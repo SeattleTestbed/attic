@@ -1,0 +1,37 @@
+routerconnections = {}
+
+def gotconnection(srcip, srcport, socketobj, mainch, ch):
+  # someone is connected to me...
+
+  if srcip in routerconnections:
+    raise Exception("Internal Error: someone I was already connected to connected to me ("+str(srcip)+")")
+
+  routerconnections[srcip] = socketobj
+
+
+
+if callfunc == 'initialize':
+  if len(callargs) != 2:
+    raise Exception("Must be called with file to read map data from and the port")
+
+  # listen for connections...
+  myip = getmyip()
+  myport = int(callargs[1])
+  waitforconn(myip, myport, gotconnection)
+
+  sleep(20)
+
+  inputfn = callargs[0]
+  # Walk through the file and look for things I'm supposed to do...
+  for line in file(inputfn):
+    srcip, destip = line.split()
+    # If this is me, then open a connection and put it in the routerconnections
+    # table...
+    if srcip == myip:
+      routerconnections[destip] = openconn(destip,myport)
+
+  # I would enter the routing loop here, but it's not written yet.
+  sleep(20)
+
+  print myip,":", routerconnections.keys()
+  exitall()

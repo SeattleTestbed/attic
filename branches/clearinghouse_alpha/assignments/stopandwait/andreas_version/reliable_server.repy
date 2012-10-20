@@ -1,0 +1,56 @@
+""""
+<Author>
+  Andreas Sekine
+
+<Start Date>
+  January 2009
+
+<Description>
+  A simple server to test the functionality of the reliable module. Part of the
+  implementation for the Seattle StopAndWait assignment
+  
+  Listens on a specified port, and prints all messages received to a specified
+  file.
+  
+  Once the first packet has been receieved, all subsequent packets must be 
+  received within 5 seconds or the server will close the file and exit,
+  to ensure the file gets properly closed
+<Usage>
+  Call with 2 arguments: the file to print to, and the port to listen on.
+"""
+
+include reliable.repy
+
+#Politely exit after no new messages have been seen for a while
+def server_timeout():
+  mycontext['outfile'].close()
+  print "Server Timed out. Closing file"
+  exitall()
+
+
+#Event handler for receiving messages and printing them to outfile
+def mess_recieved(remoteip, remoteport, message, commhandle):
+  if 'server_timeout' in mycontext:
+    canceltimer(mycontext['server_timeout'])
+  print "SERVER: received message:", message
+  mycontext['outfile'].write(message)
+  mycontext['server_timeout'] = settimer(5, server_timeout, ())
+
+
+def main(portnum, ip=None):
+  if ip is None:
+    ip = getmyip()
+  print "Starting server for ip", ip, "and port", portnum 
+  reliable_recvmess(ip, portnum, mess_recieved)
+  
+  
+
+if callfunc == 'initialize':
+  if len(callargs) == 2 or len(callargs) == 3:
+    mycontext['outfile'] = open(callargs[0], "w")
+    if len(callargs) == 3:
+      main(callargs[1], callargs[2])
+    else:
+      main(callargs[1])
+  else:
+    print "Must supply 2-3 arguments: outfile portnum [ip]"

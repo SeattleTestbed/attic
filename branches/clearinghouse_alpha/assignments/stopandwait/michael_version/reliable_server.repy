@@ -1,0 +1,93 @@
+"""
+
+<Program Name>
+
+  reliable_server.repy
+
+
+
+<Started>
+
+  January 8, 2009
+
+
+
+<Author>
+
+  MikeMosh@cs.washington.edu
+
+  Michael Moshofsky
+
+
+
+<Purpose>
+
+  Listens for packets sent from reliable_client.repy and writes them to
+  a file. 
+  This program should be started before its counterpart, reliable_client.repy.
+
+
+
+
+"""
+
+include reliable.repy
+
+
+
+"""
+
+  Creates a file that can be written to and sets up a function to be called
+
+  when a packet is received.
+
+"""
+
+def main():
+
+  # Creating a file in case the file does not currently exist.
+  outputfile = open(mycontext['filename'], "w")
+  outputfile.close()
+
+
+  # When a message is received, acknoledge send will be called.
+  reliable_recvmess(getmyip(), mycontext['myport'])
+
+
+
+
+
+
+
+
+"""
+
+  This program will listen for packets from reliable_client and write them
+
+  to a file specified.
+
+
+
+  filename - name of the file where packets will be stored.
+
+
+  port - port used on this computer.
+
+
+
+  Arguments: filename port
+
+
+
+"""
+
+if callfunc == 'initialize':
+  # This file will store the received data.
+  mycontext['filename'] = callargs[0]
+
+  # Port number of the client computer
+
+  mycontext['myport'] = int(callargs[1])
+
+  main()
+  

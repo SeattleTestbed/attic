@@ -1,0 +1,272 @@
+"""
+
+<Program Name>
+
+  reliable.repy
+
+
+
+<Started>
+
+  January 8, 2009
+
+
+
+<Author>
+
+  MikeMosh@cs.washington.edu
+
+  Michael Moshofsky
+
+
+
+<Purpose>
+
+  Reliable API used by both reliable_client and reliable_server for sending and 
+  recieving packets in a reliable way.
+
+
+"""
+
+
+
+
+
+
+
+
+
+reliable_settings = {'retries':4, 'timeoutinms':10, 'curtries':0, 'timehandler':None,\
+ 'stoplock':None, 'stoplock2':None, 'received':False, 'curpackage':0, 'messwon':False}
+
+
+# *************** Client Methods *************** 
+
+"""
+
+  This method is called if a packet is received. It checks to see if it is the
+
+  current packet wanted. If it is it cancels the timer and releases the lock
+
+  to let sendmess move on to the next packet. If it is not the correct packet,
+
+  it ignores it.
+
+
+
+  remoteip - ip address of the sender
+  remoteport - unused port in this method.
+  message - the message of the packet (including the header)
+  commhandle - unused in this method.
+
+
+
+"""
+def setreceived(remoteip, remoteport, message, commhandle):
+
+  # Without this lock if the by chance the packet is received at the same
+
+  # time as the timer expires, an unlocked lock exception will occur. 
+  reliable_settings['stoplock2'].acquire()
+
+
+  # making sure it is the current packet we are waiting for
+  if int(message) == reliable_settings['curpackage']:
+    canceltimer(reliable_settings['timehandler'])
+
+
+    # indicate the message was received
+    reliable_settings['received'] = True 
+    reliable_settings['curpackage'] += 1
+
+
+    # In case events occured at the same time (True if ack won)
+    reliable_settings['messwon'] = True
+
+
+    # releases the lock in sendmess to let it move on to the next packet.
+    reliable_settings['stoplock'].release()
+  reliable_settings['stoplock2'].release()
+
+
+
+
+
+
+
+
+"""
+
+  Will be called when the current packet is not received in the time set.
+
+  It will cause sendmess to resend the last packet.
+
+"""
+def time_expired():
+
+  # without this lock if the by chance the packet is received at the same
+
+  # time as the timer expires, an unlocked lock exception will occur.
+  reliable_settings['stoplock2'].acquire()
+  reliable_settings['curpackage'] += 1
+  reliable_settings['stoplock2'].release()
+
+
+  # In case events occured at the same time (True if ack won)
+  if reliable_settings['messwon'] == False:
+    reliable_settings['stoplock'].release()
+
+
+
+
+
+
+
+
+"""
+
+  This function sends the message to the server using the give ip and port.
+
+  It waits for an ack back, but if one is not received in time given it will
+
+  resend the packet a user specified number of times.
+
+
+
+  destip - The server computer's ip
+
+  destport - The server computer's port
+
+  message - Message to be sent
+
+
+
+"""
+def reliable_sendmess(destip, destport, message):
+  reliable_settings['curtries'] = 0 # number tries for packet
+
+
+  # This lock causes the program to halt until either the correct packet
+
+  # is received or the timer expires.
+  reliable_settings['stoplock'] = getlock()
+
+
+  # Controls concurency of timer and recieve events.
+
+  # This lock is needed if the timer and received events happen at the same time.
+  reliable_settings['stoplock2'] = getlock() 
+
+
+  # sets up the event to listen for acknowledgements
+  recvmess(getmyip(), mycontext['port'], setreceived)
+
+  # will continue to loop through for the number of retries indicated by user 
+  # or until the message was acknowledged
+  while reliable_settings['curtries'] < reliable_settings['retries']:
+    reliable_settings['stoplock'].acquire()
+
+    reliable_settings['received'] = False  # current packet has not been acknowledged
+    reliable_settings['messwon'] = False  # boolean handles concurency if timer and recieve colide (if rec first = T)
+
+    # Sends current packet number then &> to indicate break in section of the packet then message
+    sendmess(destip, destport, str(reliable_settings['curpackage']) + "&>" + message)
+    
+    # Starts timer
+    reliable_settings['timehandler'] = settimer(int(reliable_settings['timeoutinms']) / 100, time_expired, [])
+
+    # Timer will not release until ack is received or timer goes off
+    reliable_settings['stoplock'].acquire()
+    
+    reliable_settings['curtries'] += 1
+
+    reliable_settings['stoplock'].release()
+
+    # If ack is received, no need to loop anymore
+    if reliable_settings['received'] == True:
+      break
+
+
+
+
+
+
+
+"""
+
+  Sets the number of times sendmess will retry sending each message and also
+
+  the time before the program will resend a packet.
+
+
+
+  retries - Number of times sendmess will resend a packet.
+
+  timeoutinms - Time before sendmess will resend a packet.
+
+
+"""
+def reliable_config(retries, timeoutinms):
+  reliable_settings['retries'] = retries
+  reliable_settings['timeoutinms'] = timeoutinms
+
+
+# *************** Server Methods *************** 
+
+"""
+
+  Unpacks all packets, writing the message to an output file then sending an
+
+  ack back to the computer who sent the packet.
+
+
+
+  remoteip - ip address of the sender
+
+  remoteport - unused port that is not used in this method
+
+  message - full message of the packet (including headers)
+
+  commhandle - not used in this method
+
+
+
+"""
+
+def acknowledge_send(remoteip, remoteport, message, commhandle):
+  # Finds index of divider
+  numindex = message.find("&>")
+  # Gets pack num which is text before &>
+  packnum = message[:numindex]
+  numindex += 2
+  # Gets message (text after &>)
+  realmess = message[numindex:]
+
+
+  # Sends acknowledgement message to the client who just sent a message.
+  sendmess(remoteip, mycontext['myport'], str(packnum))
+
+  # Prints the message received to the output file.
+  outputfile = open(mycontext['filename'], "a")
+  print >> outputfile, realmess
+  outputfile.close()
+
+
+
+
+
+
+"""
+
+  Sets the function acknowledge_send to be called when any packet is received.
+
+
+  localip - the ip address of this computer
+
+  localport - local port used on this computer
+
+
+
+"""
+def reliable_recvmess(localip, localport):
+  recvmess(localip, localport, acknowledge_send)

@@ -1,0 +1,76 @@
+-- Winter 2009
+Stop-and-Wait Protocol
+
+--==[ About ]==--
+This code is an implementation of the assignment found at:
+  https://seattle.cs.washington.edu/wiki/StopAndWaitAssignment
+All instructions below should, hopefully, work on any Linux 
+machine.
+
+--==[ Dependencies ]==--
+You must have Repy, Repypp, and Seash.
+For example, to download them for Linux type:
+ $ wget https://seattlegeni.cs.washington.edu/geni/download/flibble/seattle_linux.tgz
+ $ tar xgf seattle_linux.tgz
+You should then see a folder named "seattle_repy."
+
+--==[ Manifest ]==--
+The Makefile expects the following layout:
+ reliable/Makefile
+ reliable/README
+ reliable/reliable_client.repy
+ reliable/reliable_server.repy
+ reliable/reliable.repy
+ reliable/test/restrictions.default
+ reliable/test/in.file
+ reliable/seattle_repy
+Where seattle_repy is your Seattle download.
+
+--==[ Running the code locally ]==--
+To run the local example, type:
+ $ make test
+Check test/junk_test.out.  Correct output is:
+ $ cat test/junk_test.out
+ hello world!!
+
+--==[ Getting remotely setup ]==--
+For instructions on getting Clearinghouse setup go to:
+  https://seattle.cs.washington.edu/wiki/SeattleShell
+  https://seattle.cs.washington.edu/wiki/TakeHomeAssignment
+  https://seattle.cs.washington.edu/wiki/RepyTutorial
+Write down your Clearinghouse port.  You'll see it on the "User Info" tab.
+Grab at least two nodes from the "Used Resources" tab.  
+Put your Clearinghouse keys into the reliable/test/ directory.
+
+--==[ Running the code remotely ]==--
+Make sure the code is linked:
+ $ make
+You should have test/reliable_client and test/reliable_server.
+To run remotely, cd into test and start seash:
+ $ cd test && python ../seattle_linux/seash.py
+Load your keys and bring up vessels:
+ !> loadkeys roger
+ !> as roger
+ roger@ !> browse
+ roger@ !> on browsegood
+Upload the file:
+ roger@browsegood !> on %1 upload in.file
+Then, run the client on one node and the server on another:
+ roger@browsegood !> on %2 run reliable_server junk_test.out <Clearinghouseport>
+ roger@browsegood !> on %1 run reliable_client in.file <IP of %2> <Clearinghouseport> <IP of %1>
+Replace the <IP of %x> with the IP of the remote vessel.  You can see
+these by doing:
+ roger@browsegood !> list
+Replace <Clearinghouseport> with your unique port from the Clearinghouse website.
+
+--==[ Examining remote output ]==--
+Check the logs:
+ roger@browsegood !> show log
+Download the file:
+ roger@browsegood !> on %2 download junk_test.out
+
+--==[ Notes ]==--
+I found the protocol has trouble transfering the in.file.  Either the
+server or client times out.  Play around with the timeout settings.  
+Seeing just "hello" transfered might be as much as the network can
+handle, especially between WAN nodes.

@@ -1,0 +1,37 @@
+def grade(client_log, server_log):
+
+  """
+  <Purpose>
+	Grades log output produced from running the test.
+
+  <Arguments>
+	client_log : string output from the client from running the test
+	server_log : string output from the server from running the test
+
+  <Exceptions>
+	None.
+
+  <Side Effects>
+        None.
+
+  <Returns>
+	Returns a string stating if the test failed or passed.
+
+  """
+
+
+  #check if there were errors in the client log
+  client = client_log.find('test completed')
+
+  #check if there were errors in the server log
+  failed = server_log.find('fail')
+  error = server_log.find('error')
+  error2 = server_log.find('Error')
+  last_retry = server_log.find('10')
+  went_over = server_log.find('11')
+
+  #if both were successful the test passed
+  if client != -1  && failed == -1 && error == -1 && error2 == -1 &&  last_retry!= -1 && went_over == -1:
+    return 'SUCCESS'
+  else :
+    return 'FAILURE'
