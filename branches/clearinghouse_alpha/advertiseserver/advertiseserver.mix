@@ -1,0 +1,347 @@
+""" 
+Author: Justin Cappos
+
+Start Date: July 8, 2008
+
+Description:
+Advertisements to a central server (similar to openDHT)
+
+
+"""
+
+include session.repy
+include sockettimeout.repy
+include time.repy
+include uniqueid.repy
+
+legacyserverport = 10101
+serverport = 10102
+
+
+hashtable = {}
+
+#used for logging
+logfiledata=dict()
+
+#contains a list of get/put requests that have been completed, nothing is logged here for requests that are failed
+#the call_trace log follows the following format:
+#<timestamp> <PUT/GET> <request identification key> <first 16 characters of key> <value> <expiration interval in case of PUT, blank in case of GET>
+logfiledata["call_trace"]=None   
+
+#contains information that is logged while each request is processed
+#will log information for all requests that are received
+logfiledata["expanded_log"]=None
+log_lock = getlock()
+
+#safely write to the given log file
+def write_to_log(log_file, message):
+  # This has been commented out to prevent logging.  
+  #log the request information
+#  log_lock.acquire()
+#  log_file.write(message)
+#  log_file.flush()
+#  log_lock.release()
+  pass
+
+
+def expire_hashtable_items():
+  now = time_gettime()
+  for key in hashtable.copy():
+    # copying the list, so I can remove elements...
+    for valuetimepair in hashtable[key][:]:
+      if valuetimepair[1] < now:
+        try:
+          # if time has expired, remove it...
+          hashtable[key].remove(valuetimepair)
+        except ValueError:
+          # This is okay.   It means another instance of expire_hashtable_items
+          # or an insert_hashtable removed the entry.
+          pass
+
+
+
+def insert_hashtable(key, value, expiretime):
+  if key not in hashtable:
+    hashtable[key] = []
+
+  # copying the list, so I can remove elements...
+  for valuetimepair in hashtable[key][:]:
+    if valuetimepair[0] == value:
+      # if there is already a value, remove it...
+      try:
+        hashtable[key].remove(valuetimepair)
+      except ValueError:
+        # This is okay.   It means an instance of expire_hashtable_items or
+        # another insert_hashtable instance removed the entry.
+        pass
+    
+  hashtable[key].append((value,expiretime))
+      
+
+def read_hashtable(key, maxkeys):
+  if key not in hashtable:
+    
+    #log the hash table miss
+    expanded_message = str(time_gettime())+": unable to find key " + str(key)[0:16] + "... in hashtable.\n"
+    write_to_log(logfiledata["expanded_log"], expanded_message)
+  
+    return []
+
+  retlist = []
+  for item in hashtable[key]:
+    retlist.append(item[0])
+
+  return retlist[:maxkeys]
+
+
+
+
+
+# This is the legacy handler for outdated clients...   
+# Hopefully, we will be able to obsolete it at some point
+def handlelegacyrequest(remoteIP, remoteport, sockobj, ch, mainch):
+  expire_hashtable_items()
+  try:
+    try:
+      request = session_recvmessage(sockobj)
+    except Exception,e:
+      print e
+      return
+
+    requestlist = request.split('|')
+    
+    #set up a unique id for this operation
+    request_id = uniqueid_getid()
+    
+    if requestlist[0] == 'PUT':
+    
+      #log the request information
+      expanded_message = str(time_gettime())+": PUT " + str(request_id) + " request started. key,value= " +  str(requestlist[1])[0:16] + "... ," + str(requestlist[2]) + ".\n"
+      write_to_log(logfiledata["expanded_log"], expanded_message)
+    
+    
+      if len(requestlist) != 4:
+        session_sendmessage(sockobj, "Error, incorrect number of args")
+        
+        #log the problem
+	expanded_message = str(time_gettime())+": PUT " + str(request_id) + " request failed, incorrect number of args\n"
+        write_to_log(logfiledata["expanded_log"], expanded_message)
+        return
+      
+      try:
+        insert_hashtable(requestlist[1], requestlist[2], int(requestlist[3])+time_gettime())
+        insert_hashtable('%all', requestlist[2], int(requestlist[3])+time_gettime())
+      except ValueError:
+        session_sendmessage(sockobj, "Error, last arg must be a number")
+        
+        #log the problem
+	expanded_message = str(time_gettime())+": PUT " + str(request_id) + " request has failed, last arg must be a number.\n"
+	write_to_log(logfiledata["expanded_log"], expanded_message)
+        
+        return
+      
+      session_sendmessage(sockobj, "OK")
+      
+            
+      #log the call info to call_trace
+      call_trace_message = str(time_gettime())+" PUT " + str(request_id) + " " +  str(requestlist[1])[0:16] + "... " + str(requestlist[2]) + " " + str(requestlist[3]) + "\n"
+      write_to_log(logfiledata["call_trace"], call_trace_message)
+      
+      #also log to the expanded log
+      expanded_message = str(time_gettime())+": PUT " + str(request_id) + " request has completed.\n"
+      write_to_log(logfiledata["expanded_log"], expanded_message)
+      
+      return
+
+    elif requestlist[0] == 'GET':
+
+      #log the request information
+      expanded_message = str(time_gettime())+": GET " + str(request_id) + " request started. key,value= " +  str(requestlist[1])[0:16] + "... ," + str(requestlist[2]) + ".\n"
+      write_to_log(logfiledata["expanded_log"], expanded_message)
+    
+
+      if len(requestlist) != 3:
+        session_sendmessage(sockobj, "Error, incorrect number of args")
+        
+        #log the problem
+	expanded_message = str(time_gettime())+": GET " + str(request_id) + " request failed, incorrect number of args\n"
+        write_to_log(logfiledata["expanded_log"], expanded_message)
+        return
+      
+      try:
+        readlist = read_hashtable(requestlist[1], int(requestlist[2]))
+      except ValueError:
+        session_sendmessage(sockobj, "Error, last arg must be a number")
+        
+        #log the problem
+	expanded_message = str(time_gettime())+": GET " + str(request_id) + " request has failed, last arg must be a number.\n"
+	write_to_log(logfiledata["expanded_log"], expanded_message)
+        return
+
+      session_sendmessage(sockobj, ",".join(readlist)+"OK")
+      
+      #log the call info to call_trace
+      call_trace_message = str(time_gettime())+" GET " + str(request_id) + " " +  str(requestlist[1])[0:16] + "... " + str(requestlist[2]) + " " + "\n"
+      write_to_log(logfiledata["call_trace"], call_trace_message)
+      
+      #also log to the expanded log
+      expanded_message = str(time_gettime())+": GET " + str(request_id) + " request has completed.\n"
+      write_to_log(logfiledata["expanded_log"], expanded_message)
+      
+      return
+
+    else:
+    
+      #log the request information
+      expanded_message = str(time_gettime())+": Unknown Request " + str(request_id) + " message = " + request + "\n"
+      write_to_log(logfiledata["expanded_log"], expanded_message)
+    
+    
+      session_sendmessage(sockobj, "Error, unknown request type")
+      return
+
+  except Exception,e:
+    print "While handling request, received: ",e
+  
+  finally:
+    sockobj.close()
+
+
+
+
+
+
+# This will receive requests that look like this:
+# ('PUT', 'key', 'value', 100)    # put 'value' under 'key' for 100 seconds
+# ('GET', 'key', 10)              # get at most 10 values stored under 'key'
+#
+# The responses returned for a PUT look like the following:
+# 'OK' (in response to put)
+# 'An error foobar occurred when performing a PUT' (in response to put)
+#
+# The responses returned for a GET look like the following:
+# ('OK',[]) (no items under key)
+# ('OK',['abc','123']) ('abc' and '123' are under the key)
+# ('An error foobar occurred when performing a PUT',) 
+
+# I know it's a little wonky to return data of different types.   I also know
+# I could have used dicts instead of tuples.   After consideration I decided 
+# not to do either because I'm not sure this would have added much clarity.
+
+# This is the new handler.   This works on serialized requests...
+def handlerequest(remoteIP, remoteport, sockobj, ch, mainch):
+  expire_hashtable_items()
+  try:
+    try:
+      rawrequestdata = session_recvmessage(sockobj)
+    except Exception,e:
+      print 'session_recvmessage error:',e
+      return
+
+    try:
+      requesttuple = serialize_deserializedata(rawrequestdata)
+    except ValueError, e:
+      print 'serialize_deserializedata:',e,' with string "'+rawrequestdata+'"'
+      return
+
+    if not type(requesttuple) is tuple:
+      print 'Request is '+str(type(requesttuple))+' not tuple.'
+      return
+    
+    if requesttuple[0] == 'PUT':
+
+      ############# START Tons of type checking
+      try:
+        (key, value, ttlval) = requesttuple[1:]
+      except ValueError, e:
+        print 'Incorrect format for request tuple: ',str(requesttuple)
+        return
+
+      if type(key) is not str:
+        print 'Key type for PUT must be str, not',type(key)
+        return
+
+      if type(value) is not str:
+        print 'Value type must be str, not',type(value)
+        return
+    
+      if type(ttlval) is not int and type(ttlval) is not long:
+        print 'TTL type must be int or long, not',type(ttlval)
+        return
+
+      if ttlval <=0:
+        print 'TTL must be positive, not ',ttlval
+        return
+
+      ############# END Tons of type checking
+
+      now = time_gettime()
+
+      # insert the items...
+      insert_hashtable(key, value, ttlval+now)
+      insert_hashtable('%all', value, ttlval+now)
+      
+      senddata = serialize_serializedata("OK")
+
+      # all is well...
+      session_sendmessage(sockobj, senddata)
+      return
+
+
+
+    elif requesttuple[0] == 'GET':
+
+      
+      ############# START Tons of type checking (similar to above
+      try:
+        (key, maxvals) = requesttuple[1:]
+      except ValueError, e:
+        print 'Incorrect format for request tuple: ',str(requesttuple)
+        return
+
+      if type(key) is not str:
+        print 'Key type for GET must be str, not',type(key)
+        return
+
+      if type(maxvals) is not int and type(maxvals) is not long:
+        print 'Maximum value type must be int or long, not',type(maxvals)
+        return
+
+      if maxvals <=0:
+        print 'Value type must be positive, not ',maxvals
+        return
+
+      ############# END Tons of type checking
+
+      # do the actual work...   read the value and send the response...
+      readlist = read_hashtable(key, maxvals)
+        
+      senddata = serialize_serializedata(("OK",readlist))
+      session_sendmessage(sockobj, senddata)
+      
+      return
+
+    else:
+    
+      print 'Unknown request:',str(requesttuple)
+      return
+
+  except Exception,e:
+    print "While handling request, received: ",e
+  
+  finally:
+    sockobj.close()
+
+
+
+if callfunc=='initialize':
+  print "Started"
+  time_updatetime(34612)
+  
+  #initialize the log files
+  logfiledata["call_trace"] = open("log.calltrace",'a')
+  logfiledata["expanded_log"] = open("log.expanded",'a')
+  print "Detailed logging has been disabled, see write_to_log to enable it"
+  
+  timeout_waitforconn(getmyip(),legacyserverport,handlelegacyrequest)
+  timeout_waitforconn(getmyip(),serverport,handlerequest, timeout=10)
