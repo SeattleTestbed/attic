@@ -1,3 +1,0 @@
-#pragma repy
-
-foo = "__kasdfj__kasdfjk____" # can have string with "__" in it...

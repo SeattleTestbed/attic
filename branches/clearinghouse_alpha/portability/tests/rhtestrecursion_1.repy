@@ -1,5 +1,0 @@
-include rhtestrecursion_2.repy 
-include rhtestrecursion_3.repy
-
-def one():
-  print "hello from 1"

@@ -1,6 +1,0 @@
-
-class NoopShim(BaseShim):
-
-  def copy(self):
-    return NoopShim()
-

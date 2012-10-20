@@ -1,3 +1,0 @@
-#pragma repy
-
-filelist = listdir()
