@@ -202,8 +202,8 @@ def main():
   #call the process_mix function to process all mix files in the target directory
   process_mix("repypp.py")
 
-  #insatll lind test files
-  setup_lind_tests(target_dir)
+  #install lind test files.   I'm in the target_dir...
+  setup_lind_tests(".")
 
   # set up dynamic port information
   if RANDOMPORTS:
