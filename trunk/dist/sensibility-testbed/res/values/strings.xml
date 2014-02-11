@@ -2,7 +2,7 @@
 <resources>
     <string name="hello">Hello World!</string>
     <string name="app_name">SeattleOnAndroid</string>
-    <string name="loading">Sensibility Testbed running...</string>
+    <string name="loading">SeattleOnAndroid running...</string>
     <string name="Install">Install</string>
     <string name="change_status">Change status</string>
     <string name="srvc_install_name">Seattle Installer</string>
@@ -16,9 +16,9 @@
     <string name="installer_err_log">Installer stderr</string>
     <string name="installer_err_log_placeholder">place for stderr of the installer</string>
     <string name="autostart">Autostart on boot</string>
-    <string name="toggleon">Stop Sensibility Testbed</string>
-    <string name="toggleoff">Start Sensibility Testbed</string>
-    <string name="install_path">Install Sensibility Testbed to:</string>
+    <string name="toggleon">Stop Seattle</string>
+    <string name="toggleoff">Start Seattle</string>
+    <string name="install_path">Install Seattle to:</string>
     <string name="resource_donate">Maximum percentage of system resources to donate</string>
     <string name="not_installed">Seattle could not be found on your handset. Press the &quot;Install&quot; button to install Seattle.</string>
     <string name="not_mounted">Removable Storage Device is not present or is not mounted correctly. Please remount the device and restart the application.</string>
@@ -30,5 +30,5 @@
     <string name="availablelogs">Available log files:</string>
     <string name="startup_delay">Autostart delay (seconds): </string>
     <string name="about">About</string>
-    <string name="thank_you">Thank you for making the world a better place by installing Sensibility Testbed!</string>
+    <string name="thank_you">Thank you for making the world a better place by installing Seattle!</string>
 </resources>
