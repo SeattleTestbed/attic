@@ -2,7 +2,7 @@
 <manifest
 	package="com.seattletestbed"
 	android:versionCode="4"
-	android:versionName="1.1"
+	android:versionName="99.90"
 	xmlns:android="http://schemas.android.com/apk/res/android">
 	<application
 		android:debuggable="true"
@@ -31,6 +31,8 @@
 			android:name="com.seattletestbed.ScriptService"/>
 		<service
 			android:name="com.seattletestbed.InstallerService" />
+		<activity
+			android:name="com.googlecode.android_scripting.activity.ScriptingLayerServiceLauncher"/>
 		<activity
 			android:configChanges="keyboardHidden|orientation"
 			android:name="com.googlecode.android_scripting.activity.FutureActivity" 
