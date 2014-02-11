@@ -540,11 +540,18 @@ def start_target(longname, argstring, prog_platform):
 
   vesselname = seash_global_variables.vesselinfo[longname]['vesselname']
 
+  # start the program
   try:
-    # start the program
-    fastnmclient.nmclient_signedsay(
-      seash_global_variables.vesselinfo[longname]['handle'],
-      "StartVesselEx", vesselname, prog_platform, argstring)
+    # Backwards compatibility with old nodemanagers that don't support
+    # StartVesselEX
+    if prog_platform == "repyV1":
+      fastnmclient.nmclient_signedsay(
+        seash_global_variables.vesselinfo[longname]['handle'],
+        "StartVessel", vesselname, argstring)
+    else:
+      fastnmclient.nmclient_signedsay(
+        seash_global_variables.vesselinfo[longname]['handle'],
+        "StartVesselEx", vesselname, prog_platform, argstring)
 
   except fastnmclient.NMClientException, e:
     print str(e)
