@@ -24,7 +24,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -54,6 +54,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
@@ -207,59 +208,48 @@ public class InstallerService extends ForegroundService {
 		Thread t = new Thread() {
 			public void run() {
 				// Install SL4A
+				// Since the required APK is included in res/raw, just announce an intent to have it installed.
 				// Loosely based on
-				// https://stackoverflow.com/questions/4967669/android-install-apk-programmatically/4969421#4969421
+				// http://stackoverflow.com/questions/11727237/programatically-install-apk-file-located-in-res-raw
+				// Thank you!
 				try {
-					String sl4aApkFileName = "sl4a_r6.apk";
-					URL url = new URL("http://android-scripting.googlecode.com/files/" + sl4aApkFileName);
-					HttpURLConnection c = (HttpURLConnection) url
-							.openConnection();
-					c.setRequestMethod("GET");
-					c.setDoOutput(true);
-					c.connect();
-					
-					String sl4aApkDownloadPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/";
-					File file = new File(sl4aApkDownloadPath);
-					file.mkdirs();
-					File outputFile = new File(file, sl4aApkFileName);
-					if (outputFile.exists()) {
-						outputFile.delete();
-					}
-					FileOutputStream fos = new FileOutputStream(outputFile);
+					Log.i(Common.LOG_TAG, "Trying to install SL4A...");
+					AssetManager assetManager = getAssets();
+					InputStream in = null;
+					OutputStream out = null;
+					try {
+						Log.v(Common.LOG_TAG, "Starting file copying...");
+						String baseFileName = "sl4a_r6.apk";
+						String assetFileName = "raw/" + baseFileName;
+						String savedFileName = Environment.getExternalStorageDirectory() + "/" + baseFileName;
+					    in = assetManager.open(assetFileName);
+					    out = new FileOutputStream(savedFileName);
+					    byte[] buffer = new byte[1024];
+					    int read;
+					    while((read = in.read(buffer)) != -1){
+					        out.write(buffer, 0, read);
+					    }
+						Log.v(Common.LOG_TAG, "File should be in dir now: " + savedFileName);
+					    in.close();
+					    in = null;
+					    out.flush();
+					    out.close();
+					    out = null;
+						Log.v(Common.LOG_TAG, "About to voice SL4A install intent...");
+						Intent intent = new Intent(Intent.ACTION_VIEW);
+					    intent.setDataAndType(Uri.fromFile(new File(savedFileName)), "application/vnd.android.package-archive");
+					    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					    startActivity(intent);
+						Log.v(Common.LOG_TAG, "Raised SL4A install intent, let's see what happens...");
+					} catch(Exception e) {
+					    // deal with copying problem
+						Log.e(Common.LOG_TAG, "SL4A install failed with " + e.toString());
+					}			
 
-					InputStream is = c.getInputStream();
-
-					installerLogger.info(Common.LOG_INFO_DOWNLOADING_FROM + url.toString());
-					Log.i(Common.LOG_TAG, Common.LOG_INFO_DOWNLOADING_FROM + url.toString());
-
-					byte[] buffer = new byte[1024];
-					int len1 = 0;
-					while ((len1 = is.read(buffer)) != -1) {
-						fos.write(buffer, 0, len1);
-					}
-					fos.close();
-					is.close();
-
-					Intent intent = new Intent(Intent.ACTION_VIEW);
-					intent.setDataAndType(Uri.fromFile(new File(sl4aApkDownloadPath + sl4aApkFileName)),
-							"application/vnd.android.package-archive");
-					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // without
-																	// this flag
-																	// android
-																	// returned
-																	// a intent
-																	// error!
-					context.startActivity(intent);
-
+			
 				} catch (Exception e) {
-					installerLogger.log(Level.SEVERE, "I'm sorry, downloading and installing the SL4A apk failed " +
-							"with error message '" + e.getMessage() + 
-							"'. Check your device's Internet connectivity, make sure third-party app install " + 
-							"is allowed, mount your SDcard, etc.");
-					Log.e(Common.LOG_TAG, "I'm sorry, downloading and installing the SL4A apk failed " +
-							"with error message '" + e.getMessage() + 
-							"'. Check your device's Internet connectivity, make sure third-party app install " + 
-							"is allowed, mount your SDcard, etc.");
+					installerLogger.log(Level.SEVERE, "I'm sorry, installing the SL4A apk from assets/raw failed. Error: " + e.toString());
+					Log.e(Common.LOG_TAG, "I'm sorry, installing the SL4A apk from assets/raw failed. Error: " + e.toString());
 				} // Done with SL4A!
 
 				// Create seattle root folder

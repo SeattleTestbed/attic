@@ -31,7 +31,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,8 +40,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -61,9 +59,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-import android.util.Log;
 
-import com.googlecode.android_scripting.Constants;
 import com.googlecode.android_scripting.FileUtils;
 
 /**
@@ -692,7 +688,7 @@ public class ScriptActivity extends Activity {
 		if(!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
 			// External storage device not mounted
 			showNotMountedLayout();
-		} else {
+		} else {			
 			File pythonBinary = new File(this.getFilesDir().getAbsolutePath() + "/python/bin/python");
 			// Check if python is installed
 			if(!pythonBinary.exists()){
