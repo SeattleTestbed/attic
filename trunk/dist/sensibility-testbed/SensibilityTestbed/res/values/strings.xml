@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World!</string>
     <string name="app_name">Sensibility Testbed</string>
     <string name="loading">Sensibility Testbed running...</string>
     <string name="Install">Install</string>
@@ -23,7 +22,7 @@
     <string name="not_installed">Sensibility Testbed could not be found on your handset. Press the &quot;Install&quot; button to install.</string>
     <string name="not_mounted">Removable Storage Device is not present or is not mounted correctly. Please remount the device and restart the application.</string>
     <string name="view_log">View log</string>
-    <string name="uninstall_seattle">Remove Sensibility Testbed's local files</string>
+    <string name="uninstall_seattle">Remove Sensibility Testbed\'s local files</string>
     <string name="refresh">Refresh</string>
     <string name="back">Back</string>
     <string name="installing">Sensibility Testbed is being installed. Please wait...</string>
