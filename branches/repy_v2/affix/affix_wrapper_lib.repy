@@ -138,11 +138,16 @@ class RepyNetworkApiWrapper:
     """
     # The destip can be a zenodotus name. We need to translate it to IP, because
     # openconnection requires the destination IP address.
-    if destip.endswith('.zenodotus.cs.washington.edu'):
-      try:
-        destip = gethostbyname(destip)
-      except NetworkAddressError:
-        raise AddressBindingError('Unable to resolve ' + destip)
+    try:
+      destip = gethostbyname(destip)
+    except NetworkAddressError:
+      raise AddressBindingError('Unable to resolve ' + destip)
+
+    try:
+      localip = gethostbyname(localip)
+    except NetworkAddressError:
+      raise AddressBindingError('Unable to resolve ' + destip)
+
     return sendmessage(destip, destport, message, localip, localport)
 
 
@@ -150,6 +155,10 @@ class RepyNetworkApiWrapper:
     """
     The original repy listenformessage call.
     """
+    try:
+      localip = gethostbyname(localip)
+    except NetworkAddressError:
+      raise ConnectionRefusedError('Unable to resolve ' + destip)
     return listenformessage(localip, localport)
 
 
@@ -159,11 +168,16 @@ class RepyNetworkApiWrapper:
     """
     # The destip can be a zenodotus name. We need to translate it to IP, because
     # openconnection requires the destination IP address.
-    if destip.endswith('.zenodotus.cs.washington.edu'):
-      try:
-        destip = gethostbyname(destip)
-      except NetworkAddressError:
-        raise ConnectionRefusedError('Unable to resolve ' + destip)
+    try:
+      destip = gethostbyname(destip)
+    except NetworkAddressError:
+      raise ConnectionRefusedError('Unable to resolve ' + destip)
+
+    try:
+      localip = gethostbyname(localip)
+    except NetworkAddressError:
+      raise AddressBindingError('Unable to resolve ' + destip)
+
     return openconnection(destip, destport, localip, localport, timeout)
 
 
@@ -171,6 +185,11 @@ class RepyNetworkApiWrapper:
     """
     The original repy listenforconnection call.
     """
+    try:
+      localip = gethostbyname(localip)
+    except NetworkAddressError:
+      raise ConnectionRefusedError('Unable to resolve ' + destip)
+
     return listenforconnection(localip, localport)
 
 
