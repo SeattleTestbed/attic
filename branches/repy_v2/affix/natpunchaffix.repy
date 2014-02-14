@@ -375,6 +375,9 @@ class NatPunchAffix(BaseAffix):
     else:
       try:
         forwarder_list = self.forwarder_cache.lookup(NAT_FORWARDER_KEY, graceperiod=5, timeout=10)
+        # We will randomize the forwarder list to try and distribute servers
+        # across all the forwarders.
+        forwarder_list = random_sample(forwarder_list, len(forwarder_list))
       except AdvertiseError:
         return None
 

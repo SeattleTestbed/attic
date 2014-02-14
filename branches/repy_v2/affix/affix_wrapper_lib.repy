@@ -178,7 +178,6 @@ class RepyNetworkApiWrapper:
     except NetworkAddressError:
       raise AddressBindingError('Unable to resolve ' + destip)
 
-    log("Openconn on: '%s:%d'" % (destip, destport))
     return openconnection(destip, destport, localip, localport, timeout)
 
 
