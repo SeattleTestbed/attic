@@ -75,7 +75,7 @@ public class InterpreterProcess extends Process {
     addAllArguments(arguments);
   
     putAllEnvironmentVariables(System.getenv());
-    putEnvironmentVariable("AP_HOST", "127.0.0.1"); //getHost());
+    putEnvironmentVariable("AP_HOST", getHost());
     putEnvironmentVariable("AP_PORT", Integer.toString(getPort()));
     if (proxy.getSecret() != null) {
       putEnvironmentVariable("AP_HANDSHAKE", getSecret());

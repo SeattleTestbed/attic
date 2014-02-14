@@ -168,6 +168,17 @@ public class InstallerService extends ForegroundService {
 	public void onStart(Intent intent, final int startId) {
 		super.onStart(intent, startId);
 
+		// Start the Logger used during Installation
+		try {
+			initalizeInstallerLogger();
+		} catch (IOException e) {
+			e.printStackTrace();
+			installerLogger.log(Level.SEVERE,
+					Common.LOG_EXCEPTION_WRITING_LOG_FILE, e);
+		}
+
+
+		
 		// Set instance to self
 		instance = this;
 		// Set python binary located at
@@ -177,14 +188,6 @@ public class InstallerService extends ForegroundService {
 		packageName = this.getPackageName();
 		fileDir = this.getFilesDir();
 
-		// Start the Logger used during Installation
-		try {
-			initalizeInstallerLogger();
-		} catch (IOException e) {
-			e.printStackTrace();
-			installerLogger.log(Level.SEVERE,
-					Common.LOG_EXCEPTION_WRITING_LOG_FILE, e);
-		}
 
 		installerLogger.info(Common.LOG_INFO_INSTALLER_STARTED);
 		// Set up notification icon
@@ -207,51 +210,6 @@ public class InstallerService extends ForegroundService {
 
 		Thread t = new Thread() {
 			public void run() {
-				// Install SL4A
-				// Since the required APK is included in res/raw, just announce an intent to have it installed.
-				// Loosely based on
-				// http://stackoverflow.com/questions/11727237/programatically-install-apk-file-located-in-res-raw
-				// Thank you!
-				try {
-					Log.i(Common.LOG_TAG, "Trying to install SL4A...");
-					AssetManager assetManager = getAssets();
-					InputStream in = null;
-					OutputStream out = null;
-					try {
-						Log.v(Common.LOG_TAG, "Starting file copying...");
-						String baseFileName = "sl4a_r6.apk";
-						String assetFileName = "raw/" + baseFileName;
-						String savedFileName = Environment.getExternalStorageDirectory() + "/" + baseFileName;
-					    in = assetManager.open(assetFileName);
-					    out = new FileOutputStream(savedFileName);
-					    byte[] buffer = new byte[1024];
-					    int read;
-					    while((read = in.read(buffer)) != -1){
-					        out.write(buffer, 0, read);
-					    }
-						Log.v(Common.LOG_TAG, "File should be in dir now: " + savedFileName);
-					    in.close();
-					    in = null;
-					    out.flush();
-					    out.close();
-					    out = null;
-						Log.v(Common.LOG_TAG, "About to voice SL4A install intent...");
-						Intent intent = new Intent(Intent.ACTION_VIEW);
-					    intent.setDataAndType(Uri.fromFile(new File(savedFileName)), "application/vnd.android.package-archive");
-					    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					    startActivity(intent);
-						Log.v(Common.LOG_TAG, "Raised SL4A install intent, let's see what happens...");
-					} catch(Exception e) {
-					    // deal with copying problem
-						Log.e(Common.LOG_TAG, "SL4A install failed with " + e.toString());
-					}			
-
-			
-				} catch (Exception e) {
-					installerLogger.log(Level.SEVERE, "I'm sorry, installing the SL4A apk from assets/raw failed. Error: " + e.toString());
-					Log.e(Common.LOG_TAG, "I'm sorry, installing the SL4A apk from assets/raw failed. Error: " + e.toString());
-				} // Done with SL4A!
-
 				// Create seattle root folder
 				File seattleFolder = new File(Environment
 						.getExternalStorageDirectory().getAbsolutePath()
