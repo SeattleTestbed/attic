@@ -108,7 +108,6 @@ class CoordinationAffix(BaseAffix):
 
     <Arguments>
       Same as the network API in repy v2.
-
     <Side Effects>
       See the documentation of AdvertiseObjects.
 
@@ -137,7 +136,16 @@ class CoordinationAffix(BaseAffix):
       localip = localhost
 
     # Start listening so we have a complete view of the affix stack below us.
-    tcpserversocket = self.peek().listenforconnection(localhost, localport)
+    # We try up to 5 times as we want to give some time for the zenodotus name
+    # to establish, if user is using it for localhost.
+    for i in range(5):
+      try:
+        tcpserversocket = self.peek().listenforconnection(localhost, localport)
+        break
+      except AddressBindingError:
+        sleep(0.1)
+    else:
+      raise AddressBindingError("Unable to bind with the localhost '%s' provided." % localhost)
 
     if _COORDINATION_AFFIX_DEBUG_MODE:
       log("CoordinationAffix started listening socket on '%s:%d'\n" % (localip, localport))
