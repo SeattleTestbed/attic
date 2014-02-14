@@ -219,6 +219,10 @@ class BaseAffix:
     # We point the new_affix_object to our next_affix and then point
     # ourself to the new_affix_object.
     next_affix_object = self.peek()
+
+    if isinstance(next_affix_object, RepyNetworkApiWrapper):
+      next_affix_object = None
+
     new_affix_object.affix_context['next_affix'] = next_affix_object
     self.affix_context['next_affix'] = new_affix_object
 
