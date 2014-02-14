@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sensibilitytestbed"
     android:versionCode="1"
-    android:versionName="20140214-1509" >
+    android:versionName="20140214-1706" >
 
     <uses-sdk
         android:minSdkVersion="8"
