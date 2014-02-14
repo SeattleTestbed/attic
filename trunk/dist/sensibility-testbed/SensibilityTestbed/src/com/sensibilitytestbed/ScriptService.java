@@ -24,16 +24,18 @@ import java.util.Map;
 
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.googlecode.android_scripting.Constants;
 import com.googlecode.android_scripting.AndroidProxy;
+import com.googlecode.android_scripting.Constants;
 import com.googlecode.android_scripting.ForegroundService;
 import com.googlecode.android_scripting.NotificationIdFactory;
 import com.googlecode.android_scripting.interpreter.InterpreterConfiguration;
@@ -85,6 +87,29 @@ public class ScriptService extends ForegroundService {
 			return ScriptService.this;
 		}
 	}
+	
+	private class StartSl4aAndroidProxy extends AsyncTask<Service, Void, Void> {
+		// We need to handle startup of the SL4A Android proxy outside of the main thread. 
+		// Otherwise, devices with API level >9 will throw a NetworkOnMainThread exception. 
+		// (Interpretation: "The main thread could possible spend too much time in a networking 
+		// function. This is frowned upon in higher API levels.")
+		// Implementation based on docs at http://developer.android.com/reference/android/os/AsyncTask.html
+
+		@Override
+		protected Void doInBackground(Service... params) {
+			Log.i(Common.LOG_TAG, "Am doing stuff in background!");
+			mProxy = new AndroidProxy(params[0], null, true); 
+			mProxy.startLocal();
+			Log.i(Common.LOG_TAG, "mProxy started Local.");
+			return null;
+		}
+		
+//		protected void onPostExecute(AndroidProxy result) {
+//			// Shove the result into a variable defined in our superclass 
+//			Log.i(Common.LOG_TAG, "Result available!");
+//			mProxy = result;
+//		}
+	}
 
 	// on destroy
 	@Override
@@ -135,8 +160,21 @@ public class ScriptService extends ForegroundService {
 		File pythonBinary = new File(this.getFilesDir().getAbsolutePath()
 				+ "/python/bin/python");
 
-		mProxy = new AndroidProxy(this, null, true);
-		mProxy.startLocal();
+//		mProxy = new AndroidProxy(this, null, true);
+//		mProxy.startLocal();
+		Log.v(Common.LOG_TAG, "Trying to start AsyncTask.");
+		new StartSl4aAndroidProxy().execute(this);
+		//mProxy = new AndroidProxy(this, null, true);
+		Log.v(Common.LOG_TAG, "Waiting fer mah AndroidProxy...");
+		while (mProxy == null) {
+			try {
+				Log.v(Common.LOG_TAG, "Waiting fer mah AndroidProxy...");
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 		// Set environmental variables (softwareupdater uses them instead of
 		// command-line arguments)
@@ -258,8 +296,21 @@ public class ScriptService extends ForegroundService {
 				+ this.getFilesDir().getAbsolutePath()
 				+ "/python/lib/python2.7/lib-dynload");
 
-		mProxy = new AndroidProxy(this, null, true);
-		mProxy.startLocal();
+		// Dealing with the proxy in this thread is problematic on API levels >9.
+		// We're wrapping stuff in an AsyncTask instead.
+		Log.v(Common.LOG_TAG, "Trying to start AsyncTask.");
+		new StartSl4aAndroidProxy().execute(this);
+		//mProxy = new AndroidProxy(this, null, true);
+		Log.v(Common.LOG_TAG, "Waiting fer mah AndroidProxy...");
+		while (mProxy == null) {
+			try {
+				Log.v(Common.LOG_TAG, "Waiting fer mah AndroidProxy...");
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 		// Start process
 		seattlemainProcess = SeattleScriptProcess.launchScript(seattlemain,
