@@ -67,58 +67,58 @@ def prepare_files(trunk_location, temp_demokit_dir):
 
 
   # Copy necessary Seattle files
-  shutil.copy2(trunk_location + os.sep + "experimentmanager/experimentlib.py", temp_demokit_dir)
-  shutil.copy2(trunk_location + os.sep + "seattlegeni/xmlrpc_clients/seattleclearinghouse_xmlrpc.py", temp_demokit_dir)
-  shutil.copy2(trunk_location + os.sep + "experimentmanager/repyimporter.py", temp_demokit_dir)
+  # shutil.copy2(trunk_location + os.sep + "experimentmanager/experimentlib.py", temp_demokit_dir)
+  # shutil.copy2(trunk_location + os.sep + "seattlegeni/xmlrpc_clients/seattleclearinghouse_xmlrpc.py", temp_demokit_dir)
+  # shutil.copy2(trunk_location + os.sep + "experimentmanager/repyimporter.py", temp_demokit_dir)
 
   # Copy Seattle license file
-  shutil.copy2(trunk_location + os.sep + "LICENSE.txt", temp_demokit_dir)
+  # shutil.copy2(trunk_location + os.sep + "LICENSE.txt", temp_demokit_dir)
 
   
   # Copy all demokit-specific files
   
   # Allpairsping map application
-  os.chdir(trunk_location + os.sep + "repy/apps/appmap/")
-  shutil.copy2("pingneighbors.repy", temp_demokit_dir)
-  shutil.copy2("style.css", temp_demokit_dir)
-  shutil.copy2("jquerygmaps.js", temp_demokit_dir)
-  shutil.copy2("map_marker_icon.png", temp_demokit_dir)
-  shutil.copy2("map_marker_sel_icon.png", temp_demokit_dir)
-  shutil.copy2("appmap.py", temp_demokit_dir)
-  os.chdir(original_dir)
+  # os.chdir(trunk_location + os.sep + "repy/apps/appmap/")
+  # shutil.copy2("pingneighbors.repy", temp_demokit_dir)
+  # shutil.copy2("style.css", temp_demokit_dir)
+  # shutil.copy2("jquerygmaps.js", temp_demokit_dir)
+  # shutil.copy2("map_marker_icon.png", temp_demokit_dir)
+  # shutil.copy2("map_marker_sel_icon.png", temp_demokit_dir)
+  # shutil.copy2("appmap.py", temp_demokit_dir)
+  # os.chdir(original_dir)
   
   # Preprocess pingneighbors.repy
-  os.chdir(temp_demokit_dir)
-  repypp_proc = subprocess.Popen([
-      "python", trunk_location + os.sep + "seattlelib" + os.sep + "repypp.py",
-      temp_demokit_dir + os.sep + "pingneighbors.repy",
-      temp_demokit_dir + os.sep + "pingneighbors.py"])
-  repypp_proc.wait()
+  # os.chdir(temp_demokit_dir)
+  # repypp_proc = subprocess.Popen([
+  #     "python", trunk_location + os.sep + "seattlelib" + os.sep + "repypp.py",
+  #     temp_demokit_dir + os.sep + "pingneighbors.repy",
+  #     temp_demokit_dir + os.sep + "pingneighbors.py"])
+  # repypp_proc.wait()
   # Now remove unprocessed pingneighbors.repy
-  os.remove(temp_demokit_dir + os.sep + "pingneighbors.repy")
+  # os.remove(temp_demokit_dir + os.sep + "pingneighbors.repy")
 
   # Original allpairsping demo
-  os.chdir(trunk_location + os.sep + "repy/apps/allpairsping/")
-  shutil.copy2("allpairsping.repy", temp_demokit_dir)
-  os.chdir(original_dir)
+  # os.chdir(trunk_location + os.sep + "repy/apps/allpairsping/")
+  # shutil.copy2("allpairsping.repy", temp_demokit_dir)
+  # os.chdir(original_dir)
 
   # UDP ping demos
-  os.chdir(trunk_location + os.sep + "repy/apps/udpping/")
-  shutil.copy2("udpping.repy", temp_demokit_dir)
-  shutil.copy2("udppingserver.repy", temp_demokit_dir)
-  shutil.copy2("udpforward.repy", temp_demokit_dir)
-  shutil.copy2("restrictions.allowallports", temp_demokit_dir)
-  os.chdir(original_dir)
+  # os.chdir(trunk_location + os.sep + "repy/apps/udpping/")
+  # shutil.copy2("udpping.repy", temp_demokit_dir)
+  # shutil.copy2("udppingserver.repy", temp_demokit_dir)
+  # shutil.copy2("udpforward.repy", temp_demokit_dir)
+  # shutil.copy2("restrictions.allowallports", temp_demokit_dir)
+  # os.chdir(original_dir)
 
   # infloop program from Take Home Assignment
-  os.chdir(trunk_location + os.sep + "repy/apps/infloop/")
-  shutil.copy2("infloop.repy", temp_demokit_dir)
-  os.chdir(original_dir)
+  # os.chdir(trunk_location + os.sep + "repy/apps/infloop/")
+  # shutil.copy2("infloop.repy", temp_demokit_dir)
+  # os.chdir(original_dir)
 
   # helloworld program from Take Home Assignment
-  os.chdir(trunk_location + os.sep + "repy/apps/helloworld/")
-  shutil.copy2("helloworld.repy", temp_demokit_dir)
-  os.chdir(original_dir)
+  # os.chdir(trunk_location + os.sep + "repy/apps/helloworld/")
+  # shutil.copy2("helloworld.repy", temp_demokit_dir)
+  # os.chdir(original_dir)
 
 
   

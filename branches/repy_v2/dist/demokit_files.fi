@@ -31,7 +31,6 @@ del rhizoma.py
 del AdvertiseObjects.repy
 del createnodekeys.py
 del daemon.py
-del dylink.repy
 del runonce.py
 del safe_eval.repy
 del strace.py
@@ -45,6 +44,7 @@ req time_interface.repy
 req advertise.repy
 req centralizedadvertise.repy
 req checkpythonversion.py
+req dylink.repy
 req emulcomm.py
 req emulfile.py
 req emulmisc.py
