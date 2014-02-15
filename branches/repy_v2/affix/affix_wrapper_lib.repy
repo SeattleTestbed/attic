@@ -158,7 +158,7 @@ class RepyNetworkApiWrapper:
     try:
       localip = gethostbyname(localip)
     except NetworkAddressError:
-      raise ConnectionRefusedError('Unable to resolve ' + destip)
+      raise AddressBindingError('Unable to resolve ' + localip)
     return listenformessage(localip, localport)
 
 
@@ -188,7 +188,7 @@ class RepyNetworkApiWrapper:
     try:
       localip = gethostbyname(localip)
     except NetworkAddressError:
-      raise ConnectionRefusedError('Unable to resolve ' + localip)
+      raise AddressBindingError('Unable to resolve ' + localip)
 
     return listenforconnection(localip, localport)
 
