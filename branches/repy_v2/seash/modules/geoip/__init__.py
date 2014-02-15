@@ -38,7 +38,13 @@ def show_location(input_dict, environment_dict):
       printedIPlist.append(thisnodeIP)
 
       try:
-        location_dict = geoip_record_by_addr(thisnodeIP)
+        # The GeoIP server doesn't understand hostnames. thisnodeIP
+        # will be a hostname if it is a NAT node and we're using
+        # Affixes.
+        node_ip = gethostbyname(thisnodeIP)
+        location_dict = geoip_record_by_addr(node_ip)
+      # Name resolution and geoip lookups could fail, in which case
+      # we just don't know where the node is.
       except:
         location_dict = None
 
@@ -65,7 +71,17 @@ def show_coordinates(input_dict, environment_dict):
     # if we haven't visited this node
     if thisnodeIP not in printedIPlist:
       printedIPlist.append(thisnodeIP)
-      location_dict = geoip_record_by_addr(thisnodeIP)
+
+      try:
+        # The GeoIP server doesn't understand hostnames. thisnodeIP
+        # will be a hostname if it is a NAT node and we're using
+        # Affixes.
+        node_ip = gethostbyname(thisnodeIP)
+        location_dict = geoip_record_by_addr(node_ip)
+      # Name resolution and geoip lookups could fail, in which case
+      # we just don't know where the node is.
+      except:
+        location_dict = None
 
       if location_dict:
         print str(seash_global_variables.vesselinfo[longname]['ID'])+'('+str(thisnodeIP)+'): ' + str(location_dict['latitude']) + ", " + str(location_dict['longitude'])

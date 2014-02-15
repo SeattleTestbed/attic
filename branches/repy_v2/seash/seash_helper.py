@@ -16,8 +16,6 @@ import seash_exceptions
 from repyportability import *
 add_dy_support(locals())
 
-dy_import_module_symbols("nmclient.repy")
-
 # Use local clock for time if there is no network connectivity
 import time
 
@@ -37,6 +35,27 @@ dy_import_module_symbols("geoip_client.repy") # used for `show location`
 
 dy_import_module_symbols("serialize.repy") # used for loadstate and savestate
 
+# Since the other code doesn't use affixes, let's import nmclient last,
+# as affixes slow down openconnection a lot with their lookups and will
+# trigger numerous timeouts.
+dy_import_module_symbols('affixstackinterface.repy')
+
+old_openconnection = openconnection
+
+affix_obj = AffixStackInterface('(CoordinationAffix)')
+
+def new_openconnection(destip, destport, localip, localport, timeout):
+  if destip.endswith('zenodotus.poly.edu'):
+    return affix_obj.openconnection(destip, destport, localip, localport, timeout)
+  else:
+    return old_openconnection(destip, destport, localip, localport, timeout)
+
+openconnection = new_openconnection
+
+# Import nmclient.repy after overloading openconnection.
+dy_import_module_symbols("nmclient.repy")
+
+openconnection = old_openconnection
 
 
 def update_time():

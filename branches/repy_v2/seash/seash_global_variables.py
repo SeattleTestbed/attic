@@ -19,8 +19,13 @@ nextid = 1
 # a dict that contains all of the key information
 keys = {}
 
+# With the addition of affixes, affixes slow down openconnection a lot
+# with their lookups and will trigger numerous timeouts.  Make sure
+# there's enough time to account for the affixes overhead, at least
+# until that is fixed.
+
 # this is how long we wait for a node to timeout
-globalseashtimeout = 10
+globalseashtimeout = 30
 
 # this is the upload rate we'll modify globalseashtimeout during 
 # file uploads to ensure completion without timeout
