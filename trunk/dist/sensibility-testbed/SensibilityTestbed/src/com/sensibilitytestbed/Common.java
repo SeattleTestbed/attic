@@ -5,7 +5,8 @@ package com.sensibilitytestbed;
 // Contains common constants 
 public final class Common {
 	// Default download URL for seattle archive
-	public static final String DEFAULT_DOWNLOAD_URL = "https://betaseattleclearinghouse.poly.edu/custom_install/5c311a0c016a6f216eac4ca4763b773ee2322035/installers/android/";
+	public static final String DEFAULT_DOWNLOAD_URL = "https://sensibilityclearinghouse.poly.edu/geni/download/altruistic/seattle_android.zip"; 
+	// This one has the stdevel keys inside: "https://betaseattleclearinghouse.poly.edu/custom_install/5c311a0c016a6f216eac4ca4763b773ee2322035/installers/android/";
 
 	// Trusted hostnames
 	public static final String[] TRUSTED_DOWNLOAD_HOSTNAMES_WHITELIST = {
