@@ -378,7 +378,7 @@ class NatPunchAffix(BaseAffix):
         # We will randomize the forwarder list to try and distribute servers
         # across all the forwarders.
         forwarder_list = random_sample(forwarder_list, len(forwarder_list))
-      except AdvertiseError:
+      except (AdvertiseError, TimeoutError):
         return None
 
 

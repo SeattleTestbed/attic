@@ -204,17 +204,10 @@ def _lookup_nodes(node_state_pubkey):
     The number of nodes found using the public key.
   """
 
-  # Lookup nodes using publickey
+  # Lookup nodes using publickey.   If it timesout or fails, this is okay.  
+  # just log it, return -1 (to print that in the log) and continue
   try:
-    # We only do a central lookup instead of both a central lookup 
-    # and an opendht lookup because the opendht lookup could be somewhat
-    # unstable and often times takes a long time to do the lookup.
-    # The opendht lookup may hang and even be waiting upto hours for a
-    # lookup result to return. Since this is a script meant to monitor swiftly
-    # we are going to use just a central lookup because its swift and has most
-    # of the same data as the opendht. Also the central lookup is more stable
-    # and the central advertise server is almost always up.
-    node_list = advertise_lookup(node_state_pubkey, maxvals = 10*1024*1024, lookuptype=["central"])
+    node_list = advertise_lookup(node_state_pubkey, maxvals = 10*1024*1024)
   except Exception, e:
     print >> sys.stderr, e
     return -1

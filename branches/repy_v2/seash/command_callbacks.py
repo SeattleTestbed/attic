@@ -1045,7 +1045,14 @@ def browse(input_dict, environment_dict):
     raise seash_exceptions.UserError("Error, must browse as an identity with a public key")
 
 
-  nodelist = advertise_lookup(seash_global_variables.keys[environment_dict['currentkeyname']]['publickey'], graceperiod = 3)
+  try:
+    nodelist = advertise_lookup(seash_global_variables.keys[environment_dict['currentkeyname']]['publickey'], graceperiod = 3)
+  except (AdvertiseError, TimeoutError), e:
+    # print the error and return to the user.   Let them decide what to do.
+    print "Error:",e
+    print "Retry or check network connection."
+    return
+    
 
 
   # If there are no vessels for a user, the lookup may return ''
@@ -1103,8 +1110,15 @@ def browse_arg(input_dict, environment_dict):
   type_list = command_key.split()
 
 
-  # they are trying to only do some types of lookup...
-  nodelist = advertise_lookup(seash_global_variables.keys[environment_dict['currentkeyname']]['publickey'],lookuptype=type_list)
+  try:
+    # they are trying to only do some types of lookup...
+    nodelist = advertise_lookup(seash_global_variables.keys[environment_dict['currentkeyname']]['publickey'],lookuptype=type_list)
+  except (AdvertiseError, TimeoutError), e:
+    # print the error and return to the user.   Let them decide what to do.
+    print "Error:",e
+    print "Retry or check network connection."
+    return
+    
 
 
   # If there are no vessels for a user, the lookup may return ''

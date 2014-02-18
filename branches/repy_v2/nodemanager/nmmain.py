@@ -300,7 +300,7 @@ def start_accepter():
               servicelogger.log("[INFO]: Current advertised Affix string: " + str(affix_stack_string))
             else:
               affix_enabled = False
-          except AdvertiseError:
+          except (AdvertiseError, TimeoutError), e:
             affix_enabled = False
             # Raise error on debug mode.
             if DEBUG_MODE:
@@ -701,9 +701,8 @@ def main():
             servicelogger.log('[WARN]:At ' + str(time.time()) + ' affix string chaged to: ' + affix_stack_string_lookup)
             node_reset_config['reset_accepter'] = True
             accepter_thread.close_serversocket()
-      except (AdvertiseError, IndexError, ValueError):
-        # IndexError and ValueError will occur if the advertise lookup
-        # returns an empty list.
+      except (AdvertiseError, TimeoutError):
+        # The advertise lookup failed.   We will retry this later once it works
         pass
       except Exception, err:
         servicelogger.log('[Exception]:At ' + str(time.time()) + ' Uncaught exception: ' + str(err))

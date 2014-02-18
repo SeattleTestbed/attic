@@ -376,7 +376,7 @@ class NatPunchShim(BaseShim):
     else:
       try:
         forwarder_list = self.forwarder_cache.lookup(NAT_FORWARDER_KEY, graceperiod=5, timeout=15)
-      except AdvertiseError:
+      except (AdvertiseError,TimeoutError):
         return None
 
 
