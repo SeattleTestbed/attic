@@ -20,13 +20,17 @@ import traceback
 
 dy_import_module_symbols("random")
 dy_import_module_symbols("session")
+dy_import_module_symbols("sockettimeout")
 dy_import_module_symbols("advertise_objects")
 dy_import_module_symbols("nat_forwarder_common_lib")
 
 
 # The default timeout that is used when connecting to forwarder
 # when doing listenforconnection.
-_NAT_AFFIX_DEFAULT_TIMEOUT = 30
+_NAT_AFFIX_DEFAULT_TIMEOUT = 10
+
+# A timeout value for all send()/recv() calls.
+_NAT_SOCKET_TIMEOUT = 5
 
 # The affix string to use to connect to Nat Forwarder.
 _NAT_AFFIX_STRING = "(CoordinationAffix)"
@@ -322,14 +326,29 @@ class NatPunchAffix(BaseAffix):
     
     # Connect to the forwarder.
     affix_stack_object = AffixStackInterface(_NAT_AFFIX_STRING)
-    new_sockobj = affix_stack_object.openconnection(forwarder_ip, forwarder_port, getmyip(), random_localport, _NAT_AFFIX_DEFAULT_TIMEOUT)
-        
+
+    try:
+      new_sockobj = affix_stack_object.openconnection(forwarder_ip, forwarder_port, getmyip(), random_localport, _NAT_AFFIX_DEFAULT_TIMEOUT)
+    except (AddressBindingError, DuplicateTupleError, AlreadyListeningError, 
+            CleanupInProgressError, ConnectionRefusedError, TimeoutError), err:
+      # No matter what error is raised by openconnection, we need to translate
+      # it to a SocketWouldBlockError because this is for a getconnection() call.
+      raise SocketWouldBlockError("Unable to connect to a client currently. " + str(err))
+
+    # Use a sockettimeout object in order to perform socket.send and socket.recv
+    # so we don't hang forever and continue on if it takes too long.
+    timeout_socket = _timeout_socket(new_sockobj, timeout=_NAT_SOCKET_TIMEOUT)
+
     # Request the Nat Forwarder to connect a client to this new socket that
     # we just opened up. Then we check if we were successfully connected to
     # a client
-    session_sendmessage(new_sockobj, CONNECT_SERVER_TAG + ',' + server_id)
-    response = session_recvmessage(new_sockobj)
-        
+    try:
+      session_sendmessage(timeout_socket, CONNECT_SERVER_TAG + ',' + server_id)
+      response = session_recvmessage(timeout_socket)
+    except SocketTimeoutError, err:
+      raise SocketWouldBlockError("Unable to connect to any client due to timeout when " +
+                                  "requesting for connection for server id: %s. %s" % (server_id, str(err)))
+
     # We successfully made a connection! So we return the socket along with
     # the ip address and port of the client.
     if response.startswith(CONNECT_SUCCESS):
@@ -410,18 +429,37 @@ class NatPunchAffix(BaseAffix):
         raise
       else:
         try:
+          # This is the initial message that we send to the NAT forwarder
+          # once we have connected and want to register the server with the
+          # forwarder.
+          register_serv_msg = SERVER_REGISTER + ',' + str(server_id)
+
           if _NAT_AFFIX_DEBUG_MODE:
             log("NatPunchAffix successfully connected to forwarder '%s:%d'\n" % (forwarder_ip, forwarder_port))
+            log("NatPunchAffix requesting to register with msg: %s\n" % register_serv_msg)
           # Once we are connected, 
-          session_sendmessage(sockobj, SERVER_REGISTER + ',' + str(server_id))
+
+          # Use a sockettimeout object in order to perform socket.send and socket.recv
+          # so we don't hang forever and continue on if it takes too long.
+          timeout_socket = _timeout_socket(sockobj, timeout=_NAT_SOCKET_TIMEOUT)
+
+          try:
+            session_sendmessage(timeout_socket, register_serv_msg)
             
-          # Make sure we are connected to the forwarder. We do this by sending
-          # the forwarder the unique ID for this particular connection. If the
-          # server returns a confirmation msg then we are connected and we can
-          # return the socket object. It is possible that the forwarder will 
-          # return other messages such as SERVER_FULL or CONNECTION_REFUSED msg.
-          # In which case we move on to the next forwarder.
-          confirmation_msg = session_recvmessage(sockobj)
+            # Make sure we are connected to the forwarder. We do this by sending
+            # the forwarder the unique ID for this particular connection. If the
+            # server returns a confirmation msg then we are connected and we can
+            # return the socket object. It is possible that the forwarder will 
+            # return other messages such as SERVER_FULL or CONNECTION_REFUSED msg.
+            # In which case we move on to the next forwarder.
+            confirmation_msg = session_recvmessage(timeout_socket)
+          except SocketTimeoutError, err:
+            if _NAT_AFFIX_DEBUG_MODE:
+              log("NatPunchAffix timed out while registering to forwarder '%s:%d'. %s\n" % (forwarder_ip, forwarder_port, str(err)))
+            # If we timeout trying to register to a NAT forwarder, we continue
+            # and move on to the next forwarder.
+            continue
+
           if confirmation_msg == CONNECT_SUCCESS:
             if not self.default_forwarder:
               self.default_forwarder.append(forwarder_ip)
