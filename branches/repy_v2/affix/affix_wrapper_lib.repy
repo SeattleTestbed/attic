@@ -1,3 +1,18 @@
+"""
+<Program>
+  affix_wrapper_lib.repy
+
+<Author>
+  Monzur Muhammad
+
+<Purpose>
+  The purpose of this library is to provide various 
+  wrapper library that are used by the Affix framework.
+"""  
+
+
+DEBUG_MODE = False
+
 class AffixSocketWrapper:
   """
   Wrapper base class for the any socket-like object. Any call to this wrapped
@@ -178,6 +193,11 @@ class RepyNetworkApiWrapper:
     except NetworkAddressError:
       raise AddressBindingError('Unable to resolve ' + destip)
 
+
+    if DEBUG_MODE:
+      log("[Netcall:openconnection] Destip: %s, Destport: %d, Localip: %s," % (destip, destport, localip) + 
+          " Localport: %d, Timeout: %s\n" % (localport, str(timeout)))
+
     return openconnection(destip, destport, localip, localport, timeout)
 
 
@@ -189,6 +209,9 @@ class RepyNetworkApiWrapper:
       localip = gethostbyname(localip)
     except NetworkAddressError:
       raise AddressBindingError('Unable to resolve ' + localip)
+
+    if DEBUG_MODE:
+      log("[Netcall:listenforconnection] Localip: %s, Localport: %d\n" % (localip, localport))
 
     return listenforconnection(localip, localport)
 
@@ -205,6 +228,8 @@ class RepyNetworkApiWrapper:
     """
     Send message by calling send() on the original socket.
     """
+    if DEBUG_MODE:
+      log("[Netcall:socket.send] Socket: %s, Msg: %s\n" % (str(socket), msg))
     return socket.send(msg)
 
 
@@ -213,7 +238,12 @@ class RepyNetworkApiWrapper:
     """
     Receive message from the original socket.
     """
-    return socket.recv(bytes)
+    return_msg = socket.recv(bytes)
+
+    if DEBUG_MODE:
+      log("[Netcall:socket.recv] Socket: %s, Msg: %s\n" % (str(socket), return_msg))
+
+    return return_msg
 
 
 
@@ -222,7 +252,13 @@ class RepyNetworkApiWrapper:
     """
     Call getconnection() on the original repy tcpserversocket.
     """
-    return tcpserversocket.getconnection()
+
+    rip, rport, sockobj = tcpserversocket.getconnection()
+
+    if DEBUG_MODE:
+      log("[Netcall:tcpserver.getconnection] Socket: %s, Remoteip: %s, Remoteport: %d" % (str(socket), remoteip, remoteport))
+
+    return rip, rport, sockobj
 
 
 
