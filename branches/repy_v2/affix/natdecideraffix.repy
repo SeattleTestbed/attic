@@ -20,6 +20,9 @@
 """
 
 
+dy_import_module_symbols("baseaffix")
+dy_import_module_symbols("affixmisc")
+dy_import_module_symbols("affix_stack")
 dy_import_module_symbols("affix_exceptions")
 
 

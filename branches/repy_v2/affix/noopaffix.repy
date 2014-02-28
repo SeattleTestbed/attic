@@ -1,4 +1,7 @@
 #!python
+
+dy_import_module_symbols("baseaffix")
+
 class NoopAffix(BaseAffix):
   """
   A affix that does nothing (no-operation). For debug purpose only.
