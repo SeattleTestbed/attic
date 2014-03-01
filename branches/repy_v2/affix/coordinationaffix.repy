@@ -278,8 +278,11 @@ class CoordinationAffix(BaseAffix):
 
       # We ignore the error here, as we may have been contacting a legacy
       # server. Later, we're going to retry without affixs.
-      except NetworkError, err:
+      except (ConnectionRefusedError, TimeoutError), err:
+        # If we receive either the connection refused error or Timeouterror
+        # we store the error message.
         failed_affix_str += server_affix_stack_str + '[' + str(err) + ']; '
+        failed_affix_str += "Error while connecting to '%s:%d' from '%s:%d'." % (desthost, destport, localip, localport)
 
     # It is possible we're contacting a legacy server that doesn't use affixs,
     # because either it doesn't advertise itself, or none of the advertised affix
@@ -322,7 +325,7 @@ class CoordinationAffix(BaseAffix):
     # If we are listening on a zenodotus name, first translate it to the local
     # IP and start the advertisement thread that constantly announces the
     # zenodotus name -> IP mapping.
-    if localhost.endswith('.zenodotus.cs.washington.edu'):
+    if localhost.endswith(zenodotus_subdomain):
       try:
         localip = getmyip()
       except InternetConnectivityError:
