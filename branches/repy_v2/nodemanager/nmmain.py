@@ -120,7 +120,7 @@ affix_service_key = "BetaSeattleAffixStack"
 enable_affix_key = "EnableBetaSeattleAffix"
 affix_enabled = False
 affix_stack_string = None
-check_affix_frequency = 15 * 60 # Check for Affix status update every 15 minutes.
+check_affix_interval = 15 * 60 # Check for Affix status update every 15 minutes.
 
 
 # JAC: Fix for #1000: This needs to be after ALL repyhhelper calls to prevent 
@@ -684,7 +684,7 @@ def main():
     
     # Check to see if we need to restart the accepter thread due to affix
     # string changing or it being turned on/off.
-    if (nonportable.getruntime() - last_check_affix_time) > check_affix_frequency:
+    if (nonportable.getruntime() - last_check_affix_time) > check_affix_interval:
       try:
         servicelogger.log("[Info] Checking to see if Affix status has changed...")
         affix_enabled_lookup = advertise_lookup(enable_affix_key)[-1]
