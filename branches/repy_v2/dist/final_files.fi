@@ -30,6 +30,9 @@ del struct.repy
 del advertise_test_routine.repy
 del private_hideprivate_layer.repy
 
+
+
+
 req domainnameinfo.repy
 req benchmark_resources.py
 req Mac_BSD_resources.py
@@ -83,6 +86,7 @@ req seash_dictionary.py
 req seash_exceptions.py
 req seash_global_variables.py
 req seash_helper.py
+req seash_modules.py
 req serialize.repy
 req servicelogger.py
 req servicelookup.repy
@@ -131,17 +135,12 @@ req freebsd_kinfo.py
 req md5py.repy
 req binascii.repy
 req sshkey_paramiko.repy
-req pyDes.repy
 req sshkey.repy
-req NAT_advertisement.repy
 req textops.py
-req NATLayer_rpc.repy
 req deserialize.repy
 req Multiplexer.repy
-req safety_exceptions.py
 req harshexit.py
 req portable_popen.py
-req nanny_resource_limits.py
 req seattleinstaller.py
 req seattleuninstaller.py
 req update_crontab_entry.py
@@ -178,7 +177,6 @@ req librepy.repy
 req librepyrunloop.repy
 req librepysocket.repy
 req librepythread.repy
-req mobile_socket.repy
 req pydes.repy
 req README.txt
 req registerhttpcallback.repy
@@ -190,13 +188,7 @@ req secureadvertise_client.repy
 req secureadvertise_server.repy
 req secureclient.repy
 
-req advertise_objects.repy
-req advertiseserver_v2.repy
-req convert_print_to_log.sh
-req doradvertise.repy
-req dylink_portability.py
-req dylinkrun.py
-req encasementlib.repy
+# Affix additions 
 
 
 req restrictions.advertiseserver
@@ -216,3 +208,5 @@ req noopaffix.repy
 req affix_wrapper_lib.repy
 req wrapper.repy
 req natpunchaffix.repy
+req natdecideraffix.repy
+req coordinationaffix.repy
