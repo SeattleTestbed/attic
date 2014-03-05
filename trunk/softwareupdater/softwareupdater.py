@@ -172,7 +172,8 @@ def safe_download(serverpath, filename, destdir, filesize):
   # TODO: raise an RsyncError from here if the download fails instead of
   #       returning True/False.
   try:
-    urllib.urlretrieve(serverpath+filename,destdir+filename)
+    # Fix for #1361. serverpath may not end in '/'
+    urllib.urlretrieve(serverpath+'/'+filename,destdir+filename)
     return True
 
   except Exception,e:
