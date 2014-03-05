@@ -46,14 +46,43 @@ from seattlegeni.common.exceptions import *
 
 from seattlegeni.common.util.decorators import log_function_call_without_first_argument
 
-from seattle import repyhelper
-from seattle import repyportability
+# Let's keep a copy of the built-ins, as repyportability destroys them
+import __builtin__
+builtins = __builtin__.__dict__.copy()
 
-from fastnmclient import *
-repyhelper.translate_and_import("listops.repy")
-repyhelper.translate_and_import("time.repy")
+from repyportability import *
+add_dy_support(locals())
 
+###### code to enable affixes #########
+dy_import_module_symbols('affixstackinterface.repy')
 
+affix_obj = AffixStackInterface('(CoordinationAffix)')
+
+old_openconnection = openconnection
+
+def new_openconnection(destip, destport, localip, localport, timeout):
+  # we may get a unicode string.  repy's network API only accepts
+  # standard python strs.
+  destip = str(destip)
+  if destip.endswith('zenodotus.poly.edu'):
+    return affix_obj.openconnection(destip, destport, localip, localport, timeout)
+  else:
+    return old_openconnection(destip, destport, localip, localport, timeout)
+
+openconnection = new_openconnection
+
+# overwrite the openconnection that is provided to modules we import
+sys.modules['dylink_repy'].openconnection = openconnection
+
+####### end code to enable affixes ######
+
+dy_import_module_symbols('nmclient.repy')
+dy_import_module_symbols("listops.repy")
+dy_import_module_symbols("time.repy")
+
+# Restore built-ins so that django and other libraries don't complain
+for i in builtins:
+  __builtin__.__dict__[i] = builtins[i]
 
 
 

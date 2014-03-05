@@ -66,14 +66,16 @@ $SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/lockserver/lockserver_daemon.py >>$LO
 sleep 1 # Wait a moment to make sure it has started (lockserver is used by other components).
 
 echo "Starting backend."
-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/backend/backend_daemon.py >>$LOG_DIR/backend.log 2>&1 &
+# We use dylink to enable affixes.  Dylink only imports from the current directory...
+cd $SEATTLECLEARINGHOUSE_DIR/backend/ && $SUDO_CMD python backend_daemon.py >>$LOG_DIR/backend.log 2>&1 &
 sleep 1 # Wait a moment to make sure it has started (backend is used by other components).
 
 echo "Gracefully restarting apache."
 apache2ctl graceful
 
 echo "Starting check_active_db_nodes.py."
-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/polling/check_active_db_nodes.py >>$LOG_DIR/check_active_db_nodes.log 2>&1 &
+# We use dylink to enable affixes.  Dylink only imports from the current directory...
+cd $SEATTLECLEARINGHOUSE_DIR/polling/ && $SUDO_CMD python check_active_db_nodes.py >>$LOG_DIR/check_active_db_nodes.log 2>&1 &
 sleep 1 # We need to wait for each process to start before beginning the next
         # because repyhelper has an issue with concurrent file access.
 
@@ -81,22 +83,26 @@ sleep 1 # We need to wait for each process to start before beginning the next
 
 TRANSITION_NAME=transition_donation_to_canonical
 echo "Starting transition script $TRANSITION_NAME"
-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/$TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
+# We use dylink to enable affixes.  Dylink only imports from the current directory...
+cd $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/ && $SUDO_CMD python $TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
 sleep 1
 
 TRANSITION_NAME=transition_canonical_to_twopercent
 echo "Starting transition script $TRANSITION_NAME"
-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/$TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
+# We use dylink to enable affixes.  Dylink only imports from the current directory...
+cd $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/ && $SUDO_CMD python $TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
 sleep 1
 
 TRANSITION_NAME=transition_twopercent_to_twopercent
 echo "Starting transition script $TRANSITION_NAME"
-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/$TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
+# We use dylink to enable affixes.  Dylink only imports from the current directory...
+cd $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/ && $SUDO_CMD python $TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
 sleep 1
 
 TRANSITION_NAME=transition_onepercentmanyevents_to_canonical
 echo "Starting transition script $TRANSITION_NAME"
-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/$TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
+# We use dylink to enable affixes.  Dylink only imports from the current directory...
+cd $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/ && $SUDO_CMD python $TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
 
 echo "All components started. Kill this process (CTRL-C or 'kill $$') to stop all started components (except apache)."
 

@@ -47,8 +47,7 @@ import traceback
 import django.db
 
 from seattle import runonce
-from seattle import repyhelper
-from seattle import repyportability
+from repyportability import *
 
 import seattlegeni.common.util.log
 
@@ -67,11 +66,12 @@ from seattlegeni.common.exceptions import *
 from seattlegeni.website import settings
 
 # Import all the repy files.
-repyhelper.translate_and_import('advertise.repy')
-repyhelper.translate_and_import('rsa.repy')
-repyhelper.translate_and_import('listops.repy')
-repyhelper.translate_and_import('parallelize.repy')
-repyhelper.translate_and_import('random.repy')
+add_dy_support(locals())
+dy_import_module_symbols('advertise.repy')
+dy_import_module_symbols('rsa.repy')
+dy_import_module_symbols('listops.repy')
+dy_import_module_symbols('parallelize.repy')
+dy_import_module_symbols('random.repy')
 
 
 

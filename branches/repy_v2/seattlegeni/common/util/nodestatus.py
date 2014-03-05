@@ -38,7 +38,7 @@ from seattlegeni.common.api import lockserver
 from seattlegeni.common.api import maindb
 from seattlegeni.common.api import nodemanager
 
-from seattlegeni.common.util import log
+from seattlegeni.common.util import log as log_module
 
 from seattlegeni.common.exceptions import *
 
@@ -49,6 +49,9 @@ from seattle import repyportability
 
 repyhelper.translate_and_import("rsa.repy")
 
+# Restore the log module as repy's log function is copied into our
+# namespace when we are importing rsa.repy
+log = log_module
 
 
 

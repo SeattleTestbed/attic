@@ -34,7 +34,7 @@ from seattlegeni.common.exceptions import *
 
 from seattlegeni.common.util.decorators import log_function_call
 
-from seattlegeni.node_state_transitions import node_transition_lib
+import node_transition_lib
 
 
 
