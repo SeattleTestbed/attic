@@ -3,9 +3,9 @@ Author: Cosmin Barsan
 Description:
 This test attempts to use the nmclient_rawsay method, but passes in an empty method name.
 """
-include time.repy
-include nmclient.repy
-include rsa.repy
+dy_import_module_symbols('time.repy')
+dy_import_module_symbols('nmclient.repy')
+dy_import_module_symbols('rsa.repy')
 
 if callfunc == 'initialize':
 

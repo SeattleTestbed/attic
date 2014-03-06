@@ -4,8 +4,8 @@ Description:
 This test splits a vessel into two, and joins the resulting vessels back together. The test then verifies that the restrictions of the vessel are the same as they were at the beggining.
 """
 
-include time.repy
-include nmclient.repy
+dy_import_module_symbols('time.repy')
+dy_import_module_symbols('nmclient.repy')
 
 
 def get_restrictions(resourcestring):

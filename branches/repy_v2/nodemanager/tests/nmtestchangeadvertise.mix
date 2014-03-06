@@ -5,8 +5,8 @@ This test verifies the ChangeAdvertise method cy calling it and then verifying i
 
 """
 
-include time.repy
-include nmclient.repy
+dy_import_module_symbols('time.repy')
+dy_import_module_symbols('nmclient.repy')
 
 if callfunc == 'initialize':
 

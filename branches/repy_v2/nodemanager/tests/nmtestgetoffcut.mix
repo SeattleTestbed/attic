@@ -4,7 +4,7 @@ Description:
 This test calls GetOffcutResources to verify no exceptions are thrown
 """
 
-include nmclient.repy
+dy_import_module_symbols('nmclient.repy')
 
 if callfunc == 'initialize':
   nmhandle = nmclient_createhandle(getmyip(), 1224)

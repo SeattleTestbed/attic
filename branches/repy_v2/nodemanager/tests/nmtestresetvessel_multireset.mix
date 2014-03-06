@@ -5,9 +5,9 @@ This test is a modified version of the nmtestresetvessel.mix. It works much like
 
 """
 
-include time.repy
-include nmclient.repy
-include rsa.repy
+dy_import_module_symbols('time.repy')
+dy_import_module_symbols('nmclient.repy')
+dy_import_module_symbols('rsa.repy')
 
 def get_restrictions(resourcestring):
   restrictionsstring = ''

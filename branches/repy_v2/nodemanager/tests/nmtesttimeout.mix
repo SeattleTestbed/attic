@@ -5,9 +5,9 @@ This test calls the AddFileToVessel method and verifies the file is added correc
 
 """
 
-include time.repy
-include nmclient.repy
-include rsa.repy
+dy_import_module_symbols('time.repy')
+dy_import_module_symbols('nmclient.repy')
+dy_import_module_symbols('rsa.repy')
 
 if callfunc == 'initialize':
 

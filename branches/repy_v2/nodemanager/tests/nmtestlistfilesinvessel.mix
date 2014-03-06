@@ -5,9 +5,9 @@ This test verifies the ListFilesInVessel method by adding a two files, storing t
 
 """
 
-include time.repy
-include nmclient.repy
-include rsa.repy
+dy_import_module_symbols('time.repy')
+dy_import_module_symbols('nmclient.repy')
+dy_import_module_symbols('rsa.repy')
 
 if callfunc == 'initialize':
 

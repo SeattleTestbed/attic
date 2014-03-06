@@ -5,8 +5,8 @@ The test sends a change user request with sequence id 0 followed by a change adv
 
 """
 
-include time.repy
-include nmclient.repy
+dy_import_module_symbols('time.repy')
+dy_import_module_symbols('nmclient.repy')
 
 if callfunc == 'initialize':
 

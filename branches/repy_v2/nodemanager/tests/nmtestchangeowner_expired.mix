@@ -4,9 +4,9 @@ Description:
 This test attempts to call the ChangeOwner method, but uses an expired handle.The test is intended to verify that the owner is not changed.
 """
 
-include time.repy
-include nmclient.repy
-include rsa.repy
+dy_import_module_symbols('time.repy')
+dy_import_module_symbols('nmclient.repy')
+dy_import_module_symbols('rsa.repy')
 
 if callfunc == 'initialize':
 

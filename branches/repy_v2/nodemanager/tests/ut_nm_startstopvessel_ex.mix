@@ -6,8 +6,8 @@ Description:
 This test verifies the StartVessel and StopVessel methods by calling them and checking whether the status is correctly set.
 
 """
-include time.repy
-include nmclient.repy
+dy_import_module_symbols('time.repy')
+dy_import_module_symbols('nmclient.repy')
 
 if callfunc == 'initialize':
 

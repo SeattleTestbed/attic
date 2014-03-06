@@ -5,9 +5,9 @@ This test verifies the DeleteFileInVessel method by adding a file, deleting it, 
 
 """
 
-include time.repy
-include nmclient.repy
-include rsa.repy
+dy_import_module_symbols('time.repy')
+dy_import_module_symbols('nmclient.repy')
+dy_import_module_symbols('rsa.repy')
 
 if callfunc == 'initialize':
 

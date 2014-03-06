@@ -3,9 +3,9 @@ Author: Cosmin Barsan
 Description:
 This test verifies the users added with the ChangeUsers method do not have owner level permissions.
 """
-include time.repy
-include nmclient.repy
-include rsa.repy
+dy_import_module_symbols('time.repy')
+dy_import_module_symbols('nmclient.repy')
+dy_import_module_symbols('rsa.repy')
 
 if callfunc == 'initialize':
 
