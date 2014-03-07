@@ -12,6 +12,7 @@ VERSION=$1
 
 SOFTWARE_UPDATE_URL=http://blackbox.cs.washington.edu/updatesite/
 PUBLIC_KEY_FILE=/path/to/softwareupdater.publickey
+PRIVATE_KEY_FILE=/path/to/softwareupdater.privatekey
 
 e=`cat $PUBLIC_KEY_FILE | cut -d' ' -f 1`
 n=`cat $PUBLIC_KEY_FILE | cut -d' ' -f 2`
@@ -70,14 +71,14 @@ fi
 
 echo "Archiving old base installers to $BASE_INSTALLER_ARCHIVE_DIR"
 echo "Warning: failure after this point may leave seattlegeni with no base installers!"
-sudo mv -f $BASE_INSTALLER_DIRECTORY/seattle0.1* $BASE_INSTALLER_ARCHIVE_DIR
+sudo mv -f $BASE_INSTALLER_DIRECTORY/seattle_* $BASE_INSTALLER_ARCHIVE_DIR
 
 echo "Building new base installers at $BASE_INSTALLER_DIRECTORY"
 sudo python $SVN_TRUNK_DIR/dist/make_base_installers.py \
   a \
   $SVN_TRUNK_DIR \
-  /root/blackbox-softwareupdater-keys/blackbox-softwareupdater.publickey \
-  /root/blackbox-softwareupdater-keys/blackbox-softwareupdater.privatekey \
+  $PUBLIC_KEY_FILE \
+  $PRIVATE_KEY_FILE \
   $BASE_INSTALLER_DIRECTORY \
   $VERSION
 
@@ -90,16 +91,16 @@ echo "Changing base installer symlinks used by seattlegeni."
 
 pushd $BASE_INSTALLER_DIRECTORY
 
-if [ ! -f "seattle${VERSION}_linux.tgz" ] || [ ! -f "seattle${VERSION}_mac.tgz" ] || [ ! -f "seattle${VERSION}_win.zip" ]; then
+if [ ! -f "seattle_${VERSION}_android.zip" ] || [ ! -f "seattle_${VERSION}_linux.tgz" ] || [ ! -f "seattle_${VERSION}_mac.tgz" ] || [ ! -f "seattle_${VERSION}_win.zip" ]; then
   echo "The base installers don't appear to have been created."
   exit 1
 fi
 
-sudo chown geni.dev seattle0.1*
+sudo chown geni seattle_*
 
-sudo -u geni ln -s -f seattle${VERSION}_linux.tgz seattle_linux.tgz
-sudo -u geni ln -s -f seattle${VERSION}_mac.tgz seattle_mac.tgz
-sudo -u geni ln -s -f seattle${VERSION}_win.zip seattle_win.zip
+sudo -u geni ln -s -f seattle_${VERSION}_linux.tgz seattle_linux.tgz
+sudo -u geni ln -s -f seattle_${VERSION}_mac.tgz seattle_mac.tgz
+sudo -u geni ln -s -f seattle_${VERSION}_win.zip seattle_win.zip
 
 popd
 
