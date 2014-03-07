@@ -3,9 +3,9 @@ Loads a series of keys and make sures seash recognizes them correctly.
 """
 import seash
 import sys
-import repyhelper
-
-repyhelper.translate_and_import('rsa.repy')
+from repyportability import add_dy_support
+add_dy_support(locals())
+dy_import_module_symbols('rsa.repy')
 
 orig_stdout = sys.stdout
 

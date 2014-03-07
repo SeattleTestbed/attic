@@ -15,8 +15,9 @@
 
 import seash_global_variables
 import seash_exceptions
-import repyhelper
-repyhelper.translate_and_import("geoip_client.repy")
+from repyportability import add_dy_support
+add_dy_support(locals())
+dy_import_module_symbols("geoip_client.repy")
 
 
 # show location        -- Display location information about the nodes
