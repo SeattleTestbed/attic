@@ -222,6 +222,25 @@ initialize_safe_module()
 
 # This function makes the dy_* functions available.
 def add_dy_support(_context):
+  """
+  <Purpose>
+    Enable usage of repy's dynamic library linking.  This should only
+    be called on the module-level.
+
+  <Arguments>
+    _context:
+      The context that dylink's functions should be inserted into.
+
+  <Side Effects>
+    Public functions from dylink.repy will be inserted into _context.
+    _context should be globals() for a module.
+
+  <Exceptions>
+    Exception is raised when a module import fails.
+
+  <Returns>
+    None
+  """
   # Add dylink support
   repyhelper.translate_and_import("dylink.repy", callfunc = 'initialize')
   

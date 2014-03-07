@@ -52,6 +52,10 @@ import os
 import socket
 import xmlrpclib
 
+# If a user does not provide us with an API key, we'll need to load
+# their private key instead.
+from repyportability import add_dy_support
+add_dy_support(locals())
 
 # Location of a file containing one or more PEM-encoded CA certificates
 # concatenated together. This is required if using allow_ssl_insecure=False.
@@ -130,9 +134,7 @@ class SeattleClearinghouseClient(object):
     # available when the user provides their api key and doesn't require
     # it to be retrieved.
     try:
-      import repyhelper
-      import repyportability
-      repyhelper.translate_and_import("rsa.repy")
+      dy_import_module_symbols("rsa.repy")
     except ImportError, e:
       raise SeattleClearinghouseError("Unable to get API key from SeattleClearinghouse " +
                              "because a required python or repy module " + 
