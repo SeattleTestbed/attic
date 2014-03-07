@@ -256,6 +256,7 @@ def main():
   copy_to_target("seash/*", target_dir)
   copy_tree_to_target("seash/pyreadline/", os.path.join(target_dir, 'pyreadline/'), ignore=".svn")
   copy_tree_to_target("seash/modules/", os.path.join(target_dir, 'modules/'), ignore=".svn")
+  copy_to_target("seattlegeni/xmlrpc_clients/*", target_dir)
   copy_to_target("affix/*", target_dir)
   #copy_to_target("shims/proxy/*", target_dir)
   copy_to_target("softwareupdater/*", target_dir)
