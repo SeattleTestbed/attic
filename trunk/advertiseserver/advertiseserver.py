@@ -19,7 +19,9 @@ import sys
 import threading
 import datetime
 import serialize
+import Queue
 import session
+import traceback
 
 # This is the dictionary which holds advertisement associations. Entries will 
 # be of the form:
@@ -58,6 +60,30 @@ gets_so_far = 0 # The number of GET queries since the last log.
 query_times = [] # Store the query times here.
 
 
+# How many connections be queued in the listening TCP socket
+# 5 is usually the maximum, though this is system dependent.
+max_queued_connections = 5
+
+# How many threads should run in parallel to receive TCP queries
+num_tcp_receive_threads = max_queued_connections
+
+# Queries that have been retrieved, and are awaiting processing.
+# Items in this queue should be handled almost instantaneously by the
+# handler thread.
+# It should contain dictionaries containing the following keys:
+# 'request':
+#    The GET/PUT request string.
+# 'callback':
+#    This function is called when processing has finished.  It will be
+#    passed the result of the request.
+# Let's cap this queue's size, so that it doesn't grow *TOO* large.
+pending_tcp_queries = Queue.Queue(maxsize=num_tcp_receive_threads * 4)
+
+
+KNOWN_OUTPUT_TYPES = ['stdout', 'volume', 'error', 'time']
+log_locks = {}
+for output_type in KNOWN_OUTPUT_TYPES:
+  log_locks[output_type] = threading.Lock()
 
 
 def _purge_expired_items():
@@ -153,7 +179,7 @@ def _log_with_timestamp(logstring, output = "stdout"):
     TypeError occurs if either logstring or output is not a string.
 
     ValueError occurs if output does not match one of the values in 
-               known_output_types.
+               KNOWN_OUTPUT_TYPES.
 
   <Side Effects>
     None
@@ -161,34 +187,40 @@ def _log_with_timestamp(logstring, output = "stdout"):
   <Returns>
     None
   """
-  known_output_types = ['stdout', 'volume', 'error', 'time']
 
   # Some type checking.
   if type(logstring) != type(''):
     raise TypeError("Invalid Input! logstring must be a string!")
   if not type(output) == type(''):
     raise TypeError("Invalid Input! output must be a string!")
-  if not output in known_output_types:
+  if not output in KNOWN_OUTPUT_TYPES:
     raise ValueError("Invalid Input! output must be a known output type!")
 
   timestamp = "[" + str(datetime.datetime.today())[:-4] + "]"
 
-  if output == "stdout":
-    sys.stdout.write(timestamp)
-    sys.stdout.write(logstring)
-    sys.stdout.flush()
-  elif output == "volume":
-    volume_log.write(timestamp)
-    volume_log.write(logstring)
-    volume_log.flush()
-  elif output == "error":
-    error_log.write(timestamp)
-    error_log.write(logstring)
-    error_log.flush()
-  elif output == "time":
-    time_log.write(timestamp)
-    time_log.write(logstring)
-    time_log.flush()
+  try:
+    # We will only try to get locks that exist, since an exception is
+    # raised if the output file is not recognized.
+    log_locks[output].acquire(True)
+
+    if output == "stdout":
+      sys.stdout.write(timestamp)
+      sys.stdout.write(logstring)
+      sys.stdout.flush()
+    elif output == "volume":
+      volume_log.write(timestamp)
+      volume_log.write(logstring)
+      volume_log.flush()
+    elif output == "error":
+      error_log.write(timestamp)
+      error_log.write(logstring)
+      error_log.flush()
+    elif output == "time":
+      time_log.write(timestamp)
+      time_log.write(logstring)
+      time_log.flush()
+  finally:
+    log_locks[output].release()
 
   return
 
@@ -395,7 +427,44 @@ def _handle_request(data):
   return
 
 
+def _tcp_query_handler_thread():
+  """
+  <Purpose>
+    Handles all TCP requests that were previously received in
+    pending_tcp_queries.  This is NOT threadsafe, and should only be
+    run from one thread only.
 
+    This is meant to be a persistent thread that continuously runs in
+    the background.  Remember to set daemon mode, otherwise this thread
+    can cause the process to run indefinitely even when the main thread
+    is interrupted.
+
+  <Arguments>
+    None
+
+  <Exceptions>
+    None
+
+  <Side Effects>
+    Will log to the error file when receiving exceptions.
+
+  <Returns>
+    None
+  """
+  global query_times
+
+  while True:
+    try:
+      query = pending_tcp_queries.get(block=True)
+      response = _handle_request(query['request'])
+
+      session.session_sendmessage(query['socket'], response)
+
+      query['socket'].close()
+      query_times.append(time.time() - query['start_time'])
+    except Exception, e:
+      _log_with_timestamp("Exception while handling request (from %s): " % str(query['socket'].getpeername()) +
+      str(query) + "\n" +  traceback.format_exc() + '\n', 'error')
 
 
 def _udp_callback():
@@ -446,16 +515,41 @@ def _tcp_callback():
   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   sock.bind((local_ip, tcp_port))
 
-  sock.listen(5)
+  sock.listen(max_queued_connections)
 
   # Slow it down a bit to prevent messing up our debugging.
   time.sleep(0.005)
 
+  # No reason to accept any more than what we can handle.
+  accepted_sockets_queue = Queue.Queue(maxsize=num_tcp_receive_threads)
+
+  # Start multiple threads to receive connections in parallel.
+  for thread_no in xrange(num_tcp_receive_threads):
+    tcp_receive_thread = threading.Thread(
+      group=None,
+      target=_tcp_receive_message,
+      name="THREAD-TCP-RECEIVE-"+str(thread_no),
+      args=(accepted_sockets_queue,),
+      kwargs={})
+    tcp_receive_thread.setDaemon(True)
+    tcp_receive_thread.start()
+
   _log_with_timestamp("TCP Callback started, now listening on: " + str(local_ip) + ":" + str(tcp_port) + "\n")
 
+  # Accept any TCP connections and insert them into the accepted sockets
+  # queue.  This allows multiple threads to be able to handle these
+  # sockets in parallel, so that a single slow connection won't affect
+  # faster connections, so long as all the threads aren't being blocked
+  # by slow connections simultaneously.
+  while True:
+    connection_socket, addr = sock.accept()
+    accepted_sockets_queue.put(connection_socket, block=True)
+
+
+def _tcp_receive_message(accepted_sockets_queue):
   while True:
     try:
-      connection_socket, addr = sock.accept()
+      connection_socket = accepted_sockets_queue.get(block=True)
 
       start = time.time()
 
@@ -463,14 +557,13 @@ def _tcp_callback():
 
       data = session.session_recvmessage(connection_socket)
 
-      formatted_response = _handle_request(data)
-
-
-      session.session_sendmessage(connection_socket, formatted_response)
-
-      connection_socket.close()
-
-      query_times.append(time.time() - start)
+      # Queue it up in the queue of pending queries, to be handled
+      # by the TCP request handler thread.
+      pending_tcp_queries.put({
+        'request': data,
+        'socket': connection_socket,
+        'start_time': start,
+      })
     except socket.timeout, e:
       _log_with_timestamp("[TIMEOUT ERROR] " + str(e) + "\n", output='error')
     except ValueError, e:
@@ -525,6 +618,12 @@ def main():
   udp_thread = threading.Thread(group=None, target=_udp_callback, name="THREAD-UDP", args = (), kwargs = {})
   udp_thread.setDaemon(True)
   udp_thread.start()
+  sys.stdout.write("[DONE]\n")
+
+  _log_with_timestamp("Starting TCP query handler . . ")
+  tcp_thread = threading.Thread(group=None, target=_tcp_query_handler_thread, name="THREAD-TCP", args = (), kwargs = {})
+  tcp_thread.setDaemon(True)
+  tcp_thread.start()
   sys.stdout.write("[DONE]\n")
 
   _log_with_timestamp("Starting TCP callback . . . . . . ")
