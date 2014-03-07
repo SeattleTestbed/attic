@@ -19,6 +19,7 @@ import sys
 import threading
 import datetime
 import serialize
+import session
 
 # This is the dictionary which holds advertisement associations. Entries will 
 # be of the form:
@@ -460,26 +461,21 @@ def _tcp_callback():
 
       connection_socket.settimeout(1.0)
 
-      # Again, 4096 may be excessive.
-      data = connection_socket.recv(4096)
-
-      session_request = False
-      if '\n' in data:
-        data = data.split('\n')[1]
-        session_request = True
+      data = session.session_recvmessage(connection_socket)
 
       formatted_response = _handle_request(data)
 
-      if session_request:
-        formatted_response = str(len(formatted_response)) + "\n" + formatted_response
 
-      connection_socket.send(formatted_response)
+      session.session_sendmessage(connection_socket, formatted_response)
 
       connection_socket.close()
 
       query_times.append(time.time() - start)
     except socket.timeout, e:
       _log_with_timestamp("[TIMEOUT ERROR] " + str(e) + "\n", output='error')
+    except ValueError, e:
+      _log_with_timestamp("[VALUE ERROR] " + str(e) + "\n", output='error')
+      _log_with_timestamp("[PACKET DUMP] " + str(data) + "\n", output = 'error')
     except Exception, e:
       _log_with_timestamp("[UNKNOWN ERROR] " + str(e) + "\n", output='error')
 
