@@ -45,18 +45,12 @@ import optparse
 # before we import repy code.  See #1273 for more information.
 import runonce
 
-import repyhelper #used to bring in NAT Layer
+from repyportability import *
+add_dy_support(locals())
+
 
 # needed to log OS type / Python version
 import platform
-
-# I need to make a cachedir for repyhelper...
-if not os.path.exists('nodemanager.repyhelpercache'):
-  os.mkdir('nodemanager.repyhelpercache')
-
-# prepend this to my python path
-sys.path = ['nodemanager.repyhelpercache'] + sys.path
-repyhelpercachedir = repyhelper.set_importcachedir('nodemanager.repyhelpercache')
 
 
 

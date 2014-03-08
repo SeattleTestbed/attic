@@ -1,5 +1,4 @@
-With the modified repyhelper.py and servicelogger.mix, to run the backend do
-the following:
+To run the backend do the following:
 
   * Create a new directory, we'll call it /path/to/deploy
   * Create a directory called seattle in the deploy directory, that is, /path/to/deploy/seattle

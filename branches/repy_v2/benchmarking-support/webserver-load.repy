@@ -78,7 +78,7 @@ def process_client(client): #ip, port, client, thiscommhandle, listencommhandle)
     reply = make_reply(header)
     send_reply(reply, client)
   except Exception, exp:
-    print 'client timed out', str(exp)
+    log('client timed out: '+str(exp)+'\n')
   finally:
     mycontext['lock'].release()
     #stopcomm(thiscommhandle)

@@ -20,10 +20,11 @@ from seattlegeni.common.util import log
 
 from seattlegeni.common.util.decorators import log_function_call_without_return
 
-from seattle import repyhelper
-from seattle import repyportability
+from seattle.repyportability import *
+add_dy_support(locals())
 
-repyhelper.translate_and_import("rsa.repy")
+dy_import_module_symbols("rsa.repy")
+
 
 
 

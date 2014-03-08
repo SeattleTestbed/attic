@@ -14,9 +14,11 @@ from seattlegeni.common.exceptions import *
 
 from seattlegeni.node_state_transitions import node_transition_lib
 
-from seattle import repyhelper
+from seattle.repyportability import *
+add_dy_support(locals())
 
-repyhelper.translate_and_import("rsa.repy")
+dy_import_module_symbols("rsa.repy")
+
 
 
 

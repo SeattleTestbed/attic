@@ -7,6 +7,7 @@ from repyportability import add_dy_support
 add_dy_support(locals())
 dy_import_module_symbols('rsa.repy')
 
+
 orig_stdout = sys.stdout
 
 # Prepare the expected results.

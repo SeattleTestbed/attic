@@ -19,8 +19,10 @@
 """
 
 # need to load public keys
-import repyhelper
-repyhelper.translate_and_import("rsa.repy")
+from repyportability import *
+add_dy_support(locals())
+
+dy_import_module_symbols("rsa.repy")
 
 import sys
 

@@ -18,10 +18,11 @@
 import time
 import traceback
 
-from seattle import repyhelper
-from seattle import repyportability
+from seattle.repyportability import *
+add_dy_support(locals())
 
-repyhelper.translate_and_import("parallelize.repy")
+dy_import_module_symbols("parallelize.repy")
+
 
 
 

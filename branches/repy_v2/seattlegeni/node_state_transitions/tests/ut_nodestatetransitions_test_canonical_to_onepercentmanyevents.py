@@ -28,10 +28,11 @@ from seattlegeni.common.api import maindb
 
 from seattlegeni.node_state_transitions.tests import mockutil
 
-from seattle import repyhelper
-from seattle import repyportability
+from seattle.repyportability import *
+add_dy_support(locals())
 
-repyhelper.translate_and_import('rsa.repy')
+dy_import_module_symbols("rsa.repy")
+
 
 
 

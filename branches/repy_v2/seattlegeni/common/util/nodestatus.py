@@ -44,10 +44,11 @@ from seattlegeni.common.exceptions import *
 
 from seattlegeni.website import settings
 
-from seattle import repyhelper
-from seattle import repyportability
+from seattle.repyportability import *
+add_dy_support(locals())
 
-repyhelper.translate_and_import("rsa.repy")
+dy_import_module_symbols("rsa.repy")
+
 
 # Restore the log module as repy's log function is copied into our
 # namespace when we are importing rsa.repy

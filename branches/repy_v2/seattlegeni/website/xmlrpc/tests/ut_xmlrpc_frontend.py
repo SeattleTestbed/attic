@@ -39,9 +39,11 @@ from seattlegeni.website.xmlrpc.tests import xmlrpctestutil
 from seattlegeni.website.control import interface
 from seattlegeni.website.control import models
 
-from seattle import repyhelper
-from seattle import repyportability
-repyhelper.translate_and_import("rsa.repy")
+from seattle.repyportability import *
+add_dy_support(locals())
+
+dy_import_module_symbols("rsa.repy")
+
 
 
 

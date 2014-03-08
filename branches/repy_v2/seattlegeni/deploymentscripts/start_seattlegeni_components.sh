@@ -77,7 +77,8 @@ echo "Starting check_active_db_nodes.py."
 # We use dylink to enable affixes.  Dylink only imports from the current directory...
 cd $SEATTLECLEARINGHOUSE_DIR/polling/ && $SUDO_CMD python check_active_db_nodes.py >>$LOG_DIR/check_active_db_nodes.log 2>&1 &
 sleep 1 # We need to wait for each process to start before beginning the next
-        # because repyhelper has an issue with concurrent file access.
+        # because repyhelper has an issue with concurrent file access. 
+        # (OBSOLETE?)
 
 # Note: Don't put a ".py" on the end of the TRANSITION_NAME values.
 

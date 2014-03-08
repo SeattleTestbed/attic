@@ -23,19 +23,12 @@ import tarfile
 
 import daemon
 
-import repyhelper
-
-# I need to make a cachedir for repyhelper...
-if not os.path.exists('softwareupdater.repyhelpercache'):
-  os.mkdir('softwareupdater.repyhelpercache')
-
-# prepend this to my python path
-sys.path = ['softwareupdater.repyhelpercache'] + sys.path
-repyhelpercachedir = repyhelper.set_importcachedir('softwareupdater.repyhelpercache')
-
 
 # this is being done so that the resources accounting doesn't interfere with logging
 from repyportability import *
+
+# Need to import some repy code
+add_dy_support(locals())
 
 import urllib      # to retrieve updates
 import random
@@ -54,8 +47,10 @@ import servicelogger
 # This gives us do_sleep
 import misc
 
-repyhelper.translate_and_import("signeddata.repy")
-repyhelper.translate_and_import("sha.repy")
+
+dy_import_module_symbols("sha.repy")
+dy_import_module_symbols("signeddata.repy")
+
 
 # Armon: The port that should be used to update our time using NTP
 TIME_PORT = 51234

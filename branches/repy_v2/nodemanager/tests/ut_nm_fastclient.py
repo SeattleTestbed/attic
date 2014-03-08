@@ -7,10 +7,12 @@ This test verifies the ResetVessel method works by first assidng several files t
 
 from repyportability import *
 
-import repyhelper
+add_dy_support(locals())
 
-repyhelper.translate_and_import("time.repy")
-repyhelper.translate_and_import("rsa.repy")
+dy_import_module_symbols("rsa.repy")
+dy_import_module_symbols("time.repy")
+
+
 import fastnmclient
 
 if __name__ == '__main__':

@@ -88,8 +88,8 @@
       Node: the /tmp/deploy path entry is to make available the two packages
       'seattlegeni' and 'seattle' which the deployment script created in the
       /tmp/deploy directory. The /tmp/deploy/seattle path item is to ensure
-      that repyhelper can find repy files in the python path, as the repy files
-      were placed in this directory by the deployment script.
+      that repyhelper (NOW OBSOLETE?) can find repy files in the python path, 
+      as the repy files were placed in this directory by the deployment script.
     
     * Create the database structure:
   

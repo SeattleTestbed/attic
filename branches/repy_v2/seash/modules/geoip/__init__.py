@@ -19,6 +19,9 @@ from repyportability import add_dy_support
 add_dy_support(locals())
 dy_import_module_symbols("geoip_client.repy")
 
+dy_import_module_symbols("geoip_client.repy")
+
+
 
 # show location        -- Display location information about the nodes
 def show_location(input_dict, environment_dict):

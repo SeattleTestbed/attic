@@ -69,8 +69,9 @@ def _deploy_seattle_files_to_directory(trunkdir, targetdir):
   
   print "Deploying seattle and repy library code to " + targetdir
   
-  # Copy the repy and mix files needed by various parts of seattlegeni,
-  # including ones we don't use but may be required to import repyhelper.
+  # Copy the repy files needed by various parts of seattlegeni,
+  # including ones we don't use but may be required to import repyhelper 
+  # (OBSOLETE?).
   _copy_to_target(os.path.join(trunkdir, "repy", "*"), targetdir)
   _copy_to_target(os.path.join(trunkdir, "nodemanager", "*"), targetdir)
   _copy_to_target(os.path.join(trunkdir, "portability", "*"), targetdir)

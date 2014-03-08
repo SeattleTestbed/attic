@@ -10,10 +10,11 @@ import nanny
 import emulfile
 import emulmisc
 import namespace
-import repyhelper
 import nonportable
 import virtual_namespace
 
+# WTF!?! repyportability uses repyhelper to import dylink!?!
+import repyhelper
 
 # JAC: Save the calls in case I want to restore them.   This is useful if 
 # repy ends up wanting to use either repyportability or repyhelper...
