@@ -294,7 +294,7 @@ def main():
   # Set up dynamic port information
   if RANDOMPORTS:
     print "\n[ Randomports option was chosen ]\n"+'-'*50
-    ports_as_ints = random.sample(range(52000, 53000), 3)
+    ports_as_ints = random.sample(range(52000, 53000), 5)
     ports_as_strings = []
     for port in ports_as_ints:
       ports_as_strings.append(str(port))
@@ -311,7 +311,7 @@ def main():
 
   else:
     # Otherwise use the default ports...
-    testportfiller.replace_ports(['12345','12346','12347'], ['12345','12346','12347'])
+    testportfiller.replace_ports(['12345','12346','12347', '12348', '12349'], ['12345','12346','12347', '12348', '12349'])
 
     # Use default port 1224 for the nodemanager port if --random flag is not provided.
     replace_string("<nodemanager_port>", '1224', "*nm*")
