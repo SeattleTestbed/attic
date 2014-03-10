@@ -1,4 +1,4 @@
-#pragma repy restrictions.test
+#pragma repy restrictions.test dylink.repy
 
 """
 Author: Cosmin Barsan

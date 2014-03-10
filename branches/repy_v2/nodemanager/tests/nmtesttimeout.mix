@@ -41,7 +41,7 @@ if callfunc == 'initialize':
     # we should have timed out...
     pass
   else:
-    print "Did not timeout!"
+    log("Did not timeout!\n")
     
 
 

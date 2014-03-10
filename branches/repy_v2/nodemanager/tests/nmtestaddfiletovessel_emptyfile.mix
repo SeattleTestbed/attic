@@ -31,5 +31,5 @@ if callfunc == 'initialize':
   retrieveddata = nmclient_signedsay(nmhandle, "RetrieveFileFromVessel", myvessel, "hello")
 
   if data != retrieveddata:
-    print "'"+data+"' != '"+retrieveddata+"'"
+    log("'"+data+"' != '"+retrieveddata+"'\n")
 

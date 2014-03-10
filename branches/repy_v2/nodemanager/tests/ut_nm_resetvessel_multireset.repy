@@ -1,4 +1,4 @@
-#pragma repy restrictions.test
+#pragma repy restrictions.test dylink.repy
 
 """
 Author: Cosmin Barsan
@@ -65,7 +65,7 @@ if callfunc == 'initialize':
   fullresourcedata = nmclient_rawsay(nmhandle, "GetVesselResources",myvessel)
   finalrestrictions = get_restrictions(fullresourcedata)
   
-  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy","print 'hello world'\nwhile True: sleep(.1)")
+  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy","log('hello world\\n')\nwhile True: sleep(.1)")
 
   try:
     # this should succeed.   The previously started version should have been 
@@ -76,7 +76,8 @@ if callfunc == 'initialize':
     nmclient_signedsay(nmhandle, "StopVessel", myvessel)
 
   if finalrestrictions.strip() != startingrestrictions.strip():
-    print "'"+finalrestrictions.strip()+"' != '"+startingrestrictions.strip()+"'"
+    log("'" + finalrestrictions.strip() + "' != '" + 
+      startingrestrictions.strip() + "'\n")
     raise Exception, "Restrictions are not preserved!"
 
 

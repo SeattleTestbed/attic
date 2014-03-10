@@ -35,17 +35,17 @@ if callfunc == 'initialize':
     pass
   else:
     #the file was added to the vessel
-    print "no exception thrown when adding file with invalid name to vessel"
-    print "attempting to retrieve file"
+    log("no exception thrown when adding file with invalid name to vessel\n")
+    log("attempting to retrieve file\n")
     
     #retrieve it
     try:
       retrieveddata = nmclient_signedsay(nmhandle, "RetrieveFileFromVessel", myvessel, "")
     except NMClientException:
-      print "unable to read file from vessel"
+      log("unable to read file from vessel\n")
       pass
     else:
       if data != retrieveddata:
-        print "'"+data+"' != '"+retrieveddata+"'"
+        log("'"+data+"' != '"+retrieveddata+"'\n")
     
     raise Exception, "test failed: expected NMClientException when attempting to add the file to vessel"

@@ -1,4 +1,4 @@
-#pragma repy restrictions.loose
+#pragma repy restrictions.loose dylink.repy
 
 
 def waitonsocket(socketobj, num):
@@ -9,7 +9,7 @@ def waitonsocket(socketobj, num):
 #    print num, e
     exitall()
   else:
-    print "Error, should not return from recv!?!"
+    log("Error, should not return from recv!?!\n")
   
 
 if callfunc == 'initialize':
@@ -31,6 +31,6 @@ if callfunc == 'initialize':
   settimer(0, waitonsocket, (junk5,5))
 
   sleep(5)
-  print "Error:Can happily block on 5 nm connections!?!"
+  log("Error:Can happily block on 5 nm connections!?!\n")
   exitall()
 #  sockobj.close()

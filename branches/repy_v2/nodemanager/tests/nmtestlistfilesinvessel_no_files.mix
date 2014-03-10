@@ -30,7 +30,7 @@ if callfunc == 'initialize':
   try:
     nmclient_signedsay(nmhandle, "ResetVessel", myvessel)
   except NMClientException:
-    print "warning: vessel reset failed"
+    log("warning: vessel reset failed\n")
 
 
   filelist = nmclient_signedsay(nmhandle, "ListFilesInVessel", myvessel)

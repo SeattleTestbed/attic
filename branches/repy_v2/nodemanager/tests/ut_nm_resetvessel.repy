@@ -1,9 +1,9 @@
-#pragma repy restrictions.test
+#pragma repy restrictions.test dylink.repy
 
 """
 Author: Justin Cappos
 Description:
-This test verifies the ResetVessel method works by first assidng several files to a vessel, resetting the vessel, and checking if the files and log were erased.
+This test verifies the ResetVessel method works by first adding several files to a vessel, resetting the vessel, and checking if the files and log were erased.
 
 """
 
@@ -29,7 +29,7 @@ if callfunc == 'initialize':
   myvessel = nmclient_listaccessiblevessels(nmhandle,pubkey)[0][0]
 
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "hello","hellodata")
-  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy","print 'hello world'\nwhile True: sleep(.1)")
+  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy","log('hello world\\n')\nwhile True: sleep(.1)")
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "hello2","hellodata")
 
   nmclient_signedsay(nmhandle, "StartVessel", myvessel, "helloworld.repy")

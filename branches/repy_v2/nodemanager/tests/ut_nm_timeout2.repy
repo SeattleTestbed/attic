@@ -1,4 +1,4 @@
-#pragma repy restrictions.test
+#pragma repy restrictions.test dylink.repy
 
 """
 Author: Justin Cappos
@@ -34,7 +34,7 @@ if callfunc == 'initialize':
   try: 
     nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "hello",data)
   except NMClientException, e:
-    print "Unexpected exception",e
+    log("Unexpected exception", e, "\n")
     exitall()
   else:
     # we should not have timed out...

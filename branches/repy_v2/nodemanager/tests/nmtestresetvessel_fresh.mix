@@ -26,7 +26,8 @@ if callfunc == 'initialize':
   # get the vessel to use...
   myvessel = nmclient_listaccessiblevessels(nmhandle,pubkey)[0][0]
 
-  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy","print 'hello world'\nwhile True: sleep(.1)")
+  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy", 
+    "log('hello world\\n')\nwhile True: sleep(.1)")
 
   nmclient_signedsay(nmhandle, "StartVessel", myvessel, "helloworld.repy")
   

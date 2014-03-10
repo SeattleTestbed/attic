@@ -1,4 +1,4 @@
-#pragma repy restrictions.test
+#pragma repy restrictions.test dylink.repy
 
 """
 Author: Steven Portzer
@@ -45,12 +45,12 @@ if callfunc == 'initialize':
   # Get any log output
   logstring = nmclient_signedsay(nmhandle, "ReadVesselLog", myvessel)
   if logstring != "":
-    print "Unexpected output:",logstring
+    log("Unexpected output:", logstring, "\n")
 
   try:
     nmclient_signedsay(nmhandle, "RetrieveFileFromVessel", myvessel, "private_foo")
   except NMClientException:
     pass
   else:
-    print "Able to retrieve file starting with 'private_'  from vessel"
+    log("Able to retrieve file starting with 'private_'  from vessel\n")
 

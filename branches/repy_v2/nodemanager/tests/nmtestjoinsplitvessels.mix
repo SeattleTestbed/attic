@@ -80,7 +80,8 @@ resource connport 12222
   endingrestrictions = get_restrictions(fullresourcedata)
 
   # commented out print statement so test does not result in failure when automatically run
-  # print "Warning, this test does not check vessel resource sizes..."
+  # log("Warning, this test does not check vessel resource sizes...\n")
   if endingrestrictions.strip() != startingrestrictions.strip():
-    print "'"+endingrestrictions.strip()+"' != '"+startingrestrictions.strip()+"'"
+    log("'" + endingrestrictions.strip() + "' != '" + 
+      startingrestrictions.strip()+"'\n")
     raise Exception, "Restrictions are not preserved!"

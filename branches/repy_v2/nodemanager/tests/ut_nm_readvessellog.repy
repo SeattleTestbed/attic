@@ -1,4 +1,4 @@
-#pragma repy restrictions.test
+#pragma repy restrictions.test dylink.repy
 
 """
 Author: Justin Cappos
@@ -29,7 +29,7 @@ if callfunc == 'initialize':
   newstring = str(randomfloat())
 
   # I need to double backslash because the program should contain \n
-  programtext = "print '\\n"+newstring+"',\nwhile True:\n  sleep(.1)"
+  programtext = "log('\\n"+newstring+"')\nwhile True:\n  sleep(.1)"
 
 
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "infloop.py",programtext)

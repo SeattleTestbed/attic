@@ -43,5 +43,5 @@ if callfunc == 'initialize':
   # Get any output
   thelog = nmclient_signedsay(nmhandle, "ReadVesselLog", myvessel)
   if thelog != "":
-    print "Unexpected output:"+thelog
+    log("Unexpected output:" + thelog + "\n")
 

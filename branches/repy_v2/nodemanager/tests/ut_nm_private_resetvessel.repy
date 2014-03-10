@@ -1,4 +1,4 @@
-#pragma repy restrictions.test
+#pragma repy restrictions.test dylink.repy
 
 """
 Author: Steven Portzer
@@ -45,12 +45,12 @@ if callfunc == 'initialize':
   # Get any log output
   logstring = nmclient_signedsay(nmhandle, "ReadVesselLog", myvessel)
   if logstring != "":
-    print "Unexpected output:",logstring
+    log("Unexpected output:", logstring, "\n")
 
   filelist = nmclient_signedsay(nmhandle, "ResetVessel", myvessel)
 
   # logs whether the file 'private_foo' exists
-  testexistsstring = "print 'private_foo' in listdir()"
+  testexistsstring = "log('private_foo' in listdir(), '\n')"
 
   # upload and run program
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "baz.repy", testexistsstring)
@@ -62,5 +62,5 @@ if callfunc == 'initialize':
   # Get any log output
   logstring = nmclient_signedsay(nmhandle, "ReadVesselLog", myvessel)
   if logstring.split()[-1] != "True":
-    print "Reseting vessel deleted file starting with 'private_'"
+    log("Reseting vessel deleted file starting with 'private_'\n")
 

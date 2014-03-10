@@ -1,4 +1,4 @@
-#pragma repy restrictions.test
+#pragma repy restrictions.test dylink.repy
 
 """
 Author: Cosmin Barsan
@@ -32,7 +32,7 @@ if callfunc == 'initialize':
   try:
     nmclient_signedsay(nmhandle, "ResetVessel", myvessel)
   except NMClientException, e:
-    print "warning: vessel reset failed",e
+    log("warning: vessel reset failed", e, "\n")
 
 
   filelist = nmclient_signedsay(nmhandle, "ListFilesInVessel", myvessel)

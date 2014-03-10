@@ -1,4 +1,4 @@
-#pragma repy restrictions.test
+#pragma repy restrictions.test dylink.repy
 
 """
 Author: Cosmin Barsan
@@ -37,16 +37,16 @@ if callfunc == 'initialize':
     pass
   else:
     #the file was added to the vessel
-    print "no exception thrown when adding file with invalid name to vessel"
-    print "attempting to retrieve file"
+    log("""No exception thrown when adding file with invalid name to vessel.
+Attempting to retrieve file""")
     
     #retrieve it
     try:
       retrieveddata = nmclient_signedsay(nmhandle, "RetrieveFileFromVessel", myvessel, "")
     except NMClientException, e:
-      print "unable to read file from vessel (?)",e
+      log("unable to read file from vessel (?)", e, "\n")
     else:
       if data != retrieveddata:
-        print "'"+data+"' != '"+retrieveddata+"'"
+        log("'"+data+"' != '"+retrieveddata+"'\n")
     
     raise Exception, "test failed: expected NMClientException when attempting to add the file to vessel"

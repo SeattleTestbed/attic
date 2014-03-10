@@ -1,4 +1,4 @@
-#pragma repy restrictions.test
+#pragma repy restrictions.test dylink.repy
 
 """
 Author: Steven Portzer
@@ -36,5 +36,5 @@ if callfunc == 'initialize':
   except NMClientException:
     pass
   else:
-    print "Able to add file starting with 'private_' to vessel"
+    log("Able to add file starting with 'private_' to vessel\n")
 

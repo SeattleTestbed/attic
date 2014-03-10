@@ -1,4 +1,4 @@
-#pragma repy restrictions.test
+#pragma repy restrictions.test dylink.repy
 
 """
 Author: Justin Cappos
@@ -35,5 +35,5 @@ if callfunc == 'initialize':
   retrieveddata = nmclient_signedsay(nmhandle, "RetrieveFileFromVessel", myvessel, "hello")
 
   if data != retrieveddata:
-    print "'"+data+"' != '"+retrieveddata+"'"
+    log("'"+data+"' != '"+retrieveddata+"'\n")
 

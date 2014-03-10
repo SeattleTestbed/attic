@@ -1,4 +1,4 @@
-#pragma repy restrictions.test
+#pragma repy restrictions.test dylink.repy
 
 """
 Author: Justin Cappos
@@ -58,7 +58,7 @@ if callfunc == 'initialize':
   nmclient_signedsay(nmhandle, "SetRestrictions", myvessel, startingrestrictions)
 
   if newrestrictions.strip() != '':
-    print "'"+newrestrictions.strip()+"'"
+    log("'" + newrestrictions.strip() + "'\n")
     raise Exception, "Could not set restrictions!"
 
   
@@ -66,5 +66,6 @@ if callfunc == 'initialize':
   finalrestrictions = get_restrictions(fullresourcedata)
 
   if finalrestrictions.strip() != startingrestrictions.strip():
-    print "'"+finalrestrictions.strip()+"' != '"+startingrestrictions.strip()+"'"
+    log("'" + finalrestrictions.strip() + "' != '" + 
+      startingrestrictions.strip() + "'")
     raise Exception, "Could not restore restrictions!"

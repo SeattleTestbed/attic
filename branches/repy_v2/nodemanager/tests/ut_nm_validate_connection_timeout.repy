@@ -1,8 +1,8 @@
-#pragma repy restrictions.loose
+#pragma repy restrictions.loose dylink.repy
 
 
 def error_and_exit():
-  print "Error:Can wait for more than 15 seconds!"
+  log("Error:Can wait for more than 15 seconds!\n")
   exitall()
 
 if callfunc == 'initialize':
@@ -24,6 +24,6 @@ if callfunc == 'initialize':
     else:
       raise
   else:
-    print "Error, should not return from recv!?!"
+    log("Error, should not return from recv!?!\n")
   
 
