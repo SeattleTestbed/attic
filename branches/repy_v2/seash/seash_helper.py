@@ -19,6 +19,9 @@ add_dy_support(locals())
 # Use local clock for time if there is no network connectivity
 import time
 
+# Used for error checking during file handling
+import errno
+
 # Enable the NAT traversal affix
 dy_import_module_symbols('affixstackinterface.repy')
 
@@ -1091,5 +1094,6 @@ def remove_files(files):
     try:
       os.remove(fn)
     except OSError, e:
-      if not "cannot find the file" in str(e):
+      # Everything but 'file not found' is a serious error here!
+      if e.errno != errno.ENOENT:
         raise
