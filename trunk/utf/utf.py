@@ -63,6 +63,9 @@ SYNTAX_PREFIX = 'ut_'
 SYNTAX_SUFFIX = '.py'
 
 
+COMPANION_SETUP = 'setup'
+COMPANION_SHUTDOWN = 'shutdown'
+COMPANION_SUBPROCESS = 'subprocess'
 
 
 # Acceptable pragma directives.
@@ -279,17 +282,14 @@ def test_file(file_path, script_files):
   subprocess_file = None
   shutdown_file = None
 
-  # Locates and stores setup/subprocess/shutdown files, if any exist.
-  for file_name in script_files:
-    file_components = file_name.split('_')
-    if components == file_components[:-1]:
-      descriptor = file_components[-1].split('.')[0]
-      if descriptor == 'setup':
-        setup_file = file_name
-      elif descriptor == 'subprocess':
-        subprocess_file = file_name
-      elif descriptor == 'shutdown':
-        shutdown_file = file_name
+  for filename in script_files:
+    script_type = get_script_type(filename, script_files)
+    if script_type == COMPANION_SETUP:
+      setup_file = filename
+    elif script_type == COMPANION_SUBPROCESS:
+      subprocess_file = filename
+    elif script_type == COMPANION_SHUTDOWN:
+      shutdown_file = filename
 
   sub = None
   # If we must open a process to run concurrently with the tests, we will use
@@ -384,27 +384,20 @@ def test_module(module_name, module_file_list):
     print "Now running setup script: " + setup_file
     execute_and_check_program(setup_file)
 
-
-  # Filters all files in the directory by module name, and stores all the 
-  # setup, shutdown, and subprocess scripts into script_files.
+  # test_file() is responsible for running companion tests.
+  # We shouldn't run them directly.
   valid_files = filter_files(glob.glob("*"))
   all_module_files = filter_files(valid_files, module=module_name)
-  valid_scripts = ['setup', 'shutdown', 'subprocess']
-  script_files = []
+  all_test_files = all_module_files[:]
   for mod_file in all_module_files:
-    # If, after removing the extension, the file ends with a
-    # valid script descriptor i.e. setup, shutdown, or subprocess
-    if mod_file.split('_')[-1].split('.')[0] in valid_scripts:
-      script_files.append(mod_file)
-      if mod_file in module_file_list:
-        module_file_list.remove(mod_file)
-
+    if get_script_type(mod_file, all_module_files) is not None:
+      all_test_files.remove(mod_file)
 
   start_time = time.time()
 
   # Run the module tests
-  for file_path in module_file_list:
-    test_file(file_path, script_files)
+  for file_path in all_test_files:
+    test_file(file_path, module_file_list)
 
   end_time = time.time()
 
@@ -877,6 +870,50 @@ def strip_android_debug_messages(rawoutput):
   return output[0:-1]
 
 
+
+def get_script_type(scriptname, all_scripts):
+  """
+  <Purpose>
+    Gets the type of a script file, in the context of all_scripts.
+
+    There are two types of scripts, standalone unit tests and companion
+    scripts.  Companion scripts are setup/shutdown/subprocess scripts
+    that need to be run at specific times, that perform tasks depended
+    on by other unit tests.
+
+  <Arguments>
+    scriptname:
+      The name of the script to look at.
+
+    all_scripts:
+      The names of all the files in the directory that contains
+      scriptname.
+
+  <Side Effects>
+    None
+
+  <Exceptions>
+    None
+
+  <Returns>
+    None if scriptname is a standalone unit test.  Otherwise, it returns
+    the type of the companion script.
+  """
+  # Script names are in the form: ut_[module]_[test]_[companion].py
+  base_name, last_filename_component = scriptname.rsplit('_', 1)
+
+  # We're not interested in the *.py extension
+  last_filename_component = last_filename_component.split('.')[0]
+
+  # If there is no base test, then this is a standalone unit test.
+  base_test_script = base_name + '.py'
+
+  if base_test_script in all_scripts:
+    # Locates and stores setup/subprocess/shutdown files, if any exist.
+    for companion_type in [COMPANION_SHUTDOWN, COMPANION_SETUP, COMPANION_SUBPROCESS]:
+      if last_filename_component == companion_type:
+        return companion_type
+  return None
 
 
 if __name__ == "__main__":
