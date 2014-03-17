@@ -143,10 +143,11 @@ class CoordinationAffix(BaseAffix):
       try:
         tcpserversocket = self.peek().listenforconnection(localhost, localport)
         break
-      except AddressBindingError:
-        sleep(0.1)
+      except (AddressBindingError, RepyArgumentError), e:
+        sleep(1)
     else:
-      raise AddressBindingError("Unable to bind with the localhost '%s' provided." % localhost)
+      raise AddressBindingError("Unable to bind with the localhost " + 
+        str(localhost) + " (IP " + str(localip) + ") provided.")
 
     if _COORDINATION_AFFIX_DEBUG_MODE:
       log("CoordinationAffix started listening socket on '%s:%d'\n" % (localip, localport))
