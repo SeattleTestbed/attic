@@ -339,7 +339,7 @@ class NatPunchAffix(BaseAffix):
 
     # Use a sockettimeout object in order to perform socket.send and socket.recv
     # so we don't hang forever and continue on if it takes too long.
-    timeout_socket = _timeout_socket(new_sockobj, timeout=_NAT_SOCKET_TIMEOUT)
+    timeout_socket = timeout_socket(new_sockobj, timeout=_NAT_SOCKET_TIMEOUT)
 
     # Request the Nat Forwarder to connect a client to this new socket that
     # we just opened up. Then we check if we were successfully connected to
@@ -443,7 +443,7 @@ class NatPunchAffix(BaseAffix):
 
           # Use a sockettimeout object in order to perform socket.send and socket.recv
           # so we don't hang forever and continue on if it takes too long.
-          timeout_socket = _timeout_socket(sockobj, timeout=_NAT_SOCKET_TIMEOUT)
+          timeout_socket = timeout_socket(sockobj, timeout=_NAT_SOCKET_TIMEOUT)
 
           try:
             session_sendmessage(timeout_socket, register_serv_msg)
