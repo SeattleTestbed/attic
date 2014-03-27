@@ -49,6 +49,7 @@ from repyportability import *
 add_dy_support(locals())
 
 
+
 # needed to log OS type / Python version
 import platform
 
@@ -108,6 +109,7 @@ dy_import_module_symbols("sha.repy")
 dy_import_module_symbols("advertise.repy")
 dy_import_module_symbols("sockettimeout.repy")
 dy_import_module_symbols("affixstackinterface")
+advertisepipe = dy_import_module("advertisepipe.r2py")
 
 
 affix_service_key = "BetaSeattleAffixStack"
@@ -287,6 +289,7 @@ def start_accepter():
           # Check to see if AFFIX is enabled.
           try:
             affix_enabled_lookup = advertise_lookup(enable_affix_key)[-1]
+            servicelogger.log("affix_enabled_lookup is " + str(affix_enabled_lookup))
             # Now we check if the last entry is True or False.
             if affix_enabled_lookup == 'True':
               affix_stack_string = advertise_lookup(affix_service_key)[-1]
@@ -295,16 +298,19 @@ def start_accepter():
             else:
               affix_enabled = False
           except (AdvertiseError, TimeoutError), e:
+            servicelogger.log("Trying to look up Affix enabled threw " + str(type(e)) + " " + str(e))
             affix_enabled = False
             # Raise error on debug mode.
             if DEBUG_MODE:
               raise
           except ValueError:
+            servicelogger.log("Trying to look up Affix enabled threw " + str(type(e)) + " " + str(e))
             affix_enabled = False
             # Raise error on debug mode.
             if DEBUG_MODE:
               raise
           except IndexError:
+            servicelogger.log("Trying to look up Affix enabled threw " + str(type(e)) + " " + str(e))
             # This will occur if the advertise server returns an empty list.
             affix_enabled = False
             # Raise error on debug mode.
@@ -335,6 +341,10 @@ def start_accepter():
               myname = sha_hexhash(mypubkey) + '.zenodotus.poly.edu'
               myname_port = myname + ":" + str(possibleport)
 
+              # Announce my Zenodotus name
+              # XXX Save the handle, modify the announcement when my address changes!
+              advertisepipe.add_to_pipe(myname, getmyip())
+
               affix_legacy_string = "(CoordinationAffix)(LegacyAffix," + myname + "," + str(affixport) + ",0," 
               affix_legacy_string += "(CoordinationAffix)" + affix_stack_string + ")"
               affix_object = AffixStackInterface(affix_legacy_string)
@@ -348,12 +358,12 @@ def start_accepter():
                 break
               except (AddressBindingError, AlreadyListeningError, DuplicateTupleError), e:
 
-                if DEBUG_MODE:
-                  servicelogger.log("Failed to open listening socket with Affix on port: " + str(affixport) +
-                                    ". Found error: " + str(e))
+                servicelogger.log(
+                  "Failed to open listening socket with Affix on port: " + 
+                  str(affixport) + ". Found error: " + str(e))
 
                 fail_affix_count += 1
-                error_list.append(str(e))
+                error_list.append((type(e), str(e)))
 
                 # If we fail more than 2 times, we will stop attempting to try listening
                 # on a socket with the Affix framework.

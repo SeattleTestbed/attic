@@ -22,9 +22,10 @@ dy_import_module_symbols("random")
 dy_import_module_symbols("session")
 dy_import_module_symbols("baseaffix")
 sockettimeout = dy_import_module("sockettimeout")
-dy_import_module_symbols("advertise_objects")
 dy_import_module_symbols("affixstackinterface")
 dy_import_module_symbols("nat_forwarder_common_lib")
+advertise = dy_import_module("advertise.repy") # for AdvertiseError
+cachedadvertise = dy_import_module("cachedadvertise.r2py")
 
 
 # The default timeout that is used when connecting to forwarder
@@ -72,11 +73,6 @@ class NatSockObj:
 
 
 class NatPunchAffix(BaseAffix):
-
-
-  # The advertise object that is used to lookup forwarders. This
-  # object will be shared between all instances of this affix.
-  forwarder_cache = LookupCache()
 
 
   def __init__(self, affix_stack = AffixStack(), optional_args = None):
@@ -206,9 +202,9 @@ class NatPunchAffix(BaseAffix):
       connection_socket = self.connect_to_forwarder(localip, localport)
     except (RepyArgumentError, AddressBindingError), err:
       # If we get these two arguments we want to raise them as AddressBindingError.
-      raise AddressBindingError(err)
+      raise AddressBindingError(str(type(err)) + " " + str(err))
     except SocketClosedRemote, err:
-      raise DuplicateTupleError(err)
+      raise DuplicateTupleError(str(typ(err)) + " " + str(err))
 
     # Raise AddressBindingError if we are unable to connect to any forwarder.
     if not connection_socket:
@@ -339,7 +335,8 @@ class NatPunchAffix(BaseAffix):
 
     # Use a sockettimeout object in order to perform socket.send and socket.recv
     # so we don't hang forever and continue on if it takes too long.
-    timeout_socket = sockettimeout.timeout_socket(new_sockobj, timeout=_NAT_SOCKET_TIMEOUT)
+    timeout_socket = sockettimeout.timeout_socket(new_sockobj, 
+      timeout=_NAT_SOCKET_TIMEOUT)
 
     # Request the Nat Forwarder to connect a client to this new socket that
     # we just opened up. Then we check if we were successfully connected to
@@ -395,11 +392,11 @@ class NatPunchAffix(BaseAffix):
       forwarder_list = [self.default_forwarder[0] + ':' + str(self.default_forwarder[1])]
     else:
       try:
-        forwarder_list = self.forwarder_cache.lookup(NAT_FORWARDER_KEY, graceperiod=5, timeout=10)
+        forwarder_list = cachedadvertise.lookup(NAT_FORWARDER_KEY)
         # We will randomize the forwarder list to try and distribute servers
         # across all the forwarders.
-        forwarder_list = random_sample(forwarder_list, len(forwarder_list))
-      except (AdvertiseError, TimeoutError):
+        forwarder_list = random_shuffle(forwarder_list)
+      except (advertise.AdvertiseError, TimeoutError):
         return None
 
 
@@ -443,7 +440,8 @@ class NatPunchAffix(BaseAffix):
 
           # Use a sockettimeout object in order to perform socket.send and socket.recv
           # so we don't hang forever and continue on if it takes too long.
-          timeout_socket = sockettimeout.timeout_socket(sockobj, timeout=_NAT_SOCKET_TIMEOUT)
+          timeout_socket = sockettimeout.timeout_socket(sockobj, 
+            timeout=_NAT_SOCKET_TIMEOUT)
 
           try:
             session_sendmessage(timeout_socket, register_serv_msg)
