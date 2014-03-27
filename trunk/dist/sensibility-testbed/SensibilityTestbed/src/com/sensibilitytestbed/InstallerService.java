@@ -25,6 +25,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -488,8 +489,20 @@ public class InstallerService extends ForegroundService {
 					args.add(optionalArgs);
 				installerLogger.info(Common.LOG_INFO_STARTING_INSTALLER_SCRIPT);
 
-				mProxy = new AndroidProxy(s, null, true);
-				mProxy.startLocal();
+				// mProxy is not fully initialized until we call
+				// mProxy.startLocal().  We must not swap out this.mProxy
+				// too early, as other threads rely on mProxy to be fully
+				// initialized when it is no longer null.
+				AndroidProxy androidProxy = new AndroidProxy(s, null, true);
+
+				InetSocketAddress proxyAddress = null;
+				while (proxyAddress == null) {
+					Log.i(Common.LOG_TAG, "Starting mProxy... (InstallerService)");
+					proxyAddress = androidProxy.startLocal();
+				}
+				mProxy = androidProxy;
+				Log.i(Common.LOG_TAG, "mProxy started successfully!");
+
 				// mLatch.countDown();
 				// Launch installer
 				SeattleScriptProcess.launchScript(installer,

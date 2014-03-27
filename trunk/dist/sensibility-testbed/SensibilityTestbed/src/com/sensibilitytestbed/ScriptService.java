@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.net.InetSocketAddress;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -58,6 +59,8 @@ public class ScriptService extends ForegroundService {
 	private final static int NOTIFICATION_ID = NotificationIdFactory.create();
 	private final IBinder mBinder;
 
+	AndroidProxy mProxy;
+
 	// booleans used in shutting down the service
 	private boolean killMe, isRestarting;
 
@@ -66,7 +69,6 @@ public class ScriptService extends ForegroundService {
 	private SeattleScriptProcess seattlemainProcess;
 
 	private InterpreterConfiguration mInterpreterConfiguration = null;
-	private AndroidProxy mProxy;
 
 	// workaround to make sure the service does not get restarted
 	// when the system kills this service
@@ -98,17 +100,21 @@ public class ScriptService extends ForegroundService {
 		@Override
 		protected Void doInBackground(Service... params) {
 			Log.i(Common.LOG_TAG, "Am doing stuff in background!");
-			mProxy = new AndroidProxy(params[0], null, true); 
-			mProxy.startLocal();
+			// mProxy is not fully initialized until we call
+			// mProxy.startLocal().  We must not swap out this.mProxy
+			// too early, as other threads rely on mProxy to be fully
+			// initialized when it is no longer null.
+			AndroidProxy androidProxy = new AndroidProxy(params[0], null, true); 
+
+			InetSocketAddress proxyAddress = null;
+			while (proxyAddress == null) {
+				Log.i(Common.LOG_TAG, "Starting mProxy... (ScriptService)");
+				proxyAddress = androidProxy.startLocal();
+			}
+			mProxy = androidProxy;
 			Log.i(Common.LOG_TAG, "mProxy started Local.");
 			return null;
 		}
-		
-//		protected void onPostExecute(AndroidProxy result) {
-//			// Shove the result into a variable defined in our superclass 
-//			Log.i(Common.LOG_TAG, "Result available!");
-//			mProxy = result;
-//		}
 	}
 
 	// on destroy
@@ -160,11 +166,9 @@ public class ScriptService extends ForegroundService {
 		File pythonBinary = new File(this.getFilesDir().getAbsolutePath()
 				+ "/python/bin/python");
 
-//		mProxy = new AndroidProxy(this, null, true);
-//		mProxy.startLocal();
 		Log.v(Common.LOG_TAG, "Trying to start AsyncTask.");
 		new StartSl4aAndroidProxy().execute(this);
-		//mProxy = new AndroidProxy(this, null, true);
+
 		Log.v(Common.LOG_TAG, "Waiting fer mah AndroidProxy...");
 		while (mProxy == null) {
 			try {
@@ -214,6 +218,7 @@ public class ScriptService extends ForegroundService {
 					public void run() {
 						Log.i(Common.LOG_TAG,
 								Common.LOG_INFO_SEATTLE_UPDATER_SHUTDOWN);
+						// startUpdater() restarts mProxy
 						mProxy.shutdown();
 						if (!killMe) {
 							// Exit was not initiated by the user
@@ -300,7 +305,7 @@ public class ScriptService extends ForegroundService {
 		// We're wrapping stuff in an AsyncTask instead.
 		Log.v(Common.LOG_TAG, "Trying to start AsyncTask.");
 		new StartSl4aAndroidProxy().execute(this);
-		//mProxy = new AndroidProxy(this, null, true);
+
 		Log.v(Common.LOG_TAG, "Waiting fer mah AndroidProxy...");
 		while (mProxy == null) {
 			try {
