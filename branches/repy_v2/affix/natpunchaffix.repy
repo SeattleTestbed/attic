@@ -347,7 +347,7 @@ class NatPunchAffix(BaseAffix):
     try:
       session_sendmessage(timeout_socket, CONNECT_SERVER_TAG + ',' + server_id)
       response = session_recvmessage(timeout_socket)
-    except SocketTimeoutError, err:
+    except sockettimeout.SocketTimeoutError, err:
       raise SocketWouldBlockError("Unable to connect to any client due to timeout when " +
                                   "requesting for connection for server id: %s. %s" % (server_id, str(err)))
 
@@ -455,7 +455,7 @@ class NatPunchAffix(BaseAffix):
             # return other messages such as SERVER_FULL or CONNECTION_REFUSED msg.
             # In which case we move on to the next forwarder.
             confirmation_msg = session_recvmessage(timeout_socket)
-          except SocketTimeoutError, err:
+          except sockettimeout.SocketTimeoutError, err:
             if _NAT_AFFIX_DEBUG_MODE:
               log("NatPunchAffix timed out while registering to forwarder '%s:%d'. %s\n" % (forwarder_ip, forwarder_port, str(err)))
             # If we timeout trying to register to a NAT forwarder, we continue
