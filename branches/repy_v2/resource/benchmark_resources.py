@@ -16,7 +16,7 @@
   files so that seattle only the donated resources.
   
   A wiki page concerning this module can be found at:
-  https://seattle.cs.washington.edu/wiki/BenchmarkCustomInstallerInfo
+  https://seattle.poly.edu/wiki/BenchmarkCustomInstallerInfo
   Which contains a more high level overview of the operation.
   
   This should be run internally by seattleinstaller.py
