@@ -431,13 +431,13 @@ public class InstallerService extends ForegroundService {
 				StatFs statfs = new StatFs(Environment
 						.getExternalStorageDirectory().getPath());
 				int cores = Runtime.getRuntime().availableProcessors();
-				int freeSpace = statfs.getAvailableBlocks()
-						* statfs.getBlockSize();
+				long freeSpace = (long) statfs.getAvailableBlocks() *
+						(long) statfs.getBlockSize();
 
 				// Set environmental variables
 				Map<String, String> env = new HashMap<String, String>();
 				env.put("SEATTLE_AVAILABLE_CORES", Integer.toString(cores));
-				env.put("SEATTLE_AVAILABLE_SPACE", Integer.toString(freeSpace));
+				env.put("SEATTLE_AVAILABLE_SPACE", Long.toString(freeSpace));
 
 				// set python 2.7 environmental variables to pass to interpreter
 				env.put("PYTHONPATH",
