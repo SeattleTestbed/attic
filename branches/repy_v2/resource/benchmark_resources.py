@@ -232,19 +232,7 @@ def run_benchmark(logfileobj):
                                 exceptionTraceback, file=logfileobj)
       max_resource_dict = DEFAULT_MAX_RESOURCE_DICT.copy()
       benchmarking_failed = True
-      
-  elif OS == "WindowsCE":
-    try:
-      import Win_WinCE_resources
-      max_resource_dict = Win_WinCE_resources.measure_resources()
-    except Exception:
-      log_failure("Failed to benchmark WindowsCE OS.", logfileobj)
-      exceptionType, exceptionValue, exceptionTraceback = sys.exc_info()
-      traceback.print_exception(exceptionType, exceptionValue, \
-                                exceptionTraceback, file=logfileobj)
-      max_resource_dict = DEFAULT_MAX_RESOURCE_DICT.copy()
-      benchmarking_failed = True
-    
+
   elif OS == "Linux":
     try:
       import Linux_resources
