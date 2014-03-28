@@ -159,7 +159,8 @@ def count_cores(procfiledata):
     string 'cpu cores' or number of cores is invalid.
     
   <Returns>
-    The total number of cores for a single physical processor.
+    The total number of cores for a single physical processor, 
+    or 1 if no core data is found.
   """
   # Search each line for the desired string
   for line in procfiledata:
@@ -172,8 +173,12 @@ def count_cores(procfiledata):
         return int(cpucores)
       except ValueError:
         raise Exception("bad value for number of cpu cores: " + str(cpucores))
-  raise Exception("cpu cores data not found")
-    
+  else:
+    # No CPU cores data found, use a default of 1.
+    # This is required for nonstandard /proc/cpuinfo layouts as 
+    # found on RaspberryPis (#1308) and OpenWrt routers.
+    return 1
+
 def count_processor_physical_id(procfiledata):
   """
   <Purpose>
@@ -192,7 +197,7 @@ def count_processor_physical_id(procfiledata):
     id is not an integer.
     
   <Returns>
-    The total number unique identifiers.
+    The total number of unique identifiers, or 1 if none were found.
   """
   id_list = []
   for line in procfiledata:
@@ -207,11 +212,12 @@ def count_processor_physical_id(procfiledata):
         raise Exception("bad value for physical id: " + str(phys_id))
       if(phys_id not in id_list):
         id_list.append(phys_id)
-  
-  if(len(id_list) > 0):
-    return len(id_list) 
-  else:      
-    raise Exception("physical id data not found")
+
+  # Return the number of physical IDs found, or 1 if none were found. 
+  # The latter is required for nonstandard /proc/cpuinfo layouts as 
+  # found on RaspberryPis (#1308) and OpenWrt routers.
+  return len(id_list) or 1
+
  
 def get_cpu():
   """
