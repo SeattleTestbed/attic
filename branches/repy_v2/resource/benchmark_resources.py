@@ -86,12 +86,18 @@ DEFAULT_OFFCUT_DICT =  {'cpu':.002,
                         'lograte':100, # the monitor might log something
                         'random':0 }
 
+
+# Reduce the default max resources for ARM devices such as Android 
+# phones/tablets, RaspberryPis, OpenWrt routers, iPhones and iPads, and 
+# Nokia N800/900.
+
 if platform.machine().startswith('armv'):
-  # there is not enough filewrite/fileread resources on the Nokia so their 
-  # requirements should be decreased.
-  # AR: This also catches Android and iDevices.
-  DEFAULT_OFFCUT_DICT['filewrite'] = 800
-  DEFAULT_OFFCUT_DICT['fileread'] = 800
+  DEFAULT_MAX_RESOURCE_DICT.update({
+    "random": DEFAUL_MAX_RESOURCE_DICT["random"] / 4,
+    "filewrite": DEFAUL_MAX_RESOURCE_DICT["filewrite"] / 20,
+    "fileread": DEFAUL_MAX_RESOURCE_DICT["filewrite"] / 20,
+    })
+
 
 # Current this is only raised when nmresourcemath raises a ResourceParseError.
 # I suppose we could let the nmresourcemath exception propagate instead
