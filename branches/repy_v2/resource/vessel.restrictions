@@ -1,3 +1,6 @@
+# RepyV1 call restrictions below.
+# RepyV2 uses Security Layers to achieve this, 
+# see https://seattle.poly.edu/wiki/SecurityLayers .
 
 
 call gethostbyname_ex allow
