@@ -93,9 +93,9 @@ DEFAULT_OFFCUT_DICT =  {'cpu':.002,
 
 if platform.machine().startswith('armv'):
   DEFAULT_MAX_RESOURCE_DICT.update({
-    "random": DEFAUL_MAX_RESOURCE_DICT["random"] / 4,
-    "filewrite": DEFAUL_MAX_RESOURCE_DICT["filewrite"] / 20,
-    "fileread": DEFAUL_MAX_RESOURCE_DICT["filewrite"] / 20,
+    "random": DEFAULT_MAX_RESOURCE_DICT["random"] / 4,
+    "filewrite": DEFAULT_MAX_RESOURCE_DICT["filewrite"] / 20,
+    "fileread": DEFAULT_MAX_RESOURCE_DICT["filewrite"] / 20,
     })
 
 
