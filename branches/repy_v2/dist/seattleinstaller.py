@@ -1378,8 +1378,8 @@ def setup_linux_or_mac_startup():
     raise UnsupportedOSError
 
   # Derek Cheng: check to see if Seattle is being installed on a Nokia tablet.
-  if platform.machine().startswith('armv'):
-    return setup_nokia_startup()
+  #if platform.machine().startswith('armv'):
+  #  return setup_nokia_startup()
 
   _output("Attempting to add an entry to the crontab...")
 
@@ -2037,22 +2037,22 @@ def test_seattle_is_installed():
   elif OS == "Linux" or OS == "Darwin":
 
     # Check to see if Seattle is being installed on a Nokia tablet.
-    if platform.machine().startswith('armv'):
-      # The full path to the startup script.
-      startup_script_path = "/etc/init.d/nokia_seattle_startup.sh"
-      # The full path to the symlink.
-      symlink_path = "/etc/rc2.d/S99startseattle"
-      
-      # If the startup script or the symlink exist, then Seattle was installed.
-      return os.path.exists(startup_script_path) or \
-                os.path.lexists(symlink_path)
+    #if platform.machine().startswith('armv'):
+    #  # The full path to the startup script.
+    #  startup_script_path = "/etc/init.d/nokia_seattle_startup.sh"
+    #  # The full path to the symlink.
+    #  symlink_path = "/etc/rc2.d/S99startseattle"
+    #  
+    #  # If the startup script or the symlink exist, then Seattle was installed.
+    #  return os.path.exists(startup_script_path) or \
+    #            os.path.lexists(symlink_path)
 
-    else:
-      # Check to see if the crontab has been modified to run seattle.
-      crontab_contents_stdout,crontab_contents_stderr = \
-          subprocess.Popen(["crontab", "-l"], stdout=subprocess.PIPE,
-                           stderr=subprocess.PIPE).communicate()
-      return get_starter_file_name() in crontab_contents_stdout
+    #else:
+    # Check to see if the crontab has been modified to run seattle.
+    crontab_contents_stdout,crontab_contents_stderr = \
+        subprocess.Popen(["crontab", "-l"], stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE).communicate()
+    return get_starter_file_name() in crontab_contents_stdout
 
   else:
     raise UnsupportedOSError()
@@ -2162,15 +2162,15 @@ def main():
     # Derek Cheng: if the user is running a Nokia N800 tablet, we require them
     # to be on root first in order to have files created in the /etc/init.d and
     # /etc/rc2.d directories. 
-    if IS_ANDROID == False:
-      _output('Seattle is being installed on a Nokia N800/900 Internet Tablet.')
-      # JAC: I can't import this on Windows, so will do it here...
-      import pwd
-      # if the current user name is not 'root'
-      if pwd.getpwuid(os.getuid())[0] != 'root':
-        _output('Please run the installer as root. This can be done by ' \
-                  + 'installing/using the rootsh or openssh package.')
-        return
+    #if IS_ANDROID == False:
+    #  _output('Seattle is being installed on a Nokia N800/900 Internet Tablet.')
+    #  # JAC: I can't import this on Windows, so will do it here...
+    #  import pwd
+    #  # if the current user name is not 'root'
+    #  if pwd.getpwuid(os.getuid())[0] != 'root':
+    #    _output('Please run the installer as root. This can be done by ' \
+    #              + 'installing/using the rootsh or openssh package.')
+    #    return
 
   # Pre-install: process the passed-in arguments, and set up the configuration
   #   dictionary.
