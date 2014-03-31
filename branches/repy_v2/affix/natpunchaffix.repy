@@ -395,7 +395,7 @@ class NatPunchAffix(BaseAffix):
         forwarder_list = cachedadvertise.lookup(NAT_FORWARDER_KEY)
         # We will randomize the forwarder list to try and distribute servers
         # across all the forwarders.
-        forwarder_list = random_shuffle(forwarder_list)
+        random_shuffle(forwarder_list)
       except (advertise.AdvertiseError, TimeoutError):
         return None
 
