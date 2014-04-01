@@ -34,6 +34,7 @@ import android.util.Log;
 
 import com.googlecode.android_scripting.Exec;
 import com.sensibilitytestbed.Common;
+import com.sensibilitytestbed.ScriptActivity;
 import com.trilead.ssh2.StreamGobbler;
 
 /***
@@ -126,7 +127,8 @@ public class Process {
 
     int[] pid = new int[1];
     String[] argumentsArray = mArguments.toArray(new String[mArguments.size()]);
-    mLog = new File(String.format("%s/%s.log", getSdcardPackageDirectory() + "/", getName()));
+    mLog = new File(String.format("%s/%s.log", 
+    		ScriptActivity.seattleInstallDirectory.getAbsolutePath() + "/", getName()));
 
     mFd =
         Exec.createSubprocess(binaryPath, argumentsArray, getEnvironmentArray(),

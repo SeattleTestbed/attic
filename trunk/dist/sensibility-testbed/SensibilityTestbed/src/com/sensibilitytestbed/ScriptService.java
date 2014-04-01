@@ -155,7 +155,7 @@ public class ScriptService extends ForegroundService {
 		Log.i(Common.LOG_TAG, Common.LOG_INFO_STARTING_SEATTLE_UPDATER);
 
 		// Get updater script file
-		File updater = new File(Environment.getExternalStorageDirectory()
+		File updater = new File(ScriptActivity.seattleInstallDirectory
 				.getAbsolutePath()
 				+ "/sl4a/seattle/seattle_repy/softwareupdater.py");
 
@@ -163,8 +163,8 @@ public class ScriptService extends ForegroundService {
 		args.add(updater.toString()); // script to run
 
 		// set python Binary
-		File pythonBinary = new File(this.getFilesDir().getAbsolutePath()
-				+ "/python/bin/python");
+		File pythonBinary = new File(this.getFilesDir().getAbsolutePath() +
+				"/python/bin/python");
 
 		Log.v(Common.LOG_TAG, "Trying to start AsyncTask.");
 		new StartSl4aAndroidProxy().execute(this);
@@ -187,29 +187,22 @@ public class ScriptService extends ForegroundService {
 		env.put("SEATTLE_RUN_SOFTWAREUPDATER_IN_FOREGROUND", "True");
 
 		// 2.7 set python environmental variables
-		env.put("PYTHONPATH", Environment.getExternalStorageDirectory()
-				.getAbsolutePath()
-				+ "/"
-				+ this.getPackageName()
-				+ "/extras/python"
-				+ ":"
-				+ this.getFilesDir().getAbsolutePath()
-				+ "/python/lib/python2.7/lib-dynload"
-				+ ":"
-				+ this.getFilesDir().getAbsolutePath()
-				+ "/python/lib/python2.7");
+		env.put("PYTHONPATH", ScriptActivity.seattleInstallDirectory.getAbsolutePath() + 
+				"/extras/python" +
+				":" + this.getFilesDir().getAbsolutePath() +  
+				"/python/lib/python2.7/lib-dynload" 
+				+ ":" + this.getFilesDir().getAbsolutePath() +
+				"/python/lib/python2.7");
 
-		env.put("TEMP", Environment.getExternalStorageDirectory()
-				.getAbsolutePath()
-				+ "/"
-				+ this.getPackageName()
-				+ "/extras/tmp");
+		env.put("TEMP", ScriptActivity.seattleInstallDirectory.getAbsolutePath() + 
+				"/extras/tmp");
 
 		env.put("PYTHONHOME", this.getFilesDir().getAbsolutePath() + "/python");
 
-		env.put("LD_LIBRARY_PATH", this.getFilesDir().getAbsolutePath()
-				+ "/python/lib" + ":" + this.getFilesDir().getAbsolutePath()
-				+ "/python/lib/python2.7/lib-dynload");
+		env.put("LD_LIBRARY_PATH", this.getFilesDir().getAbsolutePath() +
+				"/python/lib" + 
+				":" + this.getFilesDir().getAbsolutePath() +
+				"/python/lib/python2.7/lib-dynload");
 
 		// Start script
 		updaterProcess = SeattleScriptProcess.launchScript(updater,
@@ -247,10 +240,8 @@ public class ScriptService extends ForegroundService {
 							}
 						}
 					}
-				}, updater.getParent(), Environment
-						.getExternalStorageDirectory().getAbsolutePath()
-						+ "/"
-						+ this.getPackageName(), args, env, pythonBinary);
+				}, updater.getParent(), ScriptActivity.seattleInstallDirectory + 
+						"/"	+ this.getPackageName(), args, env, pythonBinary);
 	}
 
 	// Starts the nodemanager process
@@ -263,7 +254,7 @@ public class ScriptService extends ForegroundService {
 
 		Log.i(Common.LOG_TAG, Common.LOG_INFO_STARTING_SEATTLE_MAIN);
 		// Get nodemanager script file
-		File seattlemain = new File(Environment.getExternalStorageDirectory()
+		File seattlemain = new File(ScriptActivity.seattleInstallDirectory
 				.getAbsolutePath() + "/sl4a/seattle/seattle_repy/nmmain.py");
 
 		// Set arguments
@@ -271,8 +262,8 @@ public class ScriptService extends ForegroundService {
 		args.add(seattlemain.toString()); // name of script to run
 		args.add("--foreground");
 
-		File pythonBinary = new File(this.getFilesDir().getAbsolutePath()
-				+ "/python/bin/python");
+		File pythonBinary = new File(this.getFilesDir().getAbsolutePath() +
+				"/python/bin/python");
 
 		// env variables
 		Map<String, String> environmentVariables = null;
@@ -280,26 +271,20 @@ public class ScriptService extends ForegroundService {
 
 		// set python 2.7 environmental variables to pass to interpreter
 		environmentVariables.put("PYTHONPATH",
-				Environment.getExternalStorageDirectory().getAbsolutePath()
-						+ "/" + this.getPackageName() + "/extras/python" + ":"
-						+ this.getFilesDir().getAbsolutePath()
-						+ "/python/lib/python2.7/lib-dynload" + ":"
-						+ this.getFilesDir().getAbsolutePath()
-						+ "/python/lib/python2.7");
+				ScriptActivity.seattleInstallDirectory.getAbsolutePath() + "/extras/python" + 
+				":"	+ this.getFilesDir().getAbsolutePath() + "/python/lib/python2.7/lib-dynload" + 
+				":"	+ this.getFilesDir().getAbsolutePath() + "/python/lib/python2.7");
 
-		environmentVariables.put("TEMP",
-				Environment.getExternalStorageDirectory().getAbsolutePath()
-						+ "/" + this.getPackageName() + "/extras/tmp");
+		environmentVariables.put("TEMP", 
+				ScriptActivity.seattleInstallDirectory.getAbsolutePath() + "/extras/tmp");
 
-		environmentVariables.put("PYTHONHOME", this.getFilesDir()
-				.getAbsolutePath() + "/python");
+		environmentVariables.put("PYTHONHOME", this.getFilesDir().getAbsolutePath() +
+				"/python");
 
-		environmentVariables.put("LD_LIBRARY_PATH", this.getFilesDir()
-				.getAbsolutePath()
-				+ "/python/lib"
-				+ ":"
-				+ this.getFilesDir().getAbsolutePath()
-				+ "/python/lib/python2.7/lib-dynload");
+		environmentVariables.put("LD_LIBRARY_PATH", this.getFilesDir().getAbsolutePath() +
+				"/python/lib"
+				+ ":" + this.getFilesDir().getAbsolutePath() +
+				"/python/lib/python2.7/lib-dynload");
 
 		// Dealing with the proxy in this thread is problematic on API levels >9.
 		// We're wrapping stuff in an AsyncTask instead.
@@ -331,10 +316,8 @@ public class ScriptService extends ForegroundService {
 							startSeattleMain();
 						}
 					}
-				}, seattlemain.getParent(), Environment
-						.getExternalStorageDirectory().getAbsolutePath()
-						+ "/"
-						+ this.getPackageName(), args, environmentVariables,
+				}, seattlemain.getParent(), ScriptActivity.seattleInstallDirectory + 
+						"/"	+ this.getPackageName(), args, environmentVariables,
 				pythonBinary);
 	}
 

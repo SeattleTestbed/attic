@@ -108,6 +108,13 @@ public class ScriptActivity extends Activity {
 	// installation
 	private static boolean autostartedAfterInstallation = false;
 
+	// This is initialized by the onStart() method.  It needs to be static
+	// as it is referred to in a lot of different classes.  This should be fine
+	// since a ScriptActivity instance will be the first thing instantiated (as
+	// far as anything that uses seattleInstallDirectory is concerned).
+	// This should NOT be modified after initialization.
+	public static File seattleInstallDirectory;
+
 	// Message handler used for notifying the activity
 	public static MyMessageHandler handler;
 
@@ -117,7 +124,7 @@ public class ScriptActivity extends Activity {
 	// Not to be confused with seattle_repy directory, which is a subdirectory
 	// of seattle-root
 	public static String getSeattlePath() {
-		return Environment.getExternalStorageDirectory().getAbsolutePath()
+		return seattleInstallDirectory.getAbsolutePath()
 				+ "/sl4a/seattle/";
 	}
 
@@ -129,7 +136,7 @@ public class ScriptActivity extends Activity {
 	// setup python progressDialog
 	private void preparePythonProgress() {
 		this.pythonProgress = new ProgressDialog(this);
-		pythonProgress.setMessage("unpacking python");
+		pythonProgress.setMessage("Unpacking Python...");
 		pythonProgress.setIndeterminate(true);
 		pythonProgress.setCancelable(false);
 		pythonProgress.show();
@@ -149,7 +156,7 @@ public class ScriptActivity extends Activity {
 			try {
 				// Installation finished -> refresh screen
 				if (msg.what == SEATTLE_INSTALLED || msg.what == INSTALL_FAILED) {
-					// Start seattle automatically after installation
+					// Start Seattle automatically after installation
 					if (msg.what == SEATTLE_INSTALLED) {
 						ScriptActivity.autostartedAfterInstallation = true;
 						ScriptService.serviceInitiatedByUser = true;
@@ -180,7 +187,7 @@ public class ScriptActivity extends Activity {
 					new AlertDialog.Builder(a)
 							.setTitle(getString(R.string.app_name))
 							.setMessage(text)
-							.setNeutralButton("Ok",
+							.setNeutralButton("OK",
 									new DialogInterface.OnClickListener() {
 										public void onClick(
 												DialogInterface dialog,
@@ -719,21 +726,18 @@ public class ScriptActivity extends Activity {
 				// Python_27 we unpack to ->
 				// /data/data/com.sensibilitytestbed/files/python
 				if (zipName.endsWith(Common.PYTHON_ZIP_NAME)) {
-					Utils.unzip(content, this.getFilesDir().getAbsolutePath()
-							+ "/", true);
+					// This is the Python binary. It needs to live in /data/data/...., 
+					// as it can't be made executable on the SDcard due to VFAT.
+					// Thus, we must not use seattleInstallDirectory for this.
+					Utils.unzip(content, this.getFilesDir().getAbsolutePath() + "/", true);
 					// set file permissions
-					FileUtils.chmod(new File(this.getFilesDir()
-							.getAbsolutePath() + "/python/bin/python"), 0755);
+					FileUtils.chmod(new File(this.getFilesDir().getAbsolutePath() + "/python/bin/python"), 0755);
 				}
 				// Python_extras_27 we unpack to ->
 				// /sdcard/com.sensibilitytestbed/extras/python
-				// XXX We shouldn't hardcode the package name here!
 				else if (zipName.endsWith(Common.PYTHON_EXTRAS_ZIP_NAME)) {
-					Utils.createDirectoryOnExternalStorage("com.sensibilitytestbed/extras");
-					Utils.createDirectoryOnExternalStorage("com.sensibilitytestbed/extras/tmp");
-					Utils.unzip(content, Environment
-							.getExternalStorageDirectory().getAbsolutePath()
-							+ "/com.sensibilitytestbed/extras/", true);
+					Utils.unzip(content, seattleInstallDirectory.getAbsolutePath() +
+							"/extras/", true);
 				}
 			} catch (Exception e) {
 				Log.e(Common.LOG_TAG, Common.LOG_EXCEPTION_PYTHON_UNZIPPING, e);
@@ -749,6 +753,10 @@ public class ScriptActivity extends Activity {
 		// Load settings
 		settings = getSharedPreferences(SEATTLE_PREFERENCES,
 				MODE_WORLD_WRITEABLE);
+		seattleInstallDirectory = getExternalFilesDir(null);
+		Log.v(Common.LOG_TAG, "Application files will be placed in: " +
+			seattleInstallDirectory.getAbsolutePath());
+
 		if (!Environment.getExternalStorageState().equals(
 				Environment.MEDIA_MOUNTED)) {
 			// External storage device not mounted
@@ -791,10 +799,8 @@ public class ScriptActivity extends Activity {
 						Log.v(Common.LOG_TAG, "Starting file copying...");
 						String baseFileName = "sl4a_r6.apk";
 						String assetFileName = "raw/" + baseFileName;
-						String savedFileName = Environment
-								.getExternalStorageDirectory()
-								+ "/"
-								+ baseFileName;
+						String savedFileName = ScriptActivity.seattleInstallDirectory + 
+								"/" + baseFileName;
 						in = assetManager.open(assetFileName);
 						out = new FileOutputStream(savedFileName);
 						byte[] buffer = new byte[1024];
@@ -835,8 +841,8 @@ public class ScriptActivity extends Activity {
 				
 			}
 
-			File pythonBinary = new File(this.getFilesDir().getAbsolutePath()
-					+ "/python/bin/python");
+			File pythonBinary = new File(this.getFilesDir().getAbsolutePath() + 
+					"/python/bin/python");
 			// Check if python is installed
 			if (!pythonBinary.exists()) {
 				Log.e(Common.LOG_TAG,
@@ -844,7 +850,7 @@ public class ScriptActivity extends Activity {
 				// Setup dialog to display when python unpacking is complete
 				final Builder pythonComplete = new AlertDialog.Builder(this)
 						.setMessage("Python unpack complete!")
-						.setNeutralButton("Ok",
+						.setNeutralButton("OK",
 								new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog,

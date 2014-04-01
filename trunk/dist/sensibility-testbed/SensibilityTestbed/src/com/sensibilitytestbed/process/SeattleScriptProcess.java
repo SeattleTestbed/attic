@@ -54,7 +54,7 @@ public class SeattleScriptProcess extends PythonScriptProcess{
 		super(script, configuration, proxy);
 		
 		this.workingDirectory = workingDirectory;
-		this.sdcardPackageDirectory =sdcardPackageDirectory;
+		this.sdcardPackageDirectory = sdcardPackageDirectory;
 	}
 
 	@Override

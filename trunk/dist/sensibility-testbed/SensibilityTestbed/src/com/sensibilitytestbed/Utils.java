@@ -135,12 +135,12 @@ public class Utils {
 
 	public static void createDirectoryOnExternalStorage(String path) {
 		try {
-			File file = new File(Environment.getExternalStorageDirectory(), path);
+			File file = new File(ScriptActivity.seattleInstallDirectory, path);
 			if (!file.exists()) {
 				try {
 					file.mkdirs();
 					Log.i(Common.LOG_TAG, "createDirectoryOnExternalStorage created "
-							+ Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + path);
+							+ ScriptActivity.seattleInstallDirectory.getAbsolutePath() + "/" + path);
 				} catch (Exception e) {
 					Log.e(Common.LOG_TAG, "createDirectoryOnExternalStorage error: ", e);
 				}

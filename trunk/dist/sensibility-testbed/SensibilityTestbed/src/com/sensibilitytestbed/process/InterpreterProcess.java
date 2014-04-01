@@ -29,6 +29,7 @@ import com.googlecode.android_scripting.interpreter.Interpreter;
 import com.googlecode.android_scripting.interpreter.InterpreterConstants;
 import com.googlecode.android_scripting.interpreter.MyInterpreter;
 import com.googlecode.android_scripting.jsonrpc.RpcReceiverManagerFactory;
+import com.sensibilitytestbed.ScriptActivity;
 import com.sensibilitytestbed.ScriptApplication;
 
 /**
@@ -137,6 +138,6 @@ public class InterpreterProcess extends Process {
   }
   @Override
   public String getSdcardPackageDirectory() {
-    return Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + ScriptApplication.getThePackageName();
+    return ScriptActivity.seattleInstallDirectory.getAbsolutePath() + "/" + ScriptApplication.getThePackageName();
   }
 }

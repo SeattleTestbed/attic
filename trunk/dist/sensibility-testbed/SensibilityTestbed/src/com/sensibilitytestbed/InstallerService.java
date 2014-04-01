@@ -24,7 +24,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -55,8 +54,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Environment;
@@ -138,11 +135,11 @@ public class InstallerService extends ForegroundService {
 	// installInfo log file
 	public boolean checkInstallationSuccess() {
 		// Prefer installInfo.new to installInfo.old
-		File f = new File(Environment.getExternalStorageDirectory()
+		File f = new File(ScriptActivity.seattleInstallDirectory
 				.getAbsolutePath()
 				+ "/sl4a/seattle/seattle_repy/installInfo.new");
 		if (!f.exists()) {
-			f = new File(Environment.getExternalStorageDirectory()
+			f = new File(ScriptActivity.seattleInstallDirectory
 					.getAbsolutePath()
 					+ "/sl4a/seattle/seattle_repy/installInfo.old");
 			if (!f.exists())
@@ -184,8 +181,8 @@ public class InstallerService extends ForegroundService {
 		instance = this;
 		// Set python binary located at
 		// /data/data/com.seattleonandroid/files/python/bin/python
-		pythonBinary = new File(this.getFilesDir().getAbsolutePath()
-				+ "/python/bin/python");
+		pythonBinary = new File(this.getFilesDir().getAbsolutePath() + 
+				"/python/bin/python");
 		packageName = this.getPackageName();
 		fileDir = this.getFilesDir();
 
@@ -212,17 +209,15 @@ public class InstallerService extends ForegroundService {
 		Thread t = new Thread() {
 			public void run() {
 				// Create seattle root folder
-				File seattleFolder = new File(Environment
-						.getExternalStorageDirectory().getAbsolutePath()
-						+ "/sl4a/seattle/");
+				File seattleFolder = new File(ScriptActivity.seattleInstallDirectory
+					+ "/sl4a/seattle/");
 				if (seattleFolder.mkdirs())
 					; // folder created
 				else
 					; // folder not created
 
-				File archive = new File(Environment
-						.getExternalStorageDirectory().getAbsolutePath()
-						+ "/sl4a/seattle.zip");
+				File archive = new File(ScriptActivity.seattleInstallDirectory
+					+ "/sl4a/seattle.zip");
 				archive.delete();
 
 				// String user_hash =
@@ -390,7 +385,7 @@ public class InstallerService extends ForegroundService {
 				// Unzip archive
 				try {
 					FileInputStream fis = new FileInputStream(archive);
-					Utils.unzip(fis, Environment.getExternalStorageDirectory()
+					Utils.unzip(fis, ScriptActivity.seattleInstallDirectory
 							.getAbsolutePath() + "/sl4a/", false);
 				} catch (Exception e) {
 					installerLogger.log(Level.SEVERE,
@@ -416,8 +411,7 @@ public class InstallerService extends ForegroundService {
 				mNotificationManager.notify(NOTIFICATION_ID, notification);
 
 				// Get installer script file
-				File installer = new File(Environment
-						.getExternalStorageDirectory().getAbsolutePath()
+				File installer = new File(ScriptActivity.seattleInstallDirectory.getAbsolutePath()
 						+ "/sl4a/seattle/seattle_repy/seattleinstaller.py");
 
 				// Get percentage of resources to donate
@@ -428,8 +422,7 @@ public class InstallerService extends ForegroundService {
 						.getStringArray(ScriptActivity.PERMITTED_INTERFACES);
 
 				// Get information about cores and storage space
-				StatFs statfs = new StatFs(Environment
-						.getExternalStorageDirectory().getPath());
+				StatFs statfs = new StatFs(ScriptActivity.seattleInstallDirectory.getPath());
 				int cores = Runtime.getRuntime().availableProcessors();
 				long freeSpace = (long) statfs.getAvailableBlocks() *
 						(long) statfs.getBlockSize();
@@ -440,27 +433,24 @@ public class InstallerService extends ForegroundService {
 				env.put("SEATTLE_AVAILABLE_SPACE", Long.toString(freeSpace));
 
 				// set python 2.7 environmental variables to pass to interpreter
+				// Note that the libraries, .so's, and Python binary live in 
+				// different parts of the file system, typically 
+				// /data/data/PACKAGE_NAME and /sdcard/Android/PACKAGE_NAME/files .
 				env.put("PYTHONPATH",
-						Environment.getExternalStorageDirectory()
-								.getAbsolutePath()
-								+ "/"
-								+ packageName
-								+ "/extras/python"
-								+ ":"
-								+ fileDir.getAbsolutePath()
-								+ "/python/lib/python2.7/lib-dynload"
-								+ ":"
-								+ fileDir.getAbsolutePath()
-								+ "/python/lib/python2.7");
+						ScriptActivity.seattleInstallDirectory.getAbsolutePath() + 
+								"/extras/python" + 
+								":" + fileDir.getAbsolutePath() +
+								"/python/lib/python2.7/lib-dynload" + 
+								":" + fileDir.getAbsolutePath() + 
+								"/python/lib/python2.7");
 
-				env.put("TEMP", Environment.getExternalStorageDirectory()
-						.getAbsolutePath() + "/" + packageName + "/extras/tmp");
+				env.put("TEMP", ScriptActivity.seattleInstallDirectory.getAbsolutePath() + 
+						"/extras/tmp");
 
 				env.put("PYTHONHOME", fileDir.getAbsolutePath() + "/python");
 
-				env.put("LD_LIBRARY_PATH", fileDir.getAbsolutePath()
-						+ "/python/lib" + ":" + fileDir.getAbsolutePath()
-						+ "/python/lib/python2.7/lib-dynload");
+				env.put("LD_LIBRARY_PATH", fileDir.getAbsolutePath() + "/python/lib" + 
+						":" + fileDir.getAbsolutePath() + "/python/lib/python2.7/lib-dynload");
 
 				// Set arguments
 				List<String> args = new ArrayList<String>();
@@ -505,7 +495,7 @@ public class InstallerService extends ForegroundService {
 
 				// mLatch.countDown();
 				// Launch installer
-				SeattleScriptProcess.launchScript(installer,
+				SeattleScriptProcess.launchScript(installer, 
 						mInterpreterConfiguration, mProxy, new Runnable() {
 							@Override
 							public void run() {
@@ -529,11 +519,8 @@ public class InstallerService extends ForegroundService {
 									// Other files are not removed to preserve
 									// the log files
 									FileUtils
-											.delete(new File(
-													Environment
-															.getExternalStorageDirectory()
-															.getAbsolutePath()
-															+ "/sl4a/seattle/seattle_repy/nmmain.py"));
+											.delete(new File(ScriptActivity.seattleInstallDirectory.getAbsolutePath() + 
+															"/sl4a/seattle/seattle_repy/nmmain.py"));
 									// Send message to activity about failure
 									instance = null;
 									ScriptActivity.handler
@@ -543,10 +530,8 @@ public class InstallerService extends ForegroundService {
 								// Stop service
 								stopSelf(startId);
 							}
-						}, installer.getParent(), Environment
-								.getExternalStorageDirectory()
-								.getAbsolutePath()
-								+ "/" + packageName, args, env, pythonBinary);
+						}, installer.getParent(), ScriptActivity.seattleInstallDirectory + 
+								"/" + packageName, args, env, pythonBinary);
 			};
 		};
 
@@ -560,7 +545,7 @@ public class InstallerService extends ForegroundService {
 		}
 		installerLogger = Logger.getLogger(getString(R.string.app_name));
 		installerLogger.setLevel(Level.INFO);
-		File logDir = new File(Environment.getExternalStorageDirectory()
+		File logDir = new File(ScriptActivity.seattleInstallDirectory
 				+ File.separator + "sl4a" // folder name
 				+ File.separator + "seattle" // folder name
 				+ File.separator + "seattle_repy"); // folder name
