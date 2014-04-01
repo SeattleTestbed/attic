@@ -1298,7 +1298,11 @@ def loadpub_filename(input_dict, environment_dict):
     pubkeyfn = fileandpath+'.publickey'
 
   # load the key and update the table...
-  pubkey = rsa_file_to_publickey(pubkeyfn)
+  
+  try:
+    pubkey = rsa_file_to_publickey(pubkeyfn)
+  except (OSError, IOError), e:
+    raise seash_exceptions.UserError("Cannot locate public key '"+pubkeyfn+"'.\nDetailed error: '"+str(e)+"'.")
 
   if keyname not in seash_global_variables.keys:
     seash_global_variables.keys[keyname] = {'publickey':pubkey, 'privatekey':None}
@@ -1346,7 +1350,11 @@ def loadpub_filename_as(input_dict, environment_dict):
   keyname = command_key
 
   # load the key and update the table...
-  pubkey = rsa_file_to_publickey(pubkeyfn)
+  try:
+    pubkey = rsa_file_to_publickey(pubkeyfn)
+  except (OSError, IOError), e:
+    raise seash_exceptions.UserError("Cannot locate public key '"+pubkeyfn+"'.\nDetailed error: '"+str(e)+"'.")
+
   if keyname not in seash_global_variables.keys:
     seash_global_variables.keys[keyname] = {'publickey':pubkey, 'privatekey':None}
   else:
@@ -1388,7 +1396,11 @@ def loadpriv_filename(input_dict, environment_dict):
 
 
   # load the key and update the table...
-  privkey = rsa_file_to_privatekey(privkeyfn)
+  try:
+    privkey = rsa_file_to_privatekey(privkeyfn)
+  except (OSError, IOError), e:
+    raise seash_exceptions.UserError("Cannot locate private key '"+privkeyfn+"'.\nDetailed error: '"+str(e)+"'.")
+
   if keyname not in seash_global_variables.keys:
     seash_global_variables.keys[keyname] = {'privatekey':privkey, 'publickey':None}
   else:
@@ -1435,7 +1447,11 @@ def loadpriv_filename_as(input_dict, environment_dict):
 
 
   # load the key and update the table...
-  privkey = rsa_file_to_privatekey(privkeyfn)
+  try:
+    privkey = rsa_file_to_privatekey(privkeyfn)
+  except (OSError, IOError), e:
+    raise seash_exceptions.UserError("Cannot locate private key '"+privkeyfn+"'.\nDetailed error: '"+str(e)+"'.")
+
   if keyname not in seash_global_variables.keys:
     seash_global_variables.keys[keyname] = {'privatekey':privkey, 'publickey':None}
   else:
@@ -1807,7 +1823,11 @@ def upload_filename(input_dict, environment_dict):
 
 
   # read the local file...
-  fileobj = open(localfn,"r")
+  try:
+    fileobj = open(localfn,"r")
+  except (OSError, IOError), e:
+    raise seash_exceptions.UserError("Cannot locate file '"+localfn+"'.\nDetailed error: '"+str(e)+"'.")
+
   filedata = fileobj.read()
   fileobj.close()
 
@@ -1872,7 +1892,11 @@ def upload_filename_remotefn(input_dict, environment_dict):
 
 
   # read the local file...
-  fileobj = open(localfn,"r")
+  try:
+    fileobj = open(localfn,"r")
+  except (OSError, IOError), e:
+    raise seash_exceptions.UserError("Cannot locate file '"+localfn+"'.\nDetailed error: '"+str(e)+"'.")
+
   filedata = fileobj.read()
   fileobj.close()
 
@@ -2276,7 +2300,11 @@ def run_localfn(input_dict, environment_dict):
     onlyfilename)
 
   # read the local file...
-  fileobj = open(fileandpath,"r")
+  try:
+    fileobj = open(fileandpath,"r")
+  except (OSError, IOError), e:
+    raise seash_exceptions.UserError("Cannot locate file '"+fileandpath+"'.\nDetailed error: '"+str(e)+"'.")
+
   filedata = fileobj.read()
   fileobj.close()
 
@@ -2351,7 +2379,11 @@ def run_localfn_arg(input_dict, environment_dict):
     onlyfilename)
 
   # read the local file...
-  fileobj = open(fileandpath,"r")
+  try:
+    fileobj = open(fileandpath,"r")
+  except (OSError, IOError), e:
+    raise seash_exceptions.UserError("Cannot locate file '"+fileandpath+"'.\nDetailed error: '"+str(e)+"'.")
+
   filedata = fileobj.read()
   fileobj.close()
 
