@@ -166,19 +166,21 @@ public class ScriptService extends ForegroundService {
 		File pythonBinary = new File(this.getFilesDir().getAbsolutePath() +
 				"/python/bin/python");
 
-		Log.v(Common.LOG_TAG, "Trying to start AsyncTask.");
+		Log.v(Common.LOG_TAG, "ScriptService tries to start AsyncTask.");
 		new StartSl4aAndroidProxy().execute(this);
 
-		Log.v(Common.LOG_TAG, "Waiting fer mah AndroidProxy...");
+		Log.v(Common.LOG_TAG, "ScriptService waits for the AndroidProxy to come alive...");
 		while (mProxy == null) {
 			try {
-				Log.v(Common.LOG_TAG, "Waiting fer mah AndroidProxy...");
+				Log.v(Common.LOG_TAG, "ScriptService still waiting for AndroidProxy...");
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+
+		Log.v(Common.LOG_TAG, "ScriptService's AsyncTask is done, AndroidProxy runs.");
 
 		// Set environmental variables (softwareupdater uses them instead of
 		// command-line arguments)
