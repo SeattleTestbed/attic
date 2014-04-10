@@ -554,6 +554,7 @@ def main():
       return
 
 
+  servicelogger.log('[INFO]: This is Seattle release "' + version + "'") 
 
   # Feature add for #1031: Log information about the system in the nm log...
   servicelogger.log('[INFO]:platform.python_version(): "' + 
