@@ -40,7 +40,7 @@ cachedadvertise = dy_import_module("cachedadvertise.r2py")
 advertisepipe = dy_import_module("advertisepipe.r2py")
 
 # Whether we want to print debug statements.
-_COORDINATION_AFFIX_DEBUG_MODE = False
+_COORDINATION_AFFIX_DEBUG_MODE = True
 
 zenodotus_subdomain = 'zenodotus.poly.edu'
 
@@ -113,7 +113,7 @@ class CoordinationAffix(BaseAffix):
 
     """
     if _COORDINATION_AFFIX_DEBUG_MODE:
-      log("Coordination is about to start listening on '%s:%d'\n" % (localhost, localport))
+      log(self, "Coordination is about to start listening on '%s:%d'\n" % (localhost, localport))
     # If we are listening on a zenodotus name, translate it to the local IP
     if localhost.endswith(zenodotus_subdomain):
       try:
@@ -141,7 +141,7 @@ class CoordinationAffix(BaseAffix):
         ") provided. Exceptions I saw: " + str(exceptions_list))
 
     if _COORDINATION_AFFIX_DEBUG_MODE:
-      log("CoordinationAffix started listening socket on '%s:%d'\n" % (localip, localport))
+      log(self, "CoordinationAffix started listening socket on '%s:%d'\n" % (localip, localport))
 
     # The underlying affix stack has been built completely. We can advertise the
     # affix stack.
@@ -153,7 +153,7 @@ class CoordinationAffix(BaseAffix):
     adv_key = str(hostname) + ',' + str(localport) + ',TCP'
     adv_value = self.peek().get_advertisement_string()
     if _COORDINATION_AFFIX_DEBUG_MODE:
-      log('CoordinationAffix: Advertised', adv_key, adv_value, '\n')
+      log(self, 'CoordinationAffix: Advertised', adv_key, adv_value, '\n')
     adv_handle = advertisepipe.add_to_pipe(adv_key, adv_value)
 
     # We need to save the advertisement handle to a global dictionary, so that
@@ -233,7 +233,7 @@ class CoordinationAffix(BaseAffix):
     lookup_result_list = cachedadvertise.lookup(server_key)
 
     if True or _COORDINATION_AFFIX_DEBUG_MODE:
-      log("Lookup result for '" + server_key + "' is: " + str(lookup_result_list) + "\n")
+      log(self, "Openconnection from", localip, localport, "to", server_key, " via " + str(lookup_result_list) + "\n")
 
     # Reverse the results as the latest affix advertisement always comes last.
     lookup_result_list.reverse()
@@ -252,7 +252,7 @@ class CoordinationAffix(BaseAffix):
       # Build my affix stack and store it in the affix_context.
       self.affix_context['next_affix'] = AffixStack(server_affix_stack_str, localhost).affix_stack_context['top_affix']
       if _COORDINATION_AFFIX_DEBUG_MODE:
-        log('CoordinationAffix: Trying affix stack for openconnection: ', self.peek(), '\n')
+        log(self, 'CoordinationAffix: Trying affix stack for openconnection: ', self.peek(), '\n')
       # Check if we have exceeded the time limit.
       time_taken = getruntime() - start_time
       if time_taken > timeout:
@@ -261,7 +261,7 @@ class CoordinationAffix(BaseAffix):
       # Since we spent some time contacting the advertisement service, we have
       # less time for the actual openconn.
       if _COORDINATION_AFFIX_DEBUG_MODE:
-        log("Using affix string: " + self.peek().get_advertisement_string() + "to connect to '" +
+        log(self, "Using affix string: " + self.peek().get_advertisement_string() + "to connect to '" +
             destip + ":" + str(destport) + "'\n")
 
       try:
@@ -323,7 +323,7 @@ class CoordinationAffix(BaseAffix):
         raise AddressBindingError('Coordination Affix: Not connected to the network.')
       adv_handle = advertisepipe.add_to_pipe(localhost, localip)
       if _COORDINATION_AFFIX_DEBUG_MODE:
-        log('CoordinationAffix: Added', localhost, localip, 
+        log(self, 'CoordinationAffix: Added', localhost, localip, 
           'to advertisepipe.\n')
 
       # We need to save the advertisement handle to a global dictionary, so that
@@ -343,7 +343,7 @@ class CoordinationAffix(BaseAffix):
       localip = localhost
 
     if _COORDINATION_AFFIX_DEBUG_MODE:
-      log("Coordination is about to start UDP server socket on '%s:%d'\n" % (localhost, localport))
+      log(self, "Coordination is about to start UDP server socket on '%s:%d'\n" % (localhost, localport))
 
     # Start listening so we have a complete view of the affix stack below us.
     udpserversocket = self.peek().listenformessage(localip, localport)
@@ -356,7 +356,7 @@ class CoordinationAffix(BaseAffix):
  
 
     if _COORDINATION_AFFIX_DEBUG_MODE:
-      log('CoordinationAffix: Advertised', adv_key, adv_value, '\n')
+      log(self, 'CoordinationAffix: Advertised', adv_key, adv_value, '\n')
 
     # We need to save the advertisement handle to a global dictionary, so that
     # we can keep a reference to the handle. Later on, when we stop listening,
