@@ -16,8 +16,6 @@
   1st June 2011
 """
 
-import traceback
-
 dy_import_module_symbols("random")
 dy_import_module_symbols("session")
 dy_import_module_symbols("baseaffix")
@@ -424,7 +422,9 @@ class NatPunchAffix(BaseAffix):
         continue
       except Exception, err:
         if _NAT_AFFIX_DEBUG_MODE:
-          log(self, "NatPunchAffix found unexpected error: %s\n. Local Address is: '%s:%d'. %s" % (str(err), localip, localport, str(traceback.format_exc())))
+          log(self, "NatPunchAffix found unexpected error: %s %s\n. Local Address is: '%s:%d'. Desired forwarder and server_ip: %s:%d, %s" % 
+            (str(type(err)), str(err), localip, localport, forwarder_ip, 
+            forwarder_port, server_id))
         raise
       else:
         try:
