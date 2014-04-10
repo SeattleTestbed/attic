@@ -108,6 +108,23 @@ dy_import_module_symbols("rsa.repy")
 dy_import_module_symbols("sha.repy")
 dy_import_module_symbols("advertise.repy")
 dy_import_module_symbols("sockettimeout.repy")
+
+# Overwrite log() so that Affix debug messages end up in the nodemanager's 
+# log file (nodemanager.old or .new in the service vessel directory)
+def log(*args):
+  chunks = []
+  for arg in args:
+    chunks.append(str(arg))
+  logstring = " ".join(chunks)
+
+  # servicelogger.log will end a trailing newline to the string,
+  # remove the existing one (if any).
+  if logstring.endswith("\n"):
+    servicelogger.log(logstring[:-1])
+  else:
+    servicelogger.log(logstring)
+
+
 dy_import_module_symbols("affixstackinterface")
 advertisepipe = dy_import_module("advertisepipe.r2py")
 
@@ -161,7 +178,7 @@ LOG_AFTER_THIS_MANY_ITERATIONS = 600  # every 10 minutes
 # BUG: what if the data on disk is corrupt?   How do I recover?   What is the
 # "right thing"?   I could run nminit again...   Is this the "right thing"?
 
-version = "0.2-beta-r6988"
+version = "0.2-beta-r7257"
 
 # Our settings
 configuration = {}
@@ -185,6 +202,9 @@ node_reset_config = {
   'reset_advert': False,
   'reset_accepter': False
   }
+
+# Handle to the advertisepipe thread advertising our Zenodotus name (if any)
+zenodotus_advertise_handle = None
 
 # We can enable or disable Debug mode in order to get more
 # verbose output and raise errors.
@@ -262,6 +282,7 @@ def start_accepter():
   global accepter_thread
   global affix_enabled
   global affix_stack_string
+  global zenodotus_advertise_handle
 
   # do this until we get the accepter started...
   while True:
@@ -271,6 +292,24 @@ def start_accepter():
       return myname_port
     
     else:
+      # If we came here because a reset was initiated, kill the old 
+      # accepter thread server socket before starting a new one.
+      try:
+        accepter_thread.close_serversocket()
+        servicelogger.log("Closed previous accepter thread server socket.")
+      except:
+        # There was no accepter_thread, or it couldn't .close_serversocket().
+        # No problem -- this means nothing will be in the way of the new 
+        # serversocket.
+        pass
+
+      # Similarly, stop advertising my old Zenodotus name (if any), 
+      # ignoring potential errors.
+      try:
+	advertisepipe.remove_from_pipe(zenodotus_advertise_handle)
+      except:
+        pass
+
       # Just use getmyip(), this is the default behavior and will work if we have preferences set
       # We only want to call getmyip() once, rather than in the loop since this potentially avoids
       # rebuilding the allowed IP cache for each possible port
@@ -341,9 +380,8 @@ def start_accepter():
               myname = sha_hexhash(mypubkey) + '.zenodotus.poly.edu'
               myname_port = myname + ":" + str(possibleport)
 
-              # Announce my Zenodotus name
-              # XXX Save the handle, modify the announcement when my address changes!
-              advertisepipe.add_to_pipe(myname, getmyip())
+              # Announce my (new) Zenodotus name
+              zenodotus_advertise_handle = advertisepipe.add_to_pipe(myname, getmyip())
 
               affix_legacy_string = "(CoordinationAffix)(LegacyAffix," + myname + "," + str(affixport) + ",0," 
               affix_legacy_string += "(CoordinationAffix)" + affix_stack_string + ")"
