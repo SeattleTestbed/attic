@@ -40,7 +40,7 @@ cachedadvertise = dy_import_module("cachedadvertise.r2py")
 advertisepipe = dy_import_module("advertisepipe.r2py")
 
 # Whether we want to print debug statements.
-_COORDINATION_AFFIX_DEBUG_MODE = True
+_COORDINATION_AFFIX_DEBUG_MODE = False
 
 zenodotus_subdomain = 'zenodotus.poly.edu'
 
@@ -232,7 +232,7 @@ class CoordinationAffix(BaseAffix):
     server_key = str(desthost) + ',' + str(destport) + ',TCP'
     lookup_result_list = cachedadvertise.lookup(server_key)
 
-    if True or _COORDINATION_AFFIX_DEBUG_MODE:
+    if _COORDINATION_AFFIX_DEBUG_MODE:
       log(self, "Openconnection from", localip, localport, "to", server_key, " via " + str(lookup_result_list) + "\n")
 
     # Reverse the results as the latest affix advertisement always comes last.

@@ -37,7 +37,7 @@ _NAT_SOCKET_TIMEOUT = 10
 _NAT_AFFIX_STRING = "(CoordinationAffix)"
 
 # Whether we want to print debug statements.
-_NAT_AFFIX_DEBUG_MODE = True
+_NAT_AFFIX_DEBUG_MODE = False
 
 
 class NatSockObj:
