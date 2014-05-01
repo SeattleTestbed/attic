@@ -166,21 +166,21 @@ call getruntime allow                   # can get the elapsed time
 call getlock allow                      # can get a mutex
 """
 
-smallresourcedata = """resource cpu .02
+smallresourcedata = """resource cpu 0.02
 resource memory 30000000   # 30 MiB
 resource diskused 20000000 # 20 MiB
 resource events 15
-resource filewrite 100000
-resource fileread 100000
+resource filewrite 100000.0
+resource fileread 100000.0
 resource filesopened 5
 resource insockets 5
 resource outsockets 5
-resource netsend 10000
-resource netrecv 10000
-resource loopsend 1000000
-resource looprecv 1000000
-resource lograte 30000
-resource random 100
+resource netsend 10000.0
+resource netrecv 10000.0
+resource loopsend 1000000.0
+resource looprecv 1000000.0
+resource lograte 30000.0
+resource random 100.0
 resource messport %s
 resource messport %s
 resource messport %s
@@ -292,7 +292,7 @@ def initialize_state():
 
   # NOTE: I chose these randomly (they will be uniform across all NMs)...   
   # Was this wise?
-  configuration['ports'] = [1224, 2888, 9625, 10348, 39303, 48126, 52862, 57344, 64310]
+  configuration['ports'] = [<nodemanager_port>, 2888, 9625, 10348, 39303, 48126, 52862, 57344, 64310]
 
   print "Generating key..."
   keys = rsa_gen_pubpriv_keys(100)
