@@ -222,7 +222,13 @@ class CoordinationAffix(BaseAffix):
       # use the vaue we added to the advertisepipe before.
       try:
         destip = cachedadvertise.lookup(desthost, timeout=0)[0]
-      except NetworkAddressError:
+      except (NetworkAddressError, IndexError):
+        # We catch an indexerror as there is a possibility that
+        # the advertise lookup returns an empty list.
+        # In this situation we just set the destination IP as 
+        # the hostname. Note that Affixes attempts to do a 
+        # name lookup before it does a listenforconnection or
+        # openconnection.
         destip = desthost
     else:
       destip = desthost

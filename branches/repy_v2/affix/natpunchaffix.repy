@@ -496,7 +496,12 @@ class NatPunchAffix(BaseAffix):
 
     # Choose a random port out of the available ports.
     rand_index = int(randomfloat() * (len(available_ports)-1))
-    localport = available_ports[rand_index]
+
+    try:
+      localport = available_ports[rand_index]
+    except IndexError:
+      # We get an indexerror if there are no available ports.
+      raise ResourceExhaustedError("No available TCP ports for connection:", str(available_ports))
 
     return localport
 
