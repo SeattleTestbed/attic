@@ -42,7 +42,7 @@ if callfunc == 'initialize':
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "infloop.py","""while True:
   sleep(.1)""")
 
-  nmclient_signedsay(nmhandle, "StartVessel", myvessel, "infloop.py")
+  nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "infloop.py")
 
   sleep(1)
 

@@ -36,5 +36,5 @@ if callfunc == 'initialize':
   except NMClientException:
     pass
   else:
-    log("Able to add file starting with 'private_' to vessel\n")
+    log("Able to add file starting with 'private_' to vessel")
 

@@ -33,29 +33,33 @@ if callfunc == 'initialize':
   nmclient_signedsay(nmhandle, "ResetVessel", myvessel)  
 
   # create an empty file named 'private_foo'
-  addfilestring = "open('private_foo', 'w')"
+  addfilestring = "openfile('private_foo', True)"
 
   # upload and run program
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "bar.repy", addfilestring)
 
-  nmclient_signedsay(nmhandle, "StartVessel", myvessel, "bar.repy")
+  nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "bar.repy")
 
   sleep(5)
 
   # Get any log output
   logstring = nmclient_signedsay(nmhandle, "ReadVesselLog", myvessel)
-  if logstring != "":
-    log("Unexpected output:", logstring, "\n")
+
+  # We comment out this check, as Repy will use execinfo, which prints
+  # out some information for these API calls.
+  #if logstring != "":
+  #  log("Unexpected output:", logstring, "\n")
 
   filelist = nmclient_signedsay(nmhandle, "ResetVessel", myvessel)
 
   # logs whether the file 'private_foo' exists
-  testexistsstring = "log('private_foo' in listdir(), '\n')"
+  testexistsstring = "log('private_foo' in listfiles())"
+
 
   # upload and run program
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "baz.repy", testexistsstring)
 
-  nmclient_signedsay(nmhandle, "StartVessel", myvessel, "baz.repy")
+  nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "baz.repy")
 
   sleep(5)
 

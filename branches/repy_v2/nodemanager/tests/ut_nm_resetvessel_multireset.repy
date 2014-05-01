@@ -41,7 +41,7 @@ if callfunc == 'initialize':
 
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "hello","hellodata")
 
-  nmclient_signedsay(nmhandle, "StartVessel", myvessel, "helloworld.repy")
+  nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "helloworld.repy")
 
 
   #get the starting restrictions
@@ -70,7 +70,7 @@ if callfunc == 'initialize':
   try:
     # this should succeed.   The previously started version should have been 
     # stopped by the reset.
-    nmclient_signedsay(nmhandle, "StartVessel", myvessel, "helloworld.repy")
+    nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "helloworld.repy")
   finally:
     # always stop at the end...
     nmclient_signedsay(nmhandle, "StopVessel", myvessel)

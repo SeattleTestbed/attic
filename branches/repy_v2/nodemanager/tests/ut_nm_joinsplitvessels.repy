@@ -55,18 +55,26 @@ resource loopsend 100000
 resource looprecv 100000
 resource lograte 3000
 resource random 10
-resource messport 11111
-resource messport 12222
-resource connport 11111
-resource connport 12222
+resource messport 12345
+resource messport 12346
+resource connport 12345
+resource connport 12346
 """
 
 
   # get the vessel to use...
   myvessel = nmclient_listaccessiblevessels(nmhandle,pubkey)[0][0]
 
-  fullresourcedata = nmclient_rawsay(nmhandle, "GetVesselResources",myvessel)
-  startingrestrictions = get_restrictions(fullresourcedata)
+  starting_fullresourcedata = nmclient_rawsay(nmhandle, "GetVesselResources",myvessel)
+  startingrestrictions = get_restrictions(starting_fullresourcedata)
+  starting_restriction_list_full = startingrestrictions.split('\n')
+  starting_restriction_list = []
+  
+  # Build a restrictions list.
+  for restriction in starting_restriction_list_full:
+    clean_restriction = restriction.split('#')[0]
+    if clean_restriction:
+      starting_restriction_list.append(clean_restriction)
 
   nmclient_signedsay(nmhandle, "SplitVessel", myvessel, resourcedata)
 
@@ -78,12 +86,28 @@ resource connport 12222
 
 
   mynewestvessel = nmclient_listaccessiblevessels(nmhandle,pubkey)[0][0]
-  fullresourcedata = nmclient_rawsay(nmhandle, "GetVesselResources",mynewestvessel)
-  endingrestrictions = get_restrictions(fullresourcedata)
+  ending_fullresourcedata = nmclient_rawsay(nmhandle, "GetVesselResources",mynewestvessel)
+  endingrestrictions = get_restrictions(ending_fullresourcedata)
+  endingrestriction_list_full = endingrestrictions.split('\n')
+  endingrestriction_list = []
+
+  # Build a restrictions list.
+  for restriction in endingrestriction_list_full:
+    clean_restriction = restriction.split('#')[0]
+    if clean_restriction:
+      endingrestriction_list.append(clean_restriction)
+
 
   # commented out print statement so test does not result in failure when automatically run
   # log("Warning, this test does not check vessel resource sizes...\n")
-  if endingrestrictions.strip() != startingrestrictions.strip():
-    log("'" + endingrestrictions.strip() + "' != '" + 
-      startingrestrictions.strip() + "'\n")
-    raise Exception, "Restrictions are not preserved!"
+
+  # Go through all the restrictions from the starting restrictions file, and
+  # ensure that they all exist in the final restrictions.
+  for cur_restriction in starting_restriction_list:
+    if not cur_restriction:
+      continue
+
+    if cur_restriction not in endingrestriction_list:
+      raise Exception, "Restrictions are not preserved!"  
+
+    

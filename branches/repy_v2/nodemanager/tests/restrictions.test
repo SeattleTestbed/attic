@@ -2,18 +2,20 @@ resource cpu .50
 resource memory 20000000   # 20 Million bytes
 resource diskused 100000000 # 100 MB
 resource events 10
-resource filewrite 10000
-resource fileread 10000
-resource filesopened 5
-resource insockets 5
-resource outsockets 5
+resource filewrite 10000000
+resource fileread 10000000
+resource filesopened 20
+resource insockets 10
+resource outsockets 10
 resource netsend 10000
 resource netrecv 10000
 resource loopsend 1000000
 resource looprecv 1000000
-resource lograte 30000
-resource random 10000
+resource lograte 3000000
+resource random 100000
 resource messport 34612   # use for getting an NTP update
+resource connport 12345 # Use for first source port for openconnection.
+resource connport 12346 # Use for second source port for openconnection.
 
 call gethostbyname_ex allow
 call sendmess allow 	# the local port type

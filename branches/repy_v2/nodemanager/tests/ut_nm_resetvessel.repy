@@ -32,7 +32,7 @@ if callfunc == 'initialize':
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy","log('hello world\\n')\nwhile True: sleep(.1)")
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "hello2","hellodata")
 
-  nmclient_signedsay(nmhandle, "StartVessel", myvessel, "helloworld.repy")
+  nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "helloworld.repy")
   
 
   # okay, now let's reset!
@@ -45,12 +45,12 @@ if callfunc == 'initialize':
   vessellog = nmclient_signedsay(nmhandle, "ReadVesselLog", myvessel)
   if vessellog:
     raise Exception("Vessellog is not empty after reset!")
-  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy","print 'hello world'\nwhile True: sleep(.1)")
+  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy","log('hello world')\nwhile True: sleep(.1)")
 
   try:
     # this should succeed.   The previously started version should have been 
     # stopped by the reset.
-    nmclient_signedsay(nmhandle, "StartVessel", myvessel, "helloworld.repy")
+    nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "helloworld.repy")
   finally:
     # always stop at the end...
     nmclient_signedsay(nmhandle, "StopVessel", myvessel)

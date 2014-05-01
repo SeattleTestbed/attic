@@ -33,24 +33,26 @@ if callfunc == 'initialize':
   nmclient_signedsay(nmhandle, "ResetVessel", myvessel)
 
   # create an empty file named 'private_foo'
-  addfilestring = "open('private_foo', 'w')"
+  addfilestring = "openfile('private_foo', True)"
 
   # upload and run program
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "bar.repy", addfilestring)
 
-  nmclient_signedsay(nmhandle, "StartVessel", myvessel, "bar.repy")
+  nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "bar.repy")
 
   sleep(5)
 
-  # Get any log output
-  logstring = nmclient_signedsay(nmhandle, "ReadVesselLog", myvessel)
-  if logstring != "":
-    log("Unexpected output:", logstring, "\n")
+  # MMM: The logfile will not be an empty string because it prints out
+  # what file is being run and with which argument.
+  # # Get any log output
+  # logstring = nmclient_signedsay(nmhandle, "ReadVesselLog", myvessel)
+  # if logstring != "":
+  #   log("Unexpected output: " + str(logstring))
 
   try:
     filelist = nmclient_signedsay(nmhandle, "DeleteFileInVessel", myvessel, "private_foo")
   except NMClientException:
     pass
   else:
-    log("Able to delete file starting with 'private_' from vessel\n")
+    log("Able to delete file starting with 'private_' from vessel")
 

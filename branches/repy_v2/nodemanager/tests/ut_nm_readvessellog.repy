@@ -34,7 +34,7 @@ if callfunc == 'initialize':
 
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "infloop.py",programtext)
 
-  nmclient_signedsay(nmhandle, "StartVessel", myvessel, "infloop.py")
+  nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "infloop.py")
   nmclient_signedsay(nmhandle, "StopVessel", myvessel)
 
   thelog = nmclient_signedsay(nmhandle, "ReadVesselLog", myvessel)

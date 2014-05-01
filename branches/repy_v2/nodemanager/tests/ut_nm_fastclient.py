@@ -33,10 +33,10 @@ if __name__ == '__main__':
   myvessel = fastnmclient.nmclient_listaccessiblevessels(nmhandle,pubkey)[0][0]
 
   fastnmclient.nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "hello","hellodata")
-  fastnmclient.nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy","print 'hello world'\nwhile True: sleep(.1)")
+  fastnmclient.nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy","log('hello world')\nwhile True: sleep(.1)")
   fastnmclient.nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "hello2","hellodata")
 
-  fastnmclient.nmclient_signedsay(nmhandle, "StartVessel", myvessel, "helloworld.repy")
+  fastnmclient.nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "helloworld.repy")
   
 
   # okay, now let's reset!
@@ -49,12 +49,12 @@ if __name__ == '__main__':
   vessellog = fastnmclient.nmclient_signedsay(nmhandle, "ReadVesselLog", myvessel)
   if vessellog:
     raise Exception("Vessellog is not empty after reset!")
-  fastnmclient.nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy","print 'hello world'\nwhile True: sleep(.1)")
+  fastnmclient.nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy","log('hello world')\nwhile True: sleep(.1)")
 
   try:
     # this should succeed.   The previously started version should have been 
     # stopped by the reset.
-    fastnmclient.nmclient_signedsay(nmhandle, "StartVessel", myvessel, "helloworld.repy")
+    fastnmclient.nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "helloworld.repy")
   finally:
     # always stop at the end...
     fastnmclient.nmclient_signedsay(nmhandle, "StopVessel", myvessel)
