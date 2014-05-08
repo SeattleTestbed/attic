@@ -257,16 +257,18 @@ def add_dy_support(_context):
     
     # Check all combination of filepath with file extension and try to import the
     # file if we have found it.
-    for possible_extension in COMMON_EXTENSIONS:
-      for pathdir in sys.path:
-        possiblefilenamewithpath = os.path.join(pathdir, module+possible_extension)
+    for pathdir in sys.path:
+      possiblefilenamewithpath = os.path.join(pathdir, module)
    
-        # If we have found a path, then we can import the module and
-        # return so we do not continue to look in other paths.
-        if os.path.isfile(possiblefilenamewithpath):
-          filenamewithpath = possiblefilenamewithpath
-          return original_import_module(filenamewithpath, callfunc)
+      # If we have found a path, then we can import the module and
+      # return so we do not continue to look in other paths.
+      if os.path.isfile(possiblefilenamewithpath):
+        filenamewithpath = possiblefilenamewithpath
+        return original_import_module(filenamewithpath, callfunc)
 
+    # If we don't find the file, we just call down to dylink, and
+    # let it raise the appropriate error.
+    return original_import_module(module, callfunc)
 
   _context['dy_import_module'] = _new_dy_import_module_symbols
 
