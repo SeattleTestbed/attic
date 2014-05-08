@@ -19,7 +19,7 @@ _context = locals()
 add_dy_support(_context)
 
 # need to generate a public key
-dy_import_module_symbols('rsa.repy')
+dy_import_module_symbols('rsa.r2py')
 
 # need randomfloat...
 import random

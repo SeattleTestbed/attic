@@ -531,11 +531,11 @@ exampleuser@browsegood !> show files
 Files on '192.x.x.2:1224:v3': ''
 Files on '193.x.x.42:1224:v18': ''
 Files on '219.x.x.62:1224:v4': ''
-exampleuser@browsegood !> upload example.1.1.repy
+exampleuser@browsegood !> upload example.1.1.r2py
 exampleuser@browsegood !> show files
-Files on '192.x.x.2:1224:v3': 'example.1.1.repy'
-Files on '193.x.x.42:1224:v18': 'example.1.1.repy'
-Files on '219.x.x.62:1224:v4': 'example.1.1.repy'
+Files on '192.x.x.2:1224:v3': 'example.1.1.r2py'
+Files on '193.x.x.42:1224:v18': 'example.1.1.r2py'
+Files on '219.x.x.62:1224:v4': 'example.1.1.r2py'
 
 """, 'children':{}},
       'resources':{
@@ -606,7 +606,7 @@ Log from '219.x.x.62:1224:v4':
 
 Log from '192.x.x.2:1224:v12':
 
-exampleuser@browsegood !> run example.1.1.repy
+exampleuser@browsegood !> run example.1.1.r2py
 exampleuser@browsegood !> show log
 Log from '192.x.x.2:1224:v3':
 Hello World
@@ -646,7 +646,7 @@ Log from '219.x.x.62:1224:v4':
 
 Log from '192.x.x.2:1224:v12':
 
-exampleuser@browsegood !> run example.1.1.repy
+exampleuser@browsegood !> run example.1.1.r2py
 exampleuser@browsegood !> show log
 Log from '192.x.x.2:1224:v3':
 Hello World
@@ -687,7 +687,7 @@ Log from '219.x.x.62:1224:v4':
 
 Log from '192.x.x.2:1224:v12':
 
-exampleuser@browsegood !> run example.1.1.repy
+exampleuser@browsegood !> run example.1.1.r2py
 exampleuser@browsegood !> show log
 Log from '192.x.x.2:1224:v3':
 Hello World
@@ -727,7 +727,7 @@ Log from '219.x.x.62:1224:v4':
 
 Log from '192.x.x.2:1224:v12':
 
-exampleuser@browsegood !> run example.1.1.repy
+exampleuser@browsegood !> run example.1.1.r2py
 exampleuser@browsegood !> show log
 Log from '192.x.x.2:1224:v3':
 Hello World
@@ -768,7 +768,7 @@ Log from '219.x.x.62:1224:v4':
 
 Log from '192.x.x.2:1224:v12':
 
-exampleuser@browsegood !> run example.1.1.repy
+exampleuser@browsegood !> run example.1.1.r2py
 exampleuser@browsegood !> show log
 Log from '192.x.x.2:1224:v3':
 Hello World
@@ -1024,10 +1024,10 @@ Example:
 exampleuser@%1 !> set timeout 1
 exampleuser@%1 !> show timeout
 1
-exampleuser@%1 !> start example.1.1.repy
+exampleuser@%1 !> start example.1.1.r2py
 Failure 'signedcommunicate failed on session_recvmessage with error 'recv() timed out!'' uploading to 193.x.x.42:1224:v18
 exampleuser@%1 !> set timeout 10
-exampleuser@%1 !> start example.1.1.repy
+exampleuser@%1 !> start example.1.1.r2py
 exampleuser@%1 !> show log
 Log from '193.x.x.42:1224:v18':
 Hello World
@@ -1051,10 +1051,10 @@ will attempt to upload for 20 seconds.
 Example:
 exampleuser@%1 !> set uploadrate 99999999999999
 exampleuser@%1 !> set timeout 1
-exampleuser@%1 !> upload example.1.1.repy
+exampleuser@%1 !> upload example.1.1.r2py
 Failure 'signedcommunicate failed on session_recvmessage with error 'recv() timed out!'' uploading to 193.x.x.42:1224:v18
 exampleuser@%1 !> set uploadrate 102400
-exampleuser@%1 !> upload example.1.1.repy
+exampleuser@%1 !> upload example.1.1.r2py
 exampleuser@%1 !> 
 
 """, 'children':{
@@ -1272,9 +1272,9 @@ created in those vessels is destfilename (or srcfilename by default).
 Example:
 exampleuser@%1 !> show files
 Files on '192.x.x.2:1224:v3': ''
-exampleuser@%1 !> upload example.1.1.repy
+exampleuser@%1 !> upload example.1.1.r2py
 exampleuser@%1 !> show files
-Files on '192.x.x.2:1224:v3': 'example.1.1.repy'
+Files on '192.x.x.2:1224:v3': 'example.1.1.r2py'
 
 """, 'children':{
       '[FILENAME]':{'name':'filename', 'callback':command_callbacks.upload_filename, 'help_text':'', 'children':{
@@ -1294,10 +1294,10 @@ If the destfilename is not specified, srcfilename is used instead.
 
 Example:
 exampleuser@%1 !> show files
-Files on '192.x.x.2:1224:v3': 'example.1.1.repy'
-exampleuser@%1 !> download example.1.1.repy
-Wrote files: example.1.1.repy.192.x.x.2_1224_v3 
-yaluen@%1 !> download example.1.1.repy test_download
+Files on '192.x.x.2:1224:v3': 'example.1.1.r2py'
+exampleuser@%1 !> download example.1.1.r2py
+Wrote files: example.1.1.r2py.192.x.x.2_1224_v3 
+yaluen@%1 !> download example.1.1.r2py test_download
 Wrote files: test_download.192.x.x.2_1224_v3 
 
 """, 'children':{
@@ -1316,8 +1316,8 @@ Erases filename from every vessel in the default group.
 
 Example:
 exampleuser@%1 !> show files
-Files on '192.x.x.2:1224:v3': 'example.1.1.repy'
-exampleuser@%1 !> delete example.1.1.repy
+Files on '192.x.x.2:1224:v3': 'example.1.1.r2py'
+exampleuser@%1 !> delete example.1.1.r2py
 exampleuser@%1 !> show files
 Files on '192.x.x.2:1224:v3': ''
 
@@ -1334,10 +1334,10 @@ Displays the content of filename from every vessel in the default group.
 
 Example:
 exampleuser@%1 !> show files
-Files on '192.x.x.2:1224:v3': 'example.1.1.repy'
-exampleuser@%1 !> cat example.1.1.repy
+Files on '192.x.x.2:1224:v3': 'example.1.1.r2py'
+exampleuser@%1 !> cat example.1.1.r2py
 
-File 'example.1.1.repy' on '192.168.1.2:1224:v3': 
+File 'example.1.1.r2py' on '192.168.1.2:1224:v3': 
 if callfunc == 'initialize':
   print "Hello World"
 
@@ -1363,7 +1363,7 @@ exampleuser@%1 !> list
   ID Own                      Name     Status              Owner Information
   %1           192.x.x.2:1224:v3 Terminated                               
 exampleuser@%1 !> show files
-Files on '192.x.x.2:1224:v3': 'example.1.1.repy'
+Files on '192.x.x.2:1224:v3': 'example.1.1.r2py'
 exampleuser@%1 !> reset
 exampleuser@%1 !> show log
 Log from '192.x.x.2:1224:v3':
@@ -1391,8 +1391,8 @@ program is written for (i.e. repyV1 or repyV2).  You can override this
 by using 'startv1' or 'startv2', respectively.
 
 Example:
-exampleuser@%1 !> upload example.1.1.repy
-exampleuser@%1 !> start example.1.1.repy
+exampleuser@%1 !> upload example.1.1.r2py
+exampleuser@%1 !> start example.1.1.r2py
 exampleuser@%1 !> show log
 Log from '192.x.x.2:1224:v3':
 Hello World
@@ -1413,8 +1413,8 @@ arguments in repyv1.   This program must first be uploaded to the vessel
 (the 'run' command does this for the user).
 
 Example:
-exampleuser@%1 !> upload example.1.1.repy
-exampleuser@%1 !> start example.1.1.repy
+exampleuser@%1 !> upload example.1.1.r2py
+exampleuser@%1 !> start example.1.1.r2py
 exampleuser@%1 !> show log
 Log from '192.x.x.2:1224:v3':
 Hello World
@@ -1435,8 +1435,8 @@ arguments in repyv2.   This program must first be uploaded to the vessel
 (the 'run' command does this for the user).
 
 Example:
-exampleuser@%1 !> upload example.1.1.repy
-exampleuser@%1 !> start example.1.1.repy
+exampleuser@%1 !> upload example.1.1.r2py
+exampleuser@%1 !> start example.1.1.r2py
 exampleuser@%1 !> show log
 Log from '192.x.x.2:1224:v3':
 Hello World
@@ -1457,8 +1457,8 @@ arguments in repyv1.   This program must first be uploaded to the vessel
 (the 'run' command does this for the user).
 
 Example:
-exampleuser@%1 !> upload example.1.1.repy
-exampleuser@%1 !> start example.1.1.repy
+exampleuser@%1 !> upload example.1.1.r2py
+exampleuser@%1 !> start example.1.1.r2py
 exampleuser@%1 !> show log
 Log from '192.x.x.2:1224:v3':
 Hello World
@@ -1479,8 +1479,8 @@ arguments in repyv2.   This program must first be uploaded to the vessel
 (the 'run' command does this for the user).
 
 Example:
-exampleuser@%1 !> upload example.1.1.repy
-exampleuser@%1 !> start example.1.1.repy
+exampleuser@%1 !> upload example.1.1.r2py
+exampleuser@%1 !> start example.1.1.r2py
 exampleuser@%1 !> show log
 Log from '192.x.x.2:1224:v3':
 Hello World
@@ -1502,7 +1502,7 @@ The program will halt as though it were killed / interrupted.   The status
 for these vessels will become 'Stopped'.
 
 Example:
-exampleuser@%1 !> run endless_loop.repy 
+exampleuser@%1 !> run endless_loop.r2py 
 exampleuser@%1 !> list
   ID Own                      Name     Status              Owner Information
   %1             192.x.x.2:1224:v3    Started                               

@@ -43,9 +43,6 @@
   The safest way to be certain to catch any of these errors  is to the catch
   their base class:
     SeattleClearinghouseError
-    
-<Version>
-  $Rev$ ($Date$)
 """
 
 import os
@@ -134,7 +131,7 @@ class SeattleClearinghouseClient(object):
     # available when the user provides their api key and doesn't require
     # it to be retrieved.
     try:
-      dy_import_module_symbols("rsa.repy")
+      dy_import_module_symbols("rsa.r2py")
     except ImportError, e:
       raise SeattleClearinghouseError("Unable to get API key from SeattleClearinghouse " +
                              "because a required python or repy module " + 

@@ -27,7 +27,7 @@ sys.path = sys.path +  ['importcachetest']
 repyhelper.set_importcachedir('importcachetest')
 
 # NOTICE THE RELATIVE PATH NAME!!!
-repyhelper.translate_and_import('./rhtest_filetests.repy')
+repyhelper.translate_and_import('./rhtest_filetests.r2py')
 
 # This should work...
 try:
@@ -37,4 +37,4 @@ except NameError:
 
 # and the file should be in importcachetest...
 if not os.path.exists('importcachetest/rhtest_filetests_repy.py'):
-  print "The rhtest_filetests.repy file was not preprocessed to importcache test because 'importcachetest/rhtest_filetests_repy.py' does not exist"
+  print "The rhtest_filetests.r2py file was not preprocessed to importcache test because 'importcachetest/rhtest_filetests_repy.py' does not exist"

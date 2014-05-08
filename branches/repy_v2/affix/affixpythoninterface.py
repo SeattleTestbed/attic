@@ -9,11 +9,11 @@
   This library is a very simple interface that allows
   python applications to import the AFFIX framework
   with ease. This program has no other purpose other
-  then to import affixstackinterface.repy, such that
+  then to import affixstackinterface.r2py, such that
   it can be used in Python applications. For further
   documentation on the AFFIX framework core code, 
-  please look in the files affixstackinterface.repy
-  and affix_stack.repy.
+  please look in the files affixstackinterface.r2py
+  and affix_stack.r2py.
 
 <Description>
   TODO: Write up a proper description after all methods

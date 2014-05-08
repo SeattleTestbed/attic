@@ -6,8 +6,8 @@ import repyhelper
 import test_utils
 
 
-TESTFILE1 = "rhtest_mycontext_shared1.repy"
-TESTFILE2 = "rhtest_mycontext_shared2.repy"
+TESTFILE1 = "rhtest_mycontext_shared1.r2py"
+TESTFILE2 = "rhtest_mycontext_shared2.r2py"
 
 test_utils.cleanup_translations([TESTFILE1, TESTFILE2])
 

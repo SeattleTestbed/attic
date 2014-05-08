@@ -1,4 +1,4 @@
-dy_import_module_symbols('rhtestrecursion_3.repy')
+dy_import_module_symbols('rhtestrecursion_3.r2py')
 
 def two():
   print "hello, and welcome to 2"

@@ -32,7 +32,7 @@ events are not skipped.    The sequence numbers are a tuple: (tag, version)
 
 # JAC: SHA is really, really slow in Python (#971).   We'll use the Python
 # version here...
-#include sha.repy
+#include sha.r2py
 
 # Should filter out a warning about sha deprecation (if applicable)
 import warnings
@@ -49,8 +49,8 @@ from repyportability import *
 _context = locals()
 add_dy_support(_context)
 
-dy_import_module_symbols("rsa.repy")
-dy_import_module_symbols("time.repy")
+dy_import_module_symbols("rsa.r2py")
+dy_import_module_symbols("time.r2py")
 
 
 # The signature for a piece of data is appended to the end and has the format:

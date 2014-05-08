@@ -1,6 +1,6 @@
 """
 <Program Name>
-  benchmark_resources.repy
+  benchmark_resources.py
 
 <Started>
   2009-08-1

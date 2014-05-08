@@ -54,7 +54,7 @@ from repyportability import *
 add_dy_support(locals())
 
 ###### code to enable affixes #########
-dy_import_module_symbols('affixstackinterface.repy')
+dy_import_module_symbols('affixstackinterface.r2py')
 
 affix_obj = AffixStackInterface('(CoordinationAffix)')
 
@@ -76,9 +76,9 @@ sys.modules['dylink_repy'].openconnection = openconnection
 
 ####### end code to enable affixes ######
 
-dy_import_module_symbols('nmclient.repy')
-dy_import_module_symbols("listops.repy")
-dy_import_module_symbols("time.repy")
+dy_import_module_symbols('nmclient.r2py')
+dy_import_module_symbols("listops.r2py")
+dy_import_module_symbols("time.r2py")
 
 # Restore built-ins so that django and other libraries don't complain
 for i in builtins:
@@ -161,7 +161,7 @@ def get_node_info(ip, port):
         [secondvesselname]
           ...
     Node that even though we promise the keys exist, when the value is a key it may
-    be None rather than a key dictionary that rsa.repy likes.
+    be None rather than a key dictionary that rsa.r2py likes.
   """
   assert_str(ip)
   assert_int(port)
@@ -205,7 +205,7 @@ def _get_vessel_usableports(resourcedata):
   A helper function for get_vessel_resources().
   Finds the list of ports where the resource contains both connport and messport.
   """
-  # I think this code could stand to be in nmclient.repy.
+  # I think this code could stand to be in nmclient.r2py.
 
   connports = []
   messports = []

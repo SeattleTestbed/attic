@@ -23,7 +23,7 @@ import time
 import errno
 
 # Enable the NAT traversal affix
-dy_import_module_symbols('affixstackinterface.repy')
+dy_import_module_symbols('affixstackinterface.r2py')
 
 old_openconnection = openconnection
 affix_obj = AffixStackInterface('(CoordinationAffix)')
@@ -36,24 +36,24 @@ def new_openconnection(destip, destport, localip, localport, timeout):
 
 openconnection = new_openconnection
 
-dy_import_module_symbols("time.repy")
+dy_import_module_symbols("time.r2py")
 
-dy_import_module_symbols("rsa.repy")
+dy_import_module_symbols("rsa.r2py")
 
-dy_import_module_symbols("listops.repy")
+dy_import_module_symbols("listops.r2py")
 
-dy_import_module_symbols("parallelize.repy")
+dy_import_module_symbols("parallelize.r2py")
 
-dy_import_module_symbols("domainnameinfo.repy")
+dy_import_module_symbols("domainnameinfo.r2py")
 
-dy_import_module_symbols("advertise.repy")   #  used to do OpenDHT lookups
+dy_import_module_symbols("advertise.r2py")   #  used to do OpenDHT lookups
 
-dy_import_module_symbols("geoip_client.repy") # used for `show location`
+dy_import_module_symbols("geoip_client.r2py") # used for `show location`
 
-dy_import_module_symbols("serialize.repy") # used for loadstate and savestate
+dy_import_module_symbols("serialize.r2py") # used for loadstate and savestate
 
-# Import nmclient.repy after overloading openconnection.
-dy_import_module_symbols("nmclient.repy")
+# Import nmclient.r2py after overloading openconnection.
+dy_import_module_symbols("nmclient.r2py")
 
 openconnection = old_openconnection
 
@@ -67,7 +67,7 @@ def update_time():
     None
 
   <Side Effects>
-    Updates the time within time.repy.
+    Updates the time within time.r2py.
     If there is no network connection, the local clock is used.
 
   <Exceptions>
@@ -76,7 +76,7 @@ def update_time():
   <Returns>
     None
   """
-  # Since we import time.repy, we will only use the local clock if none of
+  # Since we import time.r2py, we will only use the local clock if none of
   # the default time servers respond.
 
   # LAW: Disabling for now as it seems to be being triggered even though
@@ -90,18 +90,18 @@ def update_time():
 def local_updatetime(port):
   """
   <Purpose>
-    Callback for time_interface.repy to update the time that is used
+    Callback for time_interface.r2py to update the time that is used
     internally for nodemanager communications.
 
   <Arguments>
     port:
         The port to update on.  This is not used however.  It is only
         specified to adhere to the function signature expected by
-        time_interface.repy.
+        time_interface.r2py.
 
   <Side Effects>
     If we reach this function, then it means that other time server updates
-    failed.  We will notify the user of the failure, and set time.repy to
+    failed.  We will notify the user of the failure, and set time.r2py to
     use the local clock.
 
   <Exceptions>

@@ -3,13 +3,13 @@ Author: Andreas Sekine
 Description:
   Perform various tests on recursive/circular includes/imports/translates
   
-  Uses files of the form rhtestrecursion_n.repy
+  Uses files of the form rhtestrecursion_n.r2py
   
   No output indicates success
   
 """
 
-TESTFILES = ['rhtestrecursion_1.repy', 'rhtestrecursion_2.repy', 'rhtestrecursion_3.repy', 'rhtestrecursion_4.repy']
+TESTFILES = ['rhtestrecursion_1.r2py', 'rhtestrecursion_2.r2py', 'rhtestrecursion_3.r2py', 'rhtestrecursion_4.r2py']
 
 
 import repyhelper

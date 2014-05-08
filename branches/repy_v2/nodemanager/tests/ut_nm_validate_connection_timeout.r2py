@@ -1,4 +1,4 @@
-#pragma repy restrictions.loose dylink.repy
+#pragma repy restrictions.loose dylink.r2py
 
 
 def error_and_exit(sleep_time):

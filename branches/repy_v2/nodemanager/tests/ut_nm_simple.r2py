@@ -1,4 +1,4 @@
-#pragma repy restrictions.test dylink.repy
+#pragma repy restrictions.test dylink.r2py
 
 """
 Author: Justin Cappos
@@ -7,7 +7,7 @@ This test verifies the GetVessels method does not generate an exception.
 
 """
 
-dy_import_module_symbols("nmclient.repy")
+dy_import_module_symbols("nmclient.r2py")
 
 if callfunc == 'initialize':
   nmhandle = nmclient_createhandle(getmyip(), <nodemanager_port>)

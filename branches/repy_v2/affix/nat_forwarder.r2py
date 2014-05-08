@@ -1,7 +1,7 @@
 #!/bin/python
 """
 <Program Name>
-  nat_forwarder.repy
+  nat_forwarder.r2py
 
 <Purpose>
   The purpose of this program is to act as a nat forwarder.
@@ -16,14 +16,14 @@
   monzum@cs.washington.edu
 
 <Usage>
-  python repy.py RESTRICTION_FILE nat_forwarder.repy TCP_PORT 
+  python repy.py RESTRICTION_FILE nat_forwarder.r2py TCP_PORT 
 """
 
 dy_import_module_symbols("session")
 advertisepipe = dy_import_module("advertisepipe.r2py")
 dy_import_module_symbols("affixstackinterface")
 dy_import_module_symbols("nat_forwarder_common_lib")
-iplib = dy_import_module("natdecideraffix.repy")
+iplib = dy_import_module("natdecideraffix.r2py")
 # The affix string that the NAT Forwarder will use.
 NAT_AFFIX_STRING = "(CoordinationAffix)(NoopAffix)"
 

@@ -22,7 +22,7 @@ dy_import_module_symbols("baseaffix")
 sockettimeout = dy_import_module("sockettimeout")
 dy_import_module_symbols("affixstackinterface")
 dy_import_module_symbols("nat_forwarder_common_lib")
-advertise = dy_import_module("advertise.repy") # for AdvertiseError
+advertise = dy_import_module("advertise.r2py") # for AdvertiseError
 cachedadvertise = dy_import_module("cachedadvertise.r2py")
 
 

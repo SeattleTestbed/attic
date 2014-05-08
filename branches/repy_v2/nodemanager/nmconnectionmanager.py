@@ -58,7 +58,7 @@ from repyportability import *
 _context = locals()
 add_dy_support(_context)
 
-dy_import_module_symbols("sockettimeout.repy")
+dy_import_module_symbols("sockettimeout.r2py")
 
 connectionlock = createlock()
   

@@ -130,9 +130,9 @@ created in those vessels is destfilename (or srcfilename by default).
 Example:
 exampleuser@%1 !> show files
 Files on '192.x.x.2:1224:v3': ''
-exampleuser@%1 !> upload example.1.1.repy
+exampleuser@%1 !> upload example.1.1.r2py
 exampleuser@%1 !> show files
-Files on '192.x.x.2:1224:v3': 'example.1.1.repy'
+Files on '192.x.x.2:1224:v3': 'example.1.1.r2py'
 
 """, 'children':{
       'files.txt':{'name':'filename', 'callback':command_callbacks.upload_filename, 'help_text':'', 'children':{}}}}}
@@ -160,9 +160,9 @@ created in those vessels is destfilename (or srcfilename by default).
 Example:
 exampleuser@%1 !> show files
 Files on '192.x.x.2:1224:v3': ''
-exampleuser@%1 !> upload example.1.1.repy
+exampleuser@%1 !> upload example.1.1.r2py
 exampleuser@%1 !> show files
-Files on '192.x.x.2:1224:v3': 'example.1.1.repy'
+Files on '192.x.x.2:1224:v3': 'example.1.1.r2py'
 
 """, 'children':{
       'files.txt':{'name':'filename', 'callback':command_callbacks.upload_filename, 'help_text':'', 'children':{

@@ -243,7 +243,7 @@ def add_dy_support(_context):
     None
   """
   # Add dylink support
-  repyhelper.translate_and_import("dylink.repy", callfunc = 'initialize')
+  repyhelper.translate_and_import("dylink.r2py", callfunc = 'initialize')
   
   # The dy_* functions are only added to the namespace after init_dylink is called.
   init_dylink(_context,{})
@@ -253,7 +253,7 @@ def add_dy_support(_context):
   def _new_dy_import_module_symbols(module, callfunc="import"):
     # If we are using repyportability, we want to check all pythonpath for
     # the file we are looking to import.
-    COMMON_EXTENSIONS = ["", ".py", ".repy",".py.repy", ".pp"] 
+    COMMON_EXTENSIONS = ["", ".py", ".repy",".py.repy", ".pp", ".r2py"] 
     
     # Check all combination of filepath with file extension and try to import the
     # file if we have found it.

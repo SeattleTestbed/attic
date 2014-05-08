@@ -13,7 +13,7 @@ from repyportability import *
 _context = locals()
 add_dy_support(_context)
 
-dy_import_module_symbols("advertise.repy")
+dy_import_module_symbols("advertise.r2py")
 
 affix_stack_key = "SeattleAffixStack"
 enable_affix_key = "EnableSeattleAffix"

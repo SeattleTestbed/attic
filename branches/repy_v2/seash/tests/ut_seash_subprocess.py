@@ -58,7 +58,7 @@ for resourcefilename in glob.glob('resource.v*[0-9]'):
     os.remove(resourcefilename)
 
 # remove example repy files created from downloading from node
-for repyfiles in glob.glob('example.1.1.repy.*'):
+for repyfiles in glob.glob('example.1.1.r2py.*'):
   if os.path.isfile(repyfiles):
     os.remove(repyfiles)
 

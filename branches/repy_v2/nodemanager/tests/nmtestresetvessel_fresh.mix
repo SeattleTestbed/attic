@@ -5,9 +5,9 @@ This test verifies the ResetVessel method works by first assidng several files t
 
 """
 
-dy_import_module_symbols('time.repy')
-dy_import_module_symbols('nmclient.repy')
-dy_import_module_symbols('rsa.repy')
+dy_import_module_symbols('time.r2py')
+dy_import_module_symbols('nmclient.r2py')
+dy_import_module_symbols('rsa.r2py')
 
 if callfunc == 'initialize':
 
@@ -26,10 +26,10 @@ if callfunc == 'initialize':
   # get the vessel to use...
   myvessel = nmclient_listaccessiblevessels(nmhandle,pubkey)[0][0]
 
-  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy", 
+  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.r2py", 
     "log('hello world\\n')\nwhile True: sleep(.1)")
 
-  nmclient_signedsay(nmhandle, "StartVessel", myvessel, "helloworld.repy")
+  nmclient_signedsay(nmhandle, "StartVessel", myvessel, "helloworld.r2py")
   
   vesselinfo = nmclient_getvesseldict(nmhandle)
   if vesselinfo['vessels'][myvessel]['status'] != 'Started':

@@ -1,7 +1,7 @@
 import test_utils
 import repyhelper
 
-TESTFILE = "rhtest_callargs.repy"
+TESTFILE = "rhtest_callargs.r2py"
 #Make sure we have fresh translations per test run
 
 test_utils.cleanup_translations([TESTFILE])

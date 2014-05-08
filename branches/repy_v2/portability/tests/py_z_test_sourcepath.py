@@ -28,7 +28,7 @@ if os.path.exists('rhtest_filetests_repy.py'):
   os.remove('rhtest_filetests_repy.py')
 
 # write files there
-repyhelper.translate_and_import('rhtest_filetests.repy')
+repyhelper.translate_and_import('rhtest_filetests.r2py')
 
 # This should work...
 try:
@@ -38,4 +38,4 @@ except NameError:
 
 # and the file should be in the current directory.
 if not os.path.exists('rhtest_filetests_repy.py'):
-  print "The rhtest_filetests.repy file was not preprocessed to the current directory because 'rhtest_filetests_repy.py' does not exist"
+  print "The rhtest_filetests.r2py file was not preprocessed to the current directory because 'rhtest_filetests_repy.py' does not exist"

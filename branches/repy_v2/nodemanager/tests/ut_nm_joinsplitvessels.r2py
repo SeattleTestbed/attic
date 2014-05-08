@@ -1,4 +1,4 @@
-#pragma repy restrictions.test dylink.repy
+#pragma repy restrictions.test dylink.r2py
 
 """
 Author: Justin Cappos
@@ -6,8 +6,8 @@ Description:
 This test splits a vessel into two, and joins the resulting vessels back together. The test then verifies that the restrictions of the vessel are the same as they were at the beggining.
 """
 
-dy_import_module_symbols("time.repy")
-dy_import_module_symbols("nmclient.repy")
+dy_import_module_symbols("time.r2py")
+dy_import_module_symbols("nmclient.r2py")
 
 
 def get_restrictions(resourcestring):

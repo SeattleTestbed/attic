@@ -121,7 +121,7 @@ def acquire_specific_vessels_best_effort(lockserver_handle, geniuser, vessel_lis
   for (ignored_argument_vessel, returned_vessel) in parallel_results["returned"]:
     # We successfully acquired this vessel.
     # Append the returned vessel from _do_acquire_vessel() rather than
-    # the argument that the parallelize.repy library used. Somewhere
+    # the argument that the parallelize.r2py library used. Somewhere
     # along the way a copy of the argument_vessel is being made so it
     # doesn't reflect changes made to it.
     acquired_vessels.append(returned_vessel)
@@ -343,7 +343,7 @@ def _acquire_vessels_from_list(lockserver_handle, geniuser, vesselcount, vessel_
     for (ignored_argument_vessel, returned_vessel) in parallel_results["returned"]:
       # We successfully acquired this vessel.
       # Append the returned vessel from _do_acquire_vessel() rather than
-      # the argument that the parallelize.repy library used. Somewhere
+      # the argument that the parallelize.r2py library used. Somewhere
       # along the way a copy of the argument_vessel is being made so it
       # doesn't reflect changes made to it.
       acquired_vessels.append(returned_vessel)

@@ -66,10 +66,10 @@ import sys
 from repyportability import *
 add_dy_support(locals())
 
-# dy_import_module_symbols("nmclient.repy")
+# dy_import_module_symbols("nmclient.r2py")
 
 # This is a temporary workaround for the problem where nmclient is being
-# initialized multiple times by dylink.repy when it is imported multiple
+# initialized multiple times by dylink.r2py when it is imported multiple
 # times.  The handles returned by the nmclient imported here will be
 # completely different from the set of handles that the nmclient
 # imported in seash_helper knows about.  This needs to be removed once
@@ -81,19 +81,19 @@ nmclient_duplicatehandle = seash_helper.nmclient_duplicatehandle
 nmclient_get_handle_info = seash_helper.nmclient_get_handle_info
 nmclient_set_handle_info = seash_helper.nmclient_set_handle_info
 
-dy_import_module_symbols("time.repy")
+dy_import_module_symbols("time.r2py")
 
-dy_import_module_symbols("rsa.repy")
+dy_import_module_symbols("rsa.r2py")
 
-dy_import_module_symbols("listops.repy")
+dy_import_module_symbols("listops.r2py")
 
-dy_import_module_symbols("parallelize.repy")
+dy_import_module_symbols("parallelize.r2py")
 
-dy_import_module_symbols("domainnameinfo.repy")
+dy_import_module_symbols("domainnameinfo.r2py")
 
-dy_import_module_symbols("advertise.repy")   #  used to do OpenDHT lookups
+dy_import_module_symbols("advertise.r2py")   #  used to do OpenDHT lookups
 
-dy_import_module_symbols("serialize.repy") # used for loadstate and savestate
+dy_import_module_symbols("serialize.r2py") # used for loadstate and savestate
 
 # The versions of Seattle that we officially support.
 SUPPORTED_PROG_PLATFORMS = ["repyV1", "repyV2"]

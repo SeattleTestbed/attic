@@ -11,18 +11,18 @@ os.mkdir('testdirforrepyhelper')
 os.mkdir('testdirforrepyhelper/child')
 
 # The test file we'll use.
-fo = file('testdirforrepyhelper/footest.repy','w')
+fo = file('testdirforrepyhelper/footest.r2py','w')
 fo.write('flibble = False')
 fo.flush()
 fo.close()
-fo = file('testdirforrepyhelper/footest2.repy','w')
+fo = file('testdirforrepyhelper/footest2.r2py','w')
 fo.write('flibble2 = 7')
 fo.close()
 
 
 # always clean up
 try:
-  repyhelper.translate_and_import('testdirforrepyhelper/footest.repy')
+  repyhelper.translate_and_import('testdirforrepyhelper/footest.r2py')
 
   try:
     if flibble:
@@ -31,7 +31,7 @@ try:
   except NameError:
     print "The first import failed"
 
-  repyhelper.translate_and_import('testdirforrepyhelper/child/../footest2.repy')
+  repyhelper.translate_and_import('testdirforrepyhelper/child/../footest2.r2py')
 
   try:
     if flibble2 != 7:

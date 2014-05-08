@@ -14,10 +14,10 @@ _context = locals()
 add_dy_support(_context)
 
 # needed to convert keys to strings
-dy_import_module_symbols('rsa.repy')
+dy_import_module_symbols('rsa.r2py')
 
 # Comment out following line by Danny Y. Huang. Potentially unsafe operation if it contains repy-specific symbols like mycontext.
-# include advertise.repy
+# include advertise.r2py
 
 import sys
 import time
@@ -25,8 +25,8 @@ import threading
 import traceback
 import servicelogger
 
-dy_import_module_symbols('listops.repy')
-dy_import_module_symbols("advertise.repy")
+dy_import_module_symbols('listops.r2py')
+dy_import_module_symbols("advertise.r2py")
 
 
 # The frequency of updating the advertisements

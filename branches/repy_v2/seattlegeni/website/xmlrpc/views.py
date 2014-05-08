@@ -56,7 +56,7 @@ from seattlegeni.website.control import interface
 from seattle.repyportability import *
 add_dy_support(locals())
 
-dy_import_module_symbols("rsa.repy")
+dy_import_module_symbols("rsa.r2py")
 
 
 
@@ -448,7 +448,7 @@ class PublicXMLRPCFunctions(object):
         FAULTCODE_INVALIDREQUEST if a the provided username is not a string
           specifying a valid (existing) account username.
     <Returns>
-      An string that represents DATA encrypted by (seattlelib) rsa.repy's
+      An string that represents DATA encrypted by (seattlelib) rsa.r2py's
       rsa_encrypt() function. DATA is a string that is the concatenation of
       a random string of 0-9a-fA-F of fixed length, an exclamation mark, and
       the API key.
@@ -461,7 +461,7 @@ class PublicXMLRPCFunctions(object):
       
       Note that this random data being prepended is just a dirty workaround for
       the lack of random padding being used by the encryption format offered by
-      rsa.repy or other repy libraries. This should be changed after a repy
+      rsa.r2py or other repy libraries. This should be changed after a repy
       implementation of PKCS#1 is available.
     """
     try:

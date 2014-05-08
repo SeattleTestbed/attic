@@ -21,7 +21,7 @@ import traceback
 from seattle.repyportability import *
 add_dy_support(locals())
 
-dy_import_module_symbols("parallelize.repy")
+dy_import_module_symbols("parallelize.r2py")
 
 
 

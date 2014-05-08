@@ -1,4 +1,4 @@
-#pragma repy restrictions.test dylink.repy
+#pragma repy restrictions.test dylink.r2py
 
 """
 Author: Cosmin Barsan
@@ -6,8 +6,8 @@ Description:
 This test verifies the ChangeOwnerInformation method by calling the method and passing in a string containing escape characters.
 """
 
-dy_import_module_symbols("time.repy")
-dy_import_module_symbols("nmclient.repy")
+dy_import_module_symbols("time.r2py")
+dy_import_module_symbols("nmclient.r2py")
 
 if callfunc == 'initialize':
 

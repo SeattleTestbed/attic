@@ -23,7 +23,7 @@ from seattlegeni.common.util.decorators import log_function_call_without_return
 from seattle.repyportability import *
 add_dy_support(locals())
 
-dy_import_module_symbols("rsa.repy")
+dy_import_module_symbols("rsa.r2py")
 
 
 

@@ -1,4 +1,4 @@
-#pragma repy restrictions.test dylink.repy
+#pragma repy restrictions.test dylink.r2py
 
 """
 Author: Cosmin Barsan
@@ -7,9 +7,9 @@ This test is a modified version of the nmtestresetvessel.mix. It works much like
 
 """
 
-dy_import_module_symbols("time.repy")
-dy_import_module_symbols("nmclient.repy")
-dy_import_module_symbols("rsa.repy")
+dy_import_module_symbols("time.r2py")
+dy_import_module_symbols("nmclient.r2py")
+dy_import_module_symbols("rsa.r2py")
 
 def get_restrictions(resourcestring):
   restrictionsstring = ''
@@ -41,7 +41,7 @@ if callfunc == 'initialize':
 
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "hello","hellodata")
 
-  nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "helloworld.repy")
+  nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "helloworld.r2py")
 
 
   #get the starting restrictions
@@ -65,12 +65,12 @@ if callfunc == 'initialize':
   fullresourcedata = nmclient_rawsay(nmhandle, "GetVesselResources",myvessel)
   finalrestrictions = get_restrictions(fullresourcedata)
   
-  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy","log('hello world\\n')\nwhile True: sleep(.1)")
+  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.r2py","log('hello world\\n')\nwhile True: sleep(.1)")
 
   try:
     # this should succeed.   The previously started version should have been 
     # stopped by the reset.
-    nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "helloworld.repy")
+    nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "helloworld.r2py")
   finally:
     # always stop at the end...
     nmclient_signedsay(nmhandle, "StopVessel", myvessel)

@@ -26,7 +26,7 @@ sys.path = sys.path +  ['importcachetest']
 # write files there
 repyhelper.set_importcachedir('importcachetest')
 
-repyhelper.translate_and_import('rhtestrecursion_1.repy')
+repyhelper.translate_and_import('rhtestrecursion_1.r2py')
 
 # This should work...
 try:
@@ -44,7 +44,7 @@ except NameError:
 
 # and the files should be in importcachetest...
 if not os.path.exists('importcachetest/rhtestrecursion_1_repy.py'):
-  print "The rhtest_recursion_1.repy file was not preprocessed to importcache test because 'importcachetest/rhtest_recursion_1_repy.py' does not exist"
+  print "The rhtest_recursion_1.r2py file was not preprocessed to importcache test because 'importcachetest/rhtest_recursion_1_repy.py' does not exist"
 
 if not os.path.exists('importcachetest/rhtestrecursion_2_repy.py'):
-  print "The rhtest_recursion_2.repy file was not preprocessed to importcache test because 'importcachetest/rhtest_recursion_2_repy.py' does not exist"
+  print "The rhtest_recursion_2.r2py file was not preprocessed to importcache test because 'importcachetest/rhtest_recursion_2_repy.py' does not exist"

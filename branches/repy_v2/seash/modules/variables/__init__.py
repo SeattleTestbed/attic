@@ -40,16 +40,16 @@ Optionally you can also mark the end of a variable by using yet another '$'.
 
 If you need to use the $ symbol, you can mark that by using 2 subsequent $'s.
 For example, if you type the following:
-  user@! > on %1 run need_dollarsign_arg.repy $$ username
+  user@! > on %1 run need_dollarsign_arg.r2py $$ username
 
 It is converted to:
-  user@! > on %1 run need_dollarsign_arg.repy $ username  
+  user@! > on %1 run need_dollarsign_arg.r2py $ username  
 
 Escaping is optional for a single $ at the end of the string.  The following 
 two commands are interpreted as identical commands.
 
-  user@! > on %1 run need_dollarsign_arg.repy $$
-  user@! > on %1 run need_dollarsign_arg.repy $
+  user@! > on %1 run need_dollarsign_arg.r2py $$
+  user@! > on %1 run need_dollarsign_arg.r2py $
 
 """
 

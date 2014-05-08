@@ -1,12 +1,12 @@
-#pragma repy restrictions.test dylink.repy
+#pragma repy restrictions.test dylink.r2py
 
 """
 Author: Cosmin Barsan
 Description:
 This test verifies that the change advertise method does not chage the advertise status when an invalid sequence id that is too large is specified when creating the handle.
 """
-dy_import_module_symbols("time.repy")
-dy_import_module_symbols("nmclient.repy")
+dy_import_module_symbols("time.r2py")
+dy_import_module_symbols("nmclient.r2py")
 
 if callfunc == 'initialize':
 

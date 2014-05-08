@@ -25,8 +25,8 @@ for module in seash_modules.get_enabled_modules():
 from repyportability import *
 add_dy_support(locals())
 
-dy_import_module_symbols('rsa.repy')
-dy_import_module_symbols('advertise.repy')
+dy_import_module_symbols('rsa.r2py')
+dy_import_module_symbols('advertise.r2py')
 
 for guestnum in xrange(4):
   guestkey = rsa_file_to_publickey('guest'+str(guestnum)+'.publickey')

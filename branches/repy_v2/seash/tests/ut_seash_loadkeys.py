@@ -5,7 +5,7 @@ import seash
 import sys
 from repyportability import add_dy_support
 add_dy_support(locals())
-dy_import_module_symbols('rsa.repy')
+dy_import_module_symbols('rsa.r2py')
 
 
 orig_stdout = sys.stdout

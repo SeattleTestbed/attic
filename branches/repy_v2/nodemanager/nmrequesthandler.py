@@ -23,13 +23,13 @@ add_dy_support(_context)
 import fastsigneddata 
 
 # get requests (encapsulated in session messages)
-dy_import_module_symbols("session.repy")
+dy_import_module_symbols("session.r2py")
 
 # for using time_updatetime
-dy_import_module_symbols("time.repy")
+dy_import_module_symbols("time.r2py")
 
 # For using rsa key conversion
-dy_import_module_symbols("rsa.repy")
+dy_import_module_symbols("rsa.r2py")
 
 # the API for the node manager
 import nmAPI

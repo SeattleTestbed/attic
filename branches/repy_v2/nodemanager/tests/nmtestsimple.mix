@@ -5,7 +5,7 @@ This test verifies the GetVessels method does not generate an exception.
 
 """
 
-dy_import_module_symbols('nmclient.repy')
+dy_import_module_symbols('nmclient.r2py')
 
 if callfunc == 'initialize':
   nmhandle = nmclient_createhandle(getmyip(), 1224)

@@ -111,7 +111,7 @@ import seash_helper
 from repyportability import *
 add_dy_support(locals())
 
-dy_import_module_symbols("time.repy")
+dy_import_module_symbols("time.r2py")
 
 import traceback
 

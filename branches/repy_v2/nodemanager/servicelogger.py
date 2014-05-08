@@ -37,10 +37,10 @@ servicevessel = None
 # Importing repyportability will cause unsafe repy elements to be
 # allowed, bad if this module is imported from repy.py.
 def _servicelookup_get_servicevessels(vesseldict, ownerkey, ownerinfo):
-  # This is taken from servicelookup.repy.
+  # This is taken from servicelookup.r2py.
 
   def rsa_is_valid_publickey(key):
-    # This is taken from rsa.repy.
+    # This is taken from rsa.r2py.
     # must be a dict
     if type(key) is not dict:
       return False
@@ -65,7 +65,7 @@ def _servicelookup_get_servicevessels(vesseldict, ownerkey, ownerinfo):
       return False
 
   def rsa_publickey_to_string(publickey):
-    # This is taken from rsa.repy.
+    # This is taken from rsa.r2py.
     if not rsa_is_valid_publickey(publickey):
       raise ValueError, "Invalid public key"
     return str(publickey['e'])+" "+str(publickey['n'])

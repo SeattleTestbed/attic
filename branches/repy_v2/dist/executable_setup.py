@@ -182,7 +182,7 @@ class build_scripts(distutils.command.build_scripts.build_scripts):
       distutils.command.build_scripts.build_scripts.initialize_options(self)
 
       # these are files needed (included/imported) to build each script
-      repy_core = ['repy/*.py', 'nodemanager/servicelogger.mix', 'seattlelib/*.repy', 'nodemanager/persist.py']
+      repy_core = ['repy/*.py', 'nodemanager/servicelogger.mix', 'seattlelib/*.r2py', 'nodemanager/persist.py']
       nm_core = ['nodemanager/*.mix', 'nodemanager/*.py']
       self._dependencies = { 
 		'repy.py': repy_core, 
@@ -279,7 +279,8 @@ def process_it(script, dependencies, tmpdirname):
    preparetest.process_mix("repypp.py")
 
    # rm build files
-   files_to_remove = glob.glob("*.mix") + glob.glob("*.repy")
+   files_to_remove = glob.glob("*.mix") + glob.glob("*.repy") + \
+       glob.glob("*.r2py")
    for fn in files_to_remove: 
      os.remove(fn)
    os.remove("repypp.py") # get rid of the repypp.py file

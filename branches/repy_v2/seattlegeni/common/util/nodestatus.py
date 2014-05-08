@@ -47,11 +47,11 @@ from seattlegeni.website import settings
 from seattle.repyportability import *
 add_dy_support(locals())
 
-dy_import_module_symbols("rsa.repy")
+dy_import_module_symbols("rsa.r2py")
 
 
 # Restore the log module as repy's log function is copied into our
-# namespace when we are importing rsa.repy
+# namespace when we are importing rsa.r2py
 log = log_module
 
 

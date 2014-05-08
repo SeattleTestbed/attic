@@ -1,4 +1,4 @@
-#pragma repy restrictions.loose dylink.repy
+#pragma repy restrictions.loose dylink.r2py
 
 
 def waitonsocket(socketobj, num):

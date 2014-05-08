@@ -5,9 +5,9 @@ This test verifies the ResetVessel method works by first assidng several files t
 
 """
 
-dy_import_module_symbols('time.repy')
-dy_import_module_symbols('nmclient.repy')
-dy_import_module_symbols('rsa.repy')
+dy_import_module_symbols('time.r2py')
+dy_import_module_symbols('nmclient.r2py')
+dy_import_module_symbols('rsa.r2py')
 
 if callfunc == 'initialize':
 
@@ -27,11 +27,11 @@ if callfunc == 'initialize':
   myvessel = nmclient_listaccessiblevessels(nmhandle,pubkey)[0][0]
 
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "hello","hellodata")
-  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy", 
+  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.r2py", 
     "log('hello world\\n')\nwhile True: sleep(.1)")
   nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "hello2","hellodata")
 
-  nmclient_signedsay(nmhandle, "StartVessel", myvessel, "helloworld.repy")
+  nmclient_signedsay(nmhandle, "StartVessel", myvessel, "helloworld.r2py")
   
 
   # okay, now let's reset!
@@ -44,13 +44,13 @@ if callfunc == 'initialize':
   vessellog = nmclient_signedsay(nmhandle, "ReadVesselLog", myvessel)
   if vessellog:
     raise Exception("Vessellog is not empty after reset!")
-  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.repy", 
+  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "helloworld.r2py", 
     "log('hello world\\n')\nwhile True: sleep(.1)")
 
   try:
     # this should succeed.   The previously started version should have been 
     # stopped by the reset.
-    nmclient_signedsay(nmhandle, "StartVessel", myvessel, "helloworld.repy")
+    nmclient_signedsay(nmhandle, "StartVessel", myvessel, "helloworld.r2py")
   finally:
     # always stop at the end...
     nmclient_signedsay(nmhandle, "StopVessel", myvessel)

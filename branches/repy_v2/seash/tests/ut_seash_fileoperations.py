@@ -21,8 +21,8 @@ command_list = [
   'on %1', 
   'loadkeys guest0', 
   'as guest0', 
-  'upload example.1.1.repy sample_file', 
-  'run example.1.1.repy test_argument', 
+  'upload example.1.1.r2py sample_file', 
+  'run example.1.1.r2py test_argument', 
   'show log', 
   'show files', 
   'start sample_file test_argument', 
@@ -44,10 +44,10 @@ command_list = [
   'loadkeys guest0', 
   'as guest0', 
   'loadstate testing_state', 
-  'delete example.1.1.repy', 
-  'upload example.1.1.repy', 
+  'delete example.1.1.r2py', 
+  'upload example.1.1.r2py', 
   'reset', 
-  'download example.1.1.repy'
+  'download example.1.1.r2py'
 ]
 
 seash.command_loop(command_list)

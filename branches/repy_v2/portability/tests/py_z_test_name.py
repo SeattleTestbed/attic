@@ -35,10 +35,10 @@ def test_name(name, expected):
     print "Couldn't prepare test for filename test:", name
 
 
-test_name("rhtestname_file1.repy", "rhtestname_file1_repy")
+test_name("rhtestname_file1.r2py", "rhtestname_file1_repy")
 test_name("rhtestname_file2.py", "rhtestname_file2_py")
 test_name("rhtestname.file3.py", "rhtestname_file3_py")
-test_name("rhtestname.file4.repy", "rhtestname_file4_repy")
-test_name("rhtestname file5.repy", "rhtestname file5_repy")
-test_name("./rhtestname_file6.repy", "rhtestname_file6_repy")
+test_name("rhtestname.file4.r2py", "rhtestname_file4_repy")
+test_name("rhtestname file5.r2py", "rhtestname file5_repy")
+test_name("./rhtestname_file6.r2py", "rhtestname_file6_repy")
 

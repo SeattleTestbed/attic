@@ -104,10 +104,10 @@ _context = locals()
 add_dy_support(_context)
 
 
-dy_import_module_symbols("rsa.repy")
-dy_import_module_symbols("sha.repy")
-dy_import_module_symbols("advertise.repy")
-dy_import_module_symbols("sockettimeout.repy")
+dy_import_module_symbols("rsa.r2py")
+dy_import_module_symbols("sha.r2py")
+dy_import_module_symbols("advertise.r2py")
+dy_import_module_symbols("sockettimeout.r2py")
 
 # Overwrite log() so that Affix debug messages end up in the nodemanager's 
 # log file (nodemanager.old or .new in the service vessel directory)

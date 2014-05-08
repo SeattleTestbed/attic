@@ -1,4 +1,4 @@
-#pragma repy restrictions.test dylink.repy
+#pragma repy restrictions.test dylink.r2py
 
 """
 Author: Steven Portzer
@@ -7,9 +7,9 @@ This test verifies the RetrieveFileFromVessel method doesn't work for files star
 
 """
 
-dy_import_module_symbols("time.repy")
-dy_import_module_symbols("nmclient.repy")
-dy_import_module_symbols("rsa.repy")
+dy_import_module_symbols("time.r2py")
+dy_import_module_symbols("nmclient.r2py")
+dy_import_module_symbols("rsa.r2py")
 
 if callfunc == 'initialize':
 
@@ -36,9 +36,9 @@ if callfunc == 'initialize':
   addfilestring = "openfile('private_foo', True)"
 
   # upload and run program
-  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "bar.repy", addfilestring)
+  nmclient_signedsay(nmhandle, "AddFileToVessel", myvessel, "bar.r2py", addfilestring)
 
-  nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "bar.repy")
+  nmclient_signedsay(nmhandle, "StartVesselEx", myvessel, "repyV2", "bar.r2py")
 
   sleep(5)
 

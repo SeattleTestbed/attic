@@ -67,11 +67,11 @@ from seattlegeni.website import settings
 
 # Import all the repy files.
 add_dy_support(locals())
-dy_import_module_symbols('advertise.repy')
-dy_import_module_symbols('rsa.repy')
-dy_import_module_symbols('listops.repy')
-dy_import_module_symbols('parallelize.repy')
-dy_import_module_symbols('random.repy')
+dy_import_module_symbols('advertise.r2py')
+dy_import_module_symbols('rsa.r2py')
+dy_import_module_symbols('listops.r2py')
+dy_import_module_symbols('parallelize.r2py')
+dy_import_module_symbols('random.r2py')
 
 
 

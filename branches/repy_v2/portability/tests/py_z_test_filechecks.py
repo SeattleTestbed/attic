@@ -13,10 +13,10 @@ import repyhelper
 import test_utils
   
 #The (preexisting) repy file to use as a reference for translating
-SRCFILE = "rhtest_filetests.repy"
+SRCFILE = "rhtest_filetests.r2py"
 
 #The temporary file to create to perform checks against
-TESTFILE = "rhtest_filetests_new.repy"
+TESTFILE = "rhtest_filetests_new.r2py"
 
 #The translation name corresponding to TESTFILE
 TESTFILE_TR = repyhelper._get_module_name(TESTFILE) + ".py"

@@ -5,9 +5,9 @@ This test verifies the ListFilesInVessel method by reseting the vessel, then che
 The test may not leave the vessel in its original state since all log and file data is cleared during the reset.
 """
 
-dy_import_module_symbols('time.repy')
-dy_import_module_symbols('nmclient.repy')
-dy_import_module_symbols('rsa.repy')
+dy_import_module_symbols('time.r2py')
+dy_import_module_symbols('nmclient.r2py')
+dy_import_module_symbols('rsa.r2py')
 
 if callfunc == 'initialize':
 

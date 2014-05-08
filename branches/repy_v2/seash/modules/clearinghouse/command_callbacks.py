@@ -22,7 +22,7 @@ import seattleclearinghouse_xmlrpc
 from repyportability import *
 add_dy_support(locals())
 
-dy_import_module_symbols('rsa.repy')
+dy_import_module_symbols('rsa.r2py')
 
 
 is_printed_m2crypto_not_installed = False

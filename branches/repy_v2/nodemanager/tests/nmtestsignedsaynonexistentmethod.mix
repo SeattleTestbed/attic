@@ -3,9 +3,9 @@ Author: Cosmin Barsan
 Description:
 This test attempts to use the nmclient_signedsay method, but passes in an invalid method name.
 """
-dy_import_module_symbols('time.repy')
-dy_import_module_symbols('nmclient.repy')
-dy_import_module_symbols('rsa.repy')
+dy_import_module_symbols('time.r2py')
+dy_import_module_symbols('nmclient.r2py')
+dy_import_module_symbols('rsa.r2py')
 
 if callfunc == 'initialize':
 

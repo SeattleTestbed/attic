@@ -1,4 +1,4 @@
-#pragma repy restrictions.test dylink.repy
+#pragma repy restrictions.test dylink.r2py
 
 """
 Author: Justin Cappos
@@ -6,9 +6,9 @@ Description:
 This test verifies the ChangeUsers method by removing previous users and adding a new one. Then the new credentials are checked by calling several methods.
 """
 
-dy_import_module_symbols("time.repy")
-dy_import_module_symbols("nmclient.repy")
-dy_import_module_symbols("rsa.repy")
+dy_import_module_symbols("time.r2py")
+dy_import_module_symbols("nmclient.r2py")
+dy_import_module_symbols("rsa.r2py")
 
 if callfunc == 'initialize':
 

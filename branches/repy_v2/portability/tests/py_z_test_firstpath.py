@@ -24,7 +24,7 @@ os.mkdir('firstpathtest')
 sys.path = ['firstpathtest'] + sys.path
 
 # A RELATIVE IMPORT...   SHOULD BE WRITTEN TO sys.path[0]
-repyhelper.translate_and_import('./rhtest_filetests.repy')
+repyhelper.translate_and_import('./rhtest_filetests.r2py')
 
 # This should work...
 try:
@@ -34,4 +34,4 @@ except NameError:
 
 # and the file should be in the current directory.
 if not os.path.exists('firstpathtest/rhtest_filetests_repy.py'):
-  print "The rhtest_filetests.repy file was not preprocessed to the correct directory because 'firstpathtest/rhtest_filetests_repy.py' does not exist"
+  print "The rhtest_filetests.r2py file was not preprocessed to the correct directory because 'firstpathtest/rhtest_filetests_repy.py' does not exist"
