@@ -39,7 +39,7 @@ except ImportError:
 # is used to import files in repy.
 _context = locals()
 add_dy_support(_context)
-dy_import_module_symbols("affixstackinterface")
+dy_import_module_symbols("affixstackinterface.r2py")
 
 
 # If in debug mode, we will print out extra information.

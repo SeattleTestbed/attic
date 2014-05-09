@@ -61,7 +61,7 @@
 
 
 # Import the shim exceptions.
-dy_import_module_symbols("shim_exceptions")
+dy_import_module_symbols("shim_exceptions.r2py")
 
 # A dictionary that holds all the shim objects that have been
 # registered. This dictionary is shared globally by all ShimStacks

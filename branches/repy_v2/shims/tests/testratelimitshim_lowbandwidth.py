@@ -1,4 +1,4 @@
-dy_import_module_symbols("testratelimit_helper")
+dy_import_module_symbols("testratelimit_helper.r2py")
 
 
 UPLOAD_RATE = 1024 * 56 # 100KB/s

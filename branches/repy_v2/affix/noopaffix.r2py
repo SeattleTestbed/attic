@@ -1,6 +1,6 @@
 #!python
 
-dy_import_module_symbols("baseaffix")
+dy_import_module_symbols("baseaffix.r2py")
 
 class NoopAffix(BaseAffix):
   """

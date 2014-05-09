@@ -18,10 +18,10 @@
 """
 
 
-dy_import_module_symbols("shim_exceptions")
+dy_import_module_symbols("shim_exceptions.r2py")
 
 # Use 'random' to select how many bytes to add, and to get random bytes
-dy_import_module_symbols('random')
+dy_import_module_symbols('random.r2py')
 
 
 

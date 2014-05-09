@@ -38,7 +38,7 @@
             the recv buffer is empty.
 """
 
-dy_import_module_symbols("shim_exceptions")
+dy_import_module_symbols("shim_exceptions.r2py")
 
 
 MIN_BLK_SIZE = 2**10

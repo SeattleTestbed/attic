@@ -19,10 +19,10 @@
   12-12-11: Small bug fix that was occuring when the close call was called.
 """
 
-#dy_import_module_symbols("shim_stack")
+#dy_import_module_symbols("shim_stack.r2py")
 while True:
   try:
-    dy_import_module_symbols("msg_chunk_lib")
+    dy_import_module_symbols("msg_chunk_lib.r2py")
   except FileInUseError, err:
     sleep(0.001)
   except Exception, err:

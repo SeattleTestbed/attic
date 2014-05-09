@@ -35,8 +35,8 @@ USAGE = """
 
 """
 
-dy_import_module_symbols('shimstackinterface')
-dy_import_module_symbols('random')
+dy_import_module_symbols('shimstackinterface.r2py')
+dy_import_module_symbols('random.r2py')
 
 # The max buffersize. The amount of data to send at a time.
 BUFFER_SIZE = 2**18

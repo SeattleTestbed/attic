@@ -63,7 +63,7 @@
 
 
 # Import the affix exceptions.
-dy_import_module_symbols("affix_exceptions")
+dy_import_module_symbols("affix_exceptions.r2py")
 
 # Import affixmisc.r2py that contains various functions
 # that are used for registering/parsing/initializing

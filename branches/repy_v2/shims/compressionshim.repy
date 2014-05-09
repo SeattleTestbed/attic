@@ -19,7 +19,7 @@
 
 import zlib
 
-dy_import_module_symbols("shim_exceptions")
+dy_import_module_symbols("shim_exceptions.r2py")
 
 
 

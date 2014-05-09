@@ -1,4 +1,4 @@
-dy_import_module_symbols("shimstackinterface")
+dy_import_module_symbols("shimstackinterface.r2py")
 
 listen_enabled = True
 shim_object = ShimStackInterface("(CheckApiShim)")

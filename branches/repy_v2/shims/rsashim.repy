@@ -17,8 +17,8 @@
 """
 
 
-dy_import_module_symbols("rsa")
-dy_import_module_symbols("session")
+dy_import_module_symbols("rsa.r2py")
+dy_import_module_symbols("session.r2py")
 
 
 # Tags

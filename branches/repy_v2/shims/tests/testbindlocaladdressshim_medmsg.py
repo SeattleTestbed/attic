@@ -1,4 +1,4 @@
-dy_import_module_symbols("testgeneralshim_helper")
+dy_import_module_symbols("testgeneralshim_helper.r2py")
 
 # Choose a random ip address and use BindLocalAddressShim to change to 
 # the correct ip address, and it should work.

@@ -125,7 +125,7 @@ def log(*args):
     servicelogger.log(logstring)
 
 
-dy_import_module_symbols("affixstackinterface")
+dy_import_module_symbols("affixstackinterface.r2py")
 advertisepipe = dy_import_module("advertisepipe.r2py")
 
 

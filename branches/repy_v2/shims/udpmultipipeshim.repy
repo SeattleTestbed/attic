@@ -13,8 +13,8 @@
   are discarded.
 """
 
-dy_import_module_symbols("random")
-dy_import_module_symbols("shim_exceptions")
+dy_import_module_symbols("random.r2py")
+dy_import_module_symbols("shim_exceptions.r2py")
 
 
 

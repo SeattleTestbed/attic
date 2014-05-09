@@ -15,7 +15,7 @@ DEBUG = False
 WRITE_OUT_TRACE = False
 OUTPUT_TRACE_FILE = "checkapi_trace.output"
 if WRITE_OUT_TRACE:
-    dy_import_module_symbols("check_api_output_file.repy")
+    dy_import_module_symbols("check_api_output_file.r2py")
 
 # Systolic verification constant, keep only N levels of state at any given time.
 # If constant is set to None, this implies infinite levels.
@@ -30,28 +30,28 @@ MODEL_SIMULATE = False
 ENABLE_RESTRICTIONS = False
 
 # Various global state/methods used throughout CheckAPI.
-dy_import_module_symbols("check_api_model_state.repy")
+dy_import_module_symbols("check_api_model_state.r2py")
 
 # Various exceptions that are used throughout CheckAPI.
-dy_import_module_symbols("check_api_exceptions.repy")
+dy_import_module_symbols("check_api_exceptions.r2py")
 
 # Setter/Getter mechanism for CheckAPI.
-dy_import_module_symbols("check_api_oracle_setter_getter.repy")
+dy_import_module_symbols("check_api_oracle_setter_getter.r2py")
 
 # Include helper modules.
-dy_import_module_symbols("deep_copy.repy")
-dy_import_module_symbols("math.repy")
-dy_import_module_symbols("librepyrandom.repy")
-dy_import_module_symbols("random.repy")
+dy_import_module_symbols("deep_copy.r2py")
+dy_import_module_symbols("math.r2py")
+dy_import_module_symbols("librepyrandom.r2py")
+dy_import_module_symbols("random.r2py")
 
 # Include the core model itself.
-dy_import_module_symbols("core_model_resource.repy")
-dy_import_module_symbols("core_model_time.repy")
-dy_import_module_symbols("core_model_thread.repy")
-dy_import_module_symbols("core_model_fileio.repy")
-dy_import_module_symbols("core_model_networking.repy")
-dy_import_module_symbols("core_model_misc.repy")
+dy_import_module_symbols("core_model_resource.r2py")
+dy_import_module_symbols("core_model_time.r2py")
+dy_import_module_symbols("core_model_thread.r2py")
+dy_import_module_symbols("core_model_fileio.r2py")
+dy_import_module_symbols("core_model_networking.r2py")
+dy_import_module_symbols("core_model_misc.r2py")
 
-dy_import_module_symbols("systolic_verification.repy")
+dy_import_module_symbols("systolic_verification.r2py")
 
-dy_import_module_symbols("runtime_verification_shim.repy")
+dy_import_module_symbols("runtime_verification_shim.r2py")

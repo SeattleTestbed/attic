@@ -26,7 +26,7 @@ USAGE = """
 
   """
 
-dy_import_module_symbols('shimstackinterface')
+dy_import_module_symbols('shimstackinterface.r2py')
 
 
 # The shim stack strings of the server and the client.

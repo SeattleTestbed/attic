@@ -12,8 +12,8 @@
 
 USAGE = "Usage: python udp_proxy.py server_ip server_port listening_ip listening_port shim_port shim_string"
 
-dy_import_module_symbols('shimstackinterface')
-dy_import_module_symbols('random')
+dy_import_module_symbols('shimstackinterface.r2py')
+dy_import_module_symbols('random.r2py')
 
 # Number of seconds to sleep when encountering the SocketWouldBlockError.
 SLEEP_TIME = 0.01

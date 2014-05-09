@@ -1,7 +1,7 @@
 import sys
 import time
 
-dy_import_module_symbols("msg_chunk_lib")
+dy_import_module_symbols("msg_chunk_lib.r2py")
 
 SERVER_IP = getmyip()
 SERVER_PORT = 60606

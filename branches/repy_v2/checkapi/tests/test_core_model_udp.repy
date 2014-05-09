@@ -1,10 +1,10 @@
-dy_import_module_symbols("core_model_state.repy")
-dy_import_module_symbols("core_model_file_system.repy")
-dy_import_module_symbols("core_model_misc.repy")
-dy_import_module_symbols("core_model_networking.repy")
-dy_import_module_symbols("core_model_thread.repy")
-dy_import_module_symbols("core_model_mock.repy")
-#dy_import_module_symbols("core_model_resource.repy")
+dy_import_module_symbols("core_model_state.r2py")
+dy_import_module_symbols("core_model_file_system.r2py")
+dy_import_module_symbols("core_model_misc.r2py")
+dy_import_module_symbols("core_model_networking.r2py")
+dy_import_module_symbols("core_model_thread.r2py")
+dy_import_module_symbols("core_model_mock.r2py")
+#dy_import_module_symbols("core_model_resource.r2py")
 
 def should_raise(error, fnc, *args):
     try:

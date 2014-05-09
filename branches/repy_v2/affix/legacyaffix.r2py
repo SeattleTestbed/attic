@@ -9,8 +9,8 @@
 
 _DEBUG_MODE = False
 
-dy_import_module_symbols("baseaffix")
-dy_import_module_symbols("affix_stack")
+dy_import_module_symbols("baseaffix.r2py")
+dy_import_module_symbols("affix_stack.r2py")
 
 
 class LegacyAffixTCPServerSocket():

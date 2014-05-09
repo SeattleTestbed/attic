@@ -16,7 +16,7 @@ import sys
 import time
 import random
 
-dy_import_module_symbols("shimstackinterface")
+dy_import_module_symbols("shimstackinterface.r2py")
 
 
 # The address and port of the outgoing connection.

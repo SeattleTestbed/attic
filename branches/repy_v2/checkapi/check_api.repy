@@ -30,7 +30,7 @@ WRITE_OUT_TRACE = True
 OUTPUT_TRACE_FILE = "checkapi_trace.output"
 MAX_STRING_LENGTH = 200
 if WRITE_OUT_TRACE:
-    dy_import_module_symbols("check_api_output_file.repy")
+    dy_import_module_symbols("check_api_output_file.r2py")
 
 # Are you using CheckAPI for shims or not? 
 # *Not fully supported in this version yet*
@@ -51,35 +51,35 @@ ENABLE_LOCK_VERIF = True
 FILES_TO_IMPORT_TO_FS = "check_api_initial_filestate.input"
 
 # EG:
-dy_import_module_symbols("checkapi_rstructures.repy")
+dy_import_module_symbols("checkapi_rstructures.r2py")
 
 # Various global state/methods used throughout CheckAPI.
-dy_import_module_symbols("check_api_globals.repy")
+dy_import_module_symbols("check_api_globals.r2py")
 
 # Various exceptions that are used throughout CheckAPI.
-dy_import_module_symbols("check_api_exceptions.repy")
+dy_import_module_symbols("check_api_exceptions.r2py")
 
 # Setter/Getter mechanism for CheckAPI.
-dy_import_module_symbols("check_api_oracle_setter_getter.repy")
+dy_import_module_symbols("check_api_oracle_setter_getter.r2py")
 
 # Include helper modules.
-#dy_import_module_symbols("deep_copy.repy")
-dy_import_module_symbols("math.repy")
-dy_import_module_symbols("librepyrandom.repy")
-dy_import_module_symbols("random.repy")
+#dy_import_module_symbols("deep_copy.r2py")
+dy_import_module_symbols("math.r2py")
+dy_import_module_symbols("librepyrandom.r2py")
+dy_import_module_symbols("random.r2py")
 
 # Include the core model itself.
 # EG: Now it makes use of the revertible structures
-dy_import_module_symbols("core_model_state.repy")
-dy_import_module_symbols("core_model_resource.repy")
-dy_import_module_symbols("core_model_thread.repy")
-dy_import_module_symbols("core_model_file_system.repy")
-dy_import_module_symbols("core_model_networking.repy")
-dy_import_module_symbols("core_model_misc.repy")
+dy_import_module_symbols("core_model_state.r2py")
+dy_import_module_symbols("core_model_resource.r2py")
+dy_import_module_symbols("core_model_thread.r2py")
+dy_import_module_symbols("core_model_file_system.r2py")
+dy_import_module_symbols("core_model_networking.r2py")
+dy_import_module_symbols("core_model_misc.r2py")
 
 # Import an initial file state here, reads in a file that lists files that 
 # should be imported. This, by default, includes the first call arg to checkapi.
-dy_import_module_symbols("check_api_bootstrap_state.repy")
+dy_import_module_symbols("check_api_bootstrap_state.r2py")
 bootstrap_import_filestate(callargs[0:1])
 
 # Initialize restrictions if we need to.
@@ -87,15 +87,15 @@ if ENABLE_RESTRICTIONS:
     initialize_restrictions()
 
 # Include systolic verification mechanism.
-dy_import_module_symbols("systolic_verification.repy")
+dy_import_module_symbols("systolic_verification.r2py")
 
 # Include the interposition modules, if needed.
 if not CHECKAPI_FOR_SHIMS:
-  dy_import_module_symbols("runtime_verification_fileio.repy")
-  dy_import_module_symbols("runtime_verification_network.repy")
-  dy_import_module_symbols("runtime_verification_threading.repy")
-  dy_import_module_symbols("runtime_verification_misc.repy")
-dy_import_module_symbols("runtime_verification_core.repy")
+  dy_import_module_symbols("runtime_verification_fileio.r2py")
+  dy_import_module_symbols("runtime_verification_network.r2py")
+  dy_import_module_symbols("runtime_verification_threading.r2py")
+  dy_import_module_symbols("runtime_verification_misc.r2py")
+dy_import_module_symbols("runtime_verification_core.r2py")
 
 
 def active_threads():

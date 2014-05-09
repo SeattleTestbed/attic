@@ -13,7 +13,7 @@
   March 30th, 2011
 """
 
-dy_import_module_symbols("shimstackinterface")
+dy_import_module_symbols("shimstackinterface.r2py")
 
 
 

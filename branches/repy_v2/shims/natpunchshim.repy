@@ -17,10 +17,10 @@
 """
 
 
-dy_import_module_symbols("random")
-dy_import_module_symbols("session")
-dy_import_module_symbols("advertise_objects")
-dy_import_module_symbols("nat_forwarder_common_lib")
+dy_import_module_symbols("random.r2py")
+dy_import_module_symbols("session.r2py")
+dy_import_module_symbols("advertise_objects.r2py")
+dy_import_module_symbols("nat_forwarder_common_lib.r2py")
 
 
 # The default timeout that is used when connecting to forwarder

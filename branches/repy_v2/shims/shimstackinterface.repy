@@ -16,7 +16,7 @@
 
 """
 
-dy_import_module_symbols("shim_stack")
+dy_import_module_symbols("shim_stack.r2py")
 
 
 

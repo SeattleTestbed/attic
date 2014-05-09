@@ -1,4 +1,4 @@
-dy_import_module_symbols("testnatshim_helper")
+dy_import_module_symbols("testnatshim_helper.r2py")
 
 SERVER_IP = getmyip()
 SERVER_PORT = 34829

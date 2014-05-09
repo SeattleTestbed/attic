@@ -1,7 +1,7 @@
 import sys
 import time
 
-dy_import_module_symbols("shimstackinterface")
+dy_import_module_symbols("shimstackinterface.r2py")
 
 
 SERVER_IP = getmyip()

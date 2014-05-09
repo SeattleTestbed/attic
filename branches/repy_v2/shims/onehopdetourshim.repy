@@ -15,9 +15,9 @@
   monzum@cs.washington.edu
 """
 
-dy_import_module_symbols("session.repy")
-dy_import_module_symbols("advertise_objects")
-dy_import_module_symbols("one_hop_detour_common.repy")
+dy_import_module_symbols("session.r2py")
+dy_import_module_symbols("advertise_objects.r2py")
+dy_import_module_symbols("one_hop_detour_common.r2py")
 
 
 class OneHopDetourShim(BaseShim):

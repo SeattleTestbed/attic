@@ -19,10 +19,10 @@
   python repy.py RESTRICTION_FILE nat_forwarder.repy TCP_PORT 
 """
 
-dy_import_module_symbols("session")
-dy_import_module_symbols("advertise_objects")
-dy_import_module_symbols("shimstackinterface")
-dy_import_module_symbols("nat_forwarder_common_lib")
+dy_import_module_symbols("session.r2py")
+dy_import_module_symbols("advertise_objects.r2py")
+dy_import_module_symbols("shimstackinterface.r2py")
+dy_import_module_symbols("nat_forwarder_common_lib.r2py")
 
 # The shim string that the NAT Forwarder will use.
 NAT_SHIM_STRING = "(CoordinationShim)(NoopShim)"

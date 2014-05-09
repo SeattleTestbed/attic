@@ -12,7 +12,7 @@
   Ensure that shims obey proper Repy semantics.
 """
 
-dy_import_module_symbols("check_api_shim_helper")
+dy_import_module_symbols("check_api_shim_helper.r2py")
 
 class CheckApiShim(BaseShim):
 

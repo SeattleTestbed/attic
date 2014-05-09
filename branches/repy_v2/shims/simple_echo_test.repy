@@ -22,7 +22,7 @@ USAGE = """
   where 123.4.5.6 is the server's IP, and 12345 is the port number, and N is the
   number of random bytes.  """
 
-dy_import_module_symbols('shimstackinterface')
+dy_import_module_symbols('shimstackinterface.r2py')
 import random
 
 

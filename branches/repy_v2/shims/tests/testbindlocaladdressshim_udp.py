@@ -1,4 +1,4 @@
-dy_import_module_symbols("udptest_helper")
+dy_import_module_symbols("udptest_helper.r2py")
 
 CLIENT_IP = "156.255.54.98" # Fake IP address
 SERVER_IP = getmyip()

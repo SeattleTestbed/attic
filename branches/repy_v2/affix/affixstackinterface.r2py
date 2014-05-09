@@ -92,7 +92,7 @@
 # the affix stack. affix_stack.r2py has most of the core code
 # that initializes different affix components and builds a 
 # stack that is ready to be used by the application.
-dy_import_module_symbols("affix_stack")
+dy_import_module_symbols("affix_stack.r2py")
 
 
 class AffixStackInterface:

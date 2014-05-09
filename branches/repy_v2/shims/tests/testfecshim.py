@@ -1,4 +1,4 @@
-dy_import_module_symbols("udptest_helper")
+dy_import_module_symbols("udptest_helper.r2py")
 
 SHIM_STR = "(FECShim)"
 

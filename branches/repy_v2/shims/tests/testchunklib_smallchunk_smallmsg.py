@@ -1,4 +1,4 @@
-dy_import_module_symbols("testchunk_helper")
+dy_import_module_symbols("testchunk_helper.r2py")
 
 SERVER_IP = getmyip()
 SERVER_PORT = 60606

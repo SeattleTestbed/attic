@@ -1,4 +1,4 @@
-dy_import_module_symbols("testdatalimit_helper")
+dy_import_module_symbols("testdatalimit_helper.r2py")
 
 # Send 10MB of data through with a high limit of 3MB. Which means as soon as it sends
 # 3MB, the shim should block until the time limit (in this case 20 seconds) is up. 

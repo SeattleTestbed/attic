@@ -18,10 +18,10 @@
 """
 
 # Import all the exceptions.
-dy_import_module_symbols("shim_exceptions")
+dy_import_module_symbols("shim_exceptions.r2py")
 
 # Import all the wrapper classes.
-dy_import_module_symbols("shim_wrapper_lib")
+dy_import_module_symbols("shim_wrapper_lib.r2py")
 
 
 

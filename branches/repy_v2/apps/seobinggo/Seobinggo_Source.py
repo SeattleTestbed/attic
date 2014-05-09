@@ -1,7 +1,7 @@
 
-dy_import_module_symbols('rsa')
-dy_import_module_symbols('advertise')
-dy_import_module_symbols('httpserver')
+dy_import_module_symbols('rsa.r2py')
+dy_import_module_symbols('advertise.r2py')
+dy_import_module_symbols('httpserver.r2py')
 
 """
 <Name>

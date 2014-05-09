@@ -1,4 +1,4 @@
-dy_import_module_symbols("multipathtest_helper")
+dy_import_module_symbols("multipathtest_helper.r2py")
 SERVER_IP = getmyip()
 SERVER_PORT_NODEA = 36829
 SERVER_PORT_NODEB = 35349

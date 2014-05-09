@@ -1,7 +1,7 @@
 import sys
 
-dy_import_module_symbols("shimstackinterface")
-dy_import_module_symbols("random")
+dy_import_module_symbols("shimstackinterface.r2py")
+dy_import_module_symbols("random.r2py")
 
 
 CLIENT_IP = getmyip()

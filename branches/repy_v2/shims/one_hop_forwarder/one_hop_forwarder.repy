@@ -19,10 +19,10 @@
   python repy.py RESTRICTION_FILE one_hop_forwarder.repy TCP_PORT UDP_PORT
 """
 
-dy_import_module_symbols("random.repy")
-dy_import_module_symbols("session.repy")
-dy_import_module_symbols("advertise_objects")
-dy_import_module_symbols("one_hop_detour_common.repy")
+dy_import_module_symbols("random.r2py")
+dy_import_module_symbols("session.r2py")
+dy_import_module_symbols("advertise_objects.r2py")
+dy_import_module_symbols("one_hop_detour_common.r2py")
 
 
 # How many bytes should be received at once.

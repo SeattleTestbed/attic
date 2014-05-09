@@ -19,7 +19,7 @@ from repyportability import *
 add_dy_support(locals())
 
 # need to generate a public key
-dy_import_module_symbols('rsa')
+dy_import_module_symbols('rsa.r2py')
 
 # need randomfloat...
 import random

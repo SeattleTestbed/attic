@@ -19,10 +19,10 @@
   python repy.py RESTRICTION_FILE nat_forwarder.r2py TCP_PORT 
 """
 
-dy_import_module_symbols("session")
+dy_import_module_symbols("session.r2py")
 advertisepipe = dy_import_module("advertisepipe.r2py")
-dy_import_module_symbols("affixstackinterface")
-dy_import_module_symbols("nat_forwarder_common_lib")
+dy_import_module_symbols("affixstackinterface.r2py")
+dy_import_module_symbols("nat_forwarder_common_lib.r2py")
 iplib = dy_import_module("natdecideraffix.r2py")
 # The affix string that the NAT Forwarder will use.
 NAT_AFFIX_STRING = "(CoordinationAffix)(NoopAffix)"
