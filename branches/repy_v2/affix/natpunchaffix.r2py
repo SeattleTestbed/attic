@@ -19,7 +19,7 @@
 dy_import_module_symbols("random.r2py")
 dy_import_module_symbols("session.r2py")
 dy_import_module_symbols("baseaffix.r2py")
-sockettimeout = dy_import_module("sockettimeout")
+sockettimeout = dy_import_module("sockettimeout.r2py")
 dy_import_module_symbols("affixstackinterface.r2py")
 dy_import_module_symbols("nat_forwarder_common_lib.r2py")
 advertise = dy_import_module("advertise.r2py") # for AdvertiseError

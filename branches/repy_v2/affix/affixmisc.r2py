@@ -71,8 +71,7 @@ def find_and_register_affix(affix_name):
   # may be trying to load the affix.
   while True:
     # Try to import the affix file. We convert the name to 
-    # lower case before importing.  Additionally, dylink requires
-    # that we specify the file extension for imported modules.
+    # lower case before importing and add in the extension.
     try:
       if affix_name not in _context.keys():
         dy_import_module_symbols(affix_name.lower() + '.r2py')
