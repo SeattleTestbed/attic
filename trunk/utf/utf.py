@@ -386,8 +386,7 @@ def test_module(module_name, module_file_list):
 
   # test_file() is responsible for running companion tests.
   # We shouldn't run them directly.
-  valid_files = filter_files(glob.glob("*"))
-  all_module_files = filter_files(valid_files, module=module_name)
+  all_module_files = filter_files(module_file_list, module=module_name)
   all_test_files = all_module_files[:]
   for mod_file in all_module_files:
     if get_script_type(mod_file, all_module_files) is not None:

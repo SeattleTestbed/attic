@@ -1,0 +1,7 @@
+Testing module: stagedtestsetup
+Now starting subprocess: ut_stagedtestsetup_subprocess.py
+Now running setup script: ut_stagedtestsetup_setup.py
+	Running: ut_stagedtestsetup_setup.py                        [ PASS ]
+Now running shutdown script: ut_stagedtestsetup_shutdown.py
+	Running: ut_stagedtestsetup_shutdown.py                     [ PASS ]
+Now stopping subprocess: ut_stagedtestsetup_subprocess.py
