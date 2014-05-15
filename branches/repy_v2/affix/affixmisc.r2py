@@ -25,6 +25,11 @@
 AFFIX_CLASS_DICT = {}
 
 
+# We need a lock when importing Affix files to prevent any
+# race condition.
+affix_register_lock = createlock()
+
+
 
 def find_and_register_affix(affix_name):
   """
@@ -66,23 +71,26 @@ def find_and_register_affix(affix_name):
   if affix_name in AFFIX_CLASS_DICT.keys():
     return
 
-  # We have to do the import in a while loop in case we get the 
-  # FileInUseError. This error occurs when multiple affix stacks
-  # may be trying to load the affix.
-  while True:
+  affix_register_lock.acquire(True)
+  try:
+    # We have to do the import in a while loop in case we get the 
+    # FileInUseError. This error occurs when multiple affix stacks
+    # may be trying to load the affix.
+    while True:
     # Try to import the affix file. We convert the name to 
     # lower case before importing and add in the extension.
-    try:
-      if affix_name not in _context.keys():
-        dy_import_module_symbols(affix_name.lower() + '.r2py')
-    except FileInUseError, err:
-      sleep(0.01)
-    else:
-      break
+      try:
+        if affix_name not in _context.keys():
+          dy_import_module_symbols(affix_name.lower() + '.r2py')
+      except FileInUseError, err:
+        sleep(0.01)
+      else:
+        break
 
-  # Register the affix.
-  AFFIX_CLASS_DICT[affix_name] = _context.copy()[affix_name]    
-          
+    # Register the affix.
+    AFFIX_CLASS_DICT[affix_name] = _context.copy()[affix_name]    
+  finally:
+    affix_register_lock.release()      
 
 
 
