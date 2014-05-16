@@ -119,7 +119,7 @@ req DORadvertise.r2py
 req textops.py
 req NATLayer_rpc.r2py
 req deserialize.r2py
-req Multiplexer.r2py
+req multiplexer.r2py
 req safety_exceptions.py
 req harshexit.py
 req portable_popen.py
