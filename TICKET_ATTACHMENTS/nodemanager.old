@@ -1,0 +1,312 @@
+1392245544.02:PID-11937:[INFO]:platform.python_version(): "2.7.5"
+1392245544.03:PID-11937:[INFO]:platform.platform(): "Darwin-13.0.2-x86_64-i386-64bit"
+1392245544.03:PID-11937:[INFO]:platform.uname(): "('Darwin', 'r1-201.iap.ubc.ca', '13.0.2', 'Darwin Kernel Version 13.0.2: Sun Sep 29 19:38:57 PDT 2013; root:xnu-2422.75.4~1/RELEASE_X86_64', 'x86_64', 'i386')"
+1392245544.03:PID-11937:[INFO]:Loading config
+1392245545.56:PID-11937:myname = 142.103.165.201:1224
+1392245545.56:PID-11937:[INFO]:Started
+1392246207.01:PID-11937:[INFO]: node manager is alive...
+1392246446.32:PID-11937:[Info] Checking to see if Affix status has changed...
+1392246868.72:PID-11937:[INFO]: node manager is alive...
+1392247347.38:PID-11937:[Info] Checking to see if Affix status has changed...
+1392247535.35:PID-11937:[INFO]: node manager is alive...
+1392248196.65:PID-11937:[INFO]: node manager is alive...
+1392248252.95:PID-11937:[Info] Checking to see if Affix status has changed...
+1392248859.51:PID-11937:[INFO]: node manager is alive...
+1392249155.08:PID-11937:[Info] Checking to see if Affix status has changed...
+1392249521.4:PID-11937:[INFO]: node manager is alive...
+1392250056.38:PID-11937:[Info] Checking to see if Affix status has changed...
+1392250188.21:PID-11937:[INFO]: node manager is alive...
+1392252007.98:PID-11937:[Info] Checking to see if Affix status has changed...
+1392252016.09:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392252018.63:PID-11937:[WARN]:Node IP has changed, it is 128.189.204.188 now (was 142.103.165.201).
+1392252018.63:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392252021.9:PID-11937:[ERROR]: when calling listenforconnection for the connection_handler: There is a listening socket on the provided localip and localport!
+1392252021.9:PID-11937:Traceback (most recent call last):
+  File "nmmain.py", line 326, in start_accepter
+  File "sockettimeout", line 336, in timeout_listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1426, in listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1101, in _conn_cleanup_check
+AlreadyListeningError: There is a listening socket on the provided localip and localport!
+
+1392252021.92:PID-11937:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392252023.65:PID-11937:[INFO]: Node is back online. (Encountered 3 advertise errors)
+1392252024.73:PID-11937:[WARN]:Node IP has changed, it is 142.103.165.246 now (was 128.189.204.188).
+1392253653.64:PID-11937:[Info] Checking to see if Affix status has changed...
+1392253654.46:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392253654.46:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392253655.47:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392253662.46:PID-11937:[WARN]:Node IP has changed, it is 128.189.204.188 now (was 142.103.165.246).
+1392253663.3:PID-11937:AdvertiseError occured, continuing: ['announce error (type: UDP): Cannot bind to the specified local ip, invalid!']
+1392253664.46:PID-11937:AdvertiseError occured, continuing: ['announce error (type: UDP): Cannot bind to the specified local ip, invalid!']
+1392253664.51:PID-11937:AdvertiseError occured, continuing: ['announce error (type: UDP): Cannot bind to the specified local ip, invalid!']
+1392253664.73:PID-11937:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392253665.85:PID-11937:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392253667.48:PID-11937:[ERROR]: when calling listenforconnection for the connection_handler: There is a listening socket on the provided localip and localport!
+1392253667.48:PID-11937:Traceback (most recent call last):
+  File "nmmain.py", line 326, in start_accepter
+  File "sockettimeout", line 336, in timeout_listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1426, in listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1101, in _conn_cleanup_check
+AlreadyListeningError: There is a listening socket on the provided localip and localport!
+
+1392253667.98:PID-11937:[ERROR]: when calling listenforconnection for the connection_handler: There is a listening socket on the provided localip and localport!
+1392253667.99:PID-11937:Traceback (most recent call last):
+  File "nmmain.py", line 326, in start_accepter
+  File "sockettimeout", line 336, in timeout_listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1426, in listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1101, in _conn_cleanup_check
+AlreadyListeningError: There is a listening socket on the provided localip and localport!
+
+1392253670.28:PID-11937:[WARN]:Node IP has changed, it is 142.103.165.241 now (was 128.189.204.188).
+1392253969.61:PID-11937:[INFO]: Node is back online. (Encountered 3 advertise errors)
+1392254266.03:PID-11937:[INFO]: node manager is alive...
+1392254553.78:PID-11937:[Info] Checking to see if Affix status has changed...
+1392254928.19:PID-11937:[INFO]: node manager is alive...
+1392255454.98:PID-11937:[Info] Checking to see if Affix status has changed...
+1392255589.54:PID-11937:[INFO]: node manager is alive...
+1392256250.94:PID-11937:[INFO]: node manager is alive...
+1392256355.74:PID-11937:[Info] Checking to see if Affix status has changed...
+1392256912.44:PID-11937:[INFO]: node manager is alive...
+1392257256.43:PID-11937:[Info] Checking to see if Affix status has changed...
+1392257338.71:PID-11937:AdvertiseError occured, continuing: ["announce error (type: UDP): udpcentralized_announce sent request id 433, received different request id. Full response: '('OK', 427)'"]
+1392257578.8:PID-11937:[INFO]: node manager is alive...
+1392258161.97:PID-11937:[Info] Checking to see if Affix status has changed...
+1392258240.62:PID-11937:[INFO]: node manager is alive...
+1392258902.14:PID-11937:[INFO]: node manager is alive...
+1392259063.22:PID-11937:[Info] Checking to see if Affix status has changed...
+1392259568.75:PID-11937:[INFO]: node manager is alive...
+1392259969.12:PID-11937:[Info] Checking to see if Affix status has changed...
+1392260235.29:PID-11937:[INFO]: node manager is alive...
+1392260874.76:PID-11937:[Info] Checking to see if Affix status has changed...
+1392260897.27:PID-11937:[INFO]: node manager is alive...
+1392261559.29:PID-11937:[INFO]: node manager is alive...
+1392261616.83:PID-11937:Traceback (most recent call last):
+  File "/Users/yyzh/seattle/seattle_repy/nmconnectionmanager.py", line 215, in run
+  File "/Users/yyzh/seattle/seattle_repy/nmrequesthandler.py", line 117, in handle_request
+  File "/Users/yyzh/seattle/seattle_repy/session", line 102, in session_sendmessage
+  File "/Users/yyzh/seattle/seattle_repy/session", line 84, in session_sendhelper
+  File "sockettimeout", line 154, in send
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1820, in send
+SocketClosedRemote: The socket has been closed by the remote end!
+
+1392261617.72:PID-11937:[WARN]:At 1392261617.72 restarting worker...
+1392261776.59:PID-11937:[Info] Checking to see if Affix status has changed...
+1392262225.72:PID-11937:[INFO]: node manager is alive...
+1392262682.14:PID-11937:[Info] Checking to see if Affix status has changed...
+1392262889.1:PID-11937:[INFO]: node manager is alive...
+1392263550.44:PID-11937:[INFO]: node manager is alive...
+1392263584.72:PID-11937:[Info] Checking to see if Affix status has changed...
+1392264212.32:PID-11937:[INFO]: node manager is alive...
+1392264485.79:PID-11937:[Info] Checking to see if Affix status has changed...
+1392264873.89:PID-11937:[INFO]: node manager is alive...
+1392265386.49:PID-11937:[Info] Checking to see if Affix status has changed...
+1392265536.46:PID-11937:[INFO]: node manager is alive...
+1392266197.8:PID-11937:[INFO]: node manager is alive...
+1392266288.3:PID-11937:[Info] Checking to see if Affix status has changed...
+1392266864.16:PID-11937:[INFO]: node manager is alive...
+1392267193.83:PID-11937:[Info] Checking to see if Affix status has changed...
+1392267526.75:PID-11937:[INFO]: node manager is alive...
+1392268095.61:PID-11937:[Info] Checking to see if Affix status has changed...
+1392268188.62:PID-11937:[INFO]: node manager is alive...
+1392268849.98:PID-11937:[INFO]: node manager is alive...
+1392268996.69:PID-11937:[Info] Checking to see if Affix status has changed...
+1392269512.03:PID-11937:[INFO]: node manager is alive...
+1392269897.95:PID-11937:[Info] Checking to see if Affix status has changed...
+1392270174.17:PID-11937:[INFO]: node manager is alive...
+1392270799.11:PID-11937:[Info] Checking to see if Affix status has changed...
+1392270840.39:PID-11937:[INFO]: node manager is alive...
+1392271273.11:PID-11937:AdvertiseError occured, continuing: ["announce error (type: UDP): udpcentralized_announce sent request id 1187, received different request id. Full response: '('OK', 1185)'"]
+1392271501.6:PID-11937:[INFO]: node manager is alive...
+1392271704.53:PID-11937:[Info] Checking to see if Affix status has changed...
+1392272164.22:PID-11937:[INFO]: node manager is alive...
+1392272439.98:PID-11937:[WARN]:Node IP has changed, it is 128.189.204.188 now (was 142.103.165.241).
+1392272441.45:PID-11937:[ERROR]: when calling listenforconnection for the connection_handler: There is a listening socket on the provided localip and localport!
+1392272441.45:PID-11937:Traceback (most recent call last):
+  File "nmmain.py", line 326, in start_accepter
+  File "sockettimeout", line 336, in timeout_listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1426, in listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1101, in _conn_cleanup_check
+AlreadyListeningError: There is a listening socket on the provided localip and localport!
+
+1392272441.7:PID-11937:[ERROR]: when calling listenforconnection for the connection_handler: There is a listening socket on the provided localip and localport!
+1392272441.7:PID-11937:Traceback (most recent call last):
+  File "nmmain.py", line 326, in start_accepter
+  File "sockettimeout", line 336, in timeout_listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1426, in listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1101, in _conn_cleanup_check
+AlreadyListeningError: There is a listening socket on the provided localip and localport!
+
+1392272446.72:PID-11937:[ERROR]: when calling listenforconnection for the connection_handler: There is a listening socket on the provided localip and localport!
+1392272446.72:PID-11937:Traceback (most recent call last):
+  File "nmmain.py", line 326, in start_accepter
+  File "sockettimeout", line 336, in timeout_listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1426, in listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1101, in _conn_cleanup_check
+AlreadyListeningError: There is a listening socket on the provided localip and localport!
+
+1392272451.73:PID-11937:[ERROR]: when calling listenforconnection for the connection_handler: There is a listening socket on the provided localip and localport!
+1392272451.73:PID-11937:Traceback (most recent call last):
+  File "nmmain.py", line 326, in start_accepter
+  File "sockettimeout", line 336, in timeout_listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1426, in listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1101, in _conn_cleanup_check
+AlreadyListeningError: There is a listening socket on the provided localip and localport!
+
+1392274889.65:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392274889.65:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392274890.64:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392274890.73:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392274890.79:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392274898.41:PID-11937:[WARN]:Node IP has changed, it is 192.168.1.104 now (was 128.189.204.188).
+1392274898.41:PID-11937:[Info] Checking to see if Affix status has changed...
+1392274898.41:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392274901.55:PID-11937:[INFO]: Node is back online. (Encountered 8 advertise errors)
+1392274901.57:PID-11937:[INFO]: Node is back online. (Encountered 8 advertise errors)
+1392274903.89:PID-11937:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392274905.66:PID-11937:[INFO]: Node is back online. (Encountered 11 advertise errors)
+1392274908.48:PID-11937:[ERROR]: when calling listenforconnection for the connection_handler: There is a listening socket on the provided localip and localport!
+1392274908.48:PID-11937:Traceback (most recent call last):
+  File "nmmain.py", line 326, in start_accepter
+  File "sockettimeout", line 336, in timeout_listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1426, in listenforconnection
+  File "/Users/yyzh/seattle/seattle_repy/emulcomm.py", line 1101, in _conn_cleanup_check
+AlreadyListeningError: There is a listening socket on the provided localip and localport!
+
+1392274920.05:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392274920.77:PID-11937:[INFO]: Node is back online. (Encountered 1 advertise errors)
+1392275225.91:PID-11937:[INFO]: Node is back online. (Encountered 12 advertise errors)
+1392275225.91:PID-11937:[INFO]: Node is back online. (Encountered 12 advertise errors)
+1392275235.91:PID-11937:AdvertiseError occured, continuing: ["announce error (type: UDP): udpcentralized_announce sent request id 1381, received different request id. Full response: '('OK', 1383)'"]
+1392275235.92:PID-11937:AdvertiseError occured, continuing: ["announce error (type: UDP): udpcentralized_announce sent request id 1383, received different request id. Full response: '('OK', 1381)'"]
+1392275282.24:PID-11937:[INFO]: node manager is alive...
+1392275513.41:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392275533.42:PID-11937:[INFO]: Node is back online. (Encountered 1 advertise errors)
+1392275537.6:PID-11937:AdvertiseError occured, continuing: ["announce error (type: UDP): udpcentralized_announce sent request id 1405, received different request id. Full response: '('OK', 1403)'"]
+1392275804.85:PID-11937:[Info] Checking to see if Affix status has changed...
+1392275948.62:PID-11937:[INFO]: node manager is alive...
+1392276409.58:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392276439.54:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392276439.82:PID-11937:[INFO]: Node is back online. (Encountered 1 advertise errors)
+1392276455.39:PID-11937:[INFO]: Node is back online. (Encountered 1 advertise errors)
+1392276609.97:PID-11937:[INFO]: node manager is alive...
+1392276710.39:PID-11937:[Info] Checking to see if Affix status has changed...
+1392276766.93:PID-11937:AdvertiseError occured, continuing: ["announce error (type: UDP): udpcentralized_announce sent request id 1505, received different request id. Full response: '('OK', 1495)'"]
+1392277276.39:PID-11937:[INFO]: node manager is alive...
+1392277615.98:PID-11937:[Info] Checking to see if Affix status has changed...
+1392277942.75:PID-11937:[INFO]: node manager is alive...
+1392278521.61:PID-11937:[Info] Checking to see if Affix status has changed...
+1392278603.4:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392278604.22:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392278604.23:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392278604.23:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392278604.29:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392278604.93:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392278604.94:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392278614.25:PID-11937:[INFO]: Node is back online. (Encountered 3 advertise errors)
+1392278614.25:PID-11937:[INFO]: Node is back online. (Encountered 3 advertise errors)
+1392278614.25:PID-11937:[INFO]: Node is back online. (Encountered 3 advertise errors)
+1392278614.32:PID-11937:[INFO]: Node is back online. (Encountered 3 advertise errors)
+1392278614.94:PID-11937:[INFO]: Node is back online. (Encountered 3 advertise errors)
+1392278614.95:PID-11937:[INFO]: Node is back online. (Encountered 3 advertise errors)
+1392278619.27:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392278619.95:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392278619.97:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392282216.15:PID-11937:[Info] Checking to see if Affix status has changed...
+1392282217.86:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392282218.7:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392282221.01:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392282226.85:PID-11937:[INFO]: Node is back online. (Encountered 3 advertise errors)
+1392282226.86:PID-11937:[INFO]: Node is back online. (Encountered 9 advertise errors)
+1392282228.79:PID-11937:[INFO]: Node is back online. (Encountered 6 advertise errors)
+1392282232.45:PID-11937:[INFO]: Node is back online. (Encountered 6 advertise errors)
+1392282235.14:PID-11937:[INFO]: Node is back online. (Encountered 7 advertise errors)
+1392282235.75:PID-11937:[INFO]: Node is back online. (Encountered 7 advertise errors)
+1392282235.85:PID-11937:[INFO]: Node is back online. (Encountered 7 advertise errors)
+1392285845.96:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392285845.98:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392285846.03:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392285846.59:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392285846.69:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392285849.56:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392285849.63:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392285851.72:PID-11937:[Info] Checking to see if Affix status has changed...
+1392285852.31:PID-11937:[INFO]: Node is back online. (Encountered 5 advertise errors)
+1392285855.87:PID-11937:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392285859.6:PID-11937:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392285875.4:PID-11937:[INFO]: node manager is alive...
+1392289475.22:PID-11937:[Info] Checking to see if Affix status has changed...
+1392289476.2:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392289478.73:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392289479.91:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392289487.33:PID-11937:[INFO]: Node is back online. (Encountered 17 advertise errors)
+1392289490.25:PID-11937:[INFO]: Node is back online. (Encountered 8 advertise errors)
+1392289491.94:PID-11937:[INFO]: Node is back online. (Encountered 16 advertise errors)
+1392289494.37:PID-11937:AdvertiseError occured, continuing: ["announce error (type: UDP): udpcentralized_announce sent request id 1895, received different request id. Full response: '('OK', 1893)'"]
+1392293105.47:PID-11937:[Info] Checking to see if Affix status has changed...
+1392293105.91:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392293109.74:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392293110.02:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392293112.89:PID-11937:[INFO]: Node is back online. (Encountered 22 advertise errors)
+1392293116.95:PID-11937:[INFO]: Node is back online. (Encountered 8 advertise errors)
+1392293117.94:PID-11937:[INFO]: Node is back online. (Encountered 20 advertise errors)
+1392293119.37:PID-11937:[INFO]: Node is back online. (Encountered 8 advertise errors)
+1392293119.74:PID-11937:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392293120.07:PID-11937:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392293120.11:PID-11937:[INFO]: Node is back online. (Encountered 20 advertise errors)
+1392296734.47:PID-11937:[Info] Checking to see if Affix status has changed...
+1392296734.79:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392296736.79:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392296736.8:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392296736.81:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392296737.84:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392296738.3:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392296738.71:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392296742.14:PID-11937:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392296743.18:PID-11937:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392296744.19:PID-11937:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392296748.72:PID-11937:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392296752.45:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392296753.11:PID-11937:[INFO]: Node is back online. (Encountered 5 advertise errors)
+1392296753.13:PID-11937:[INFO]: Node is back online. (Encountered 1 advertise errors)
+1392300046.01:PID-11937:[Info] Checking to see if Affix status has changed...
+1392300046.87:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392300047.32:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392300047.53:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392300048.13:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392300048.19:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392300058.03:PID-11937:[INFO]: Node is back online. (Encountered 11 advertise errors)
+1392300058.16:PID-11937:[INFO]: Node is back online. (Encountered 16 advertise errors)
+1392300059.05:PID-11937:[INFO]: Node is back online. (Encountered 8 advertise errors)
+1392300059.07:PID-11937:[INFO]: Node is back online. (Encountered 8 advertise errors)
+1392300061.06:PID-11937:[INFO]: Node is back online. (Encountered 16 advertise errors)
+1392300368.01:PID-11937:[INFO]: Node is back online. (Encountered 12 advertise errors)
+1392300371.26:PID-11937:AdvertiseError occured, continuing: ["announce error (type: UDP): udpcentralized_announce sent request id 2140, received different request id. Full response: '('OK', 2136)'"]
+1392300372.43:PID-11937:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392300624.4:PID-11937:[INFO]: node manager is alive...
+1392300946.35:PID-11937:[Info] Checking to see if Affix status has changed...
+1392301278.99:PID-11937:AdvertiseError occured, continuing: ["announce error (type: UDP): udpcentralized_announce sent request id 2184, received different request id. Full response: '('OK', 2452)'"]
+1392301290.78:PID-11937:[INFO]: node manager is alive...
+1392305196.58:PID-11937:[Info] Checking to see if Affix status has changed...
+1392305197.58:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392305198.32:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392305198.62:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392305199.77:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392305200.58:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392305200.75:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392305200.76:PID-11937:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392305210.79:PID-11937:[INFO]: Node is back online. (Encountered 7 advertise errors)
+1392305212.64:PID-11937:[INFO]: Node is back online. (Encountered 8 advertise errors)
+1392305213.36:PID-11937:[INFO]: Node is back online. (Encountered 8 advertise errors)
+1392305213.69:PID-11937:[INFO]: Node is back online. (Encountered 8 advertise errors)
+1392305214.78:PID-11937:[INFO]: Node is back online. (Encountered 8 advertise errors)
+1392305215.61:PID-11937:[INFO]: Node is back online. (Encountered 8 advertise errors)
+1392305215.78:PID-11937:[INFO]: Node is back online. (Encountered 8 advertise errors)
+40:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392305199.72:PID-11940:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392305200.56:PID-11940:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392305200.91:PID-11940:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392305205.77:PID-11940:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392305206.89:PID-11940:[INFO]: Node is back online. (Encountered 4 advertise errors)
+1392305207.92:PID-11940:[INFO]: Node is back online. (Encountered 8 advertise errors)
+1392305226.6:PID-11940:AdvertiseError occured, continuing: None of the advertise services could be contacted
+1392305226.88:PID-11940:[INFO]: Node is back online. (Encountered 1 advertise errors)
