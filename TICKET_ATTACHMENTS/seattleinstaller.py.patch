@@ -1,0 +1,46 @@
+Index: seattleinstaller.py
+===================================================================
+--- seattleinstaller.py	(revision 7319)
++++ seattleinstaller.py	(working copy)
+@@ -1949,6 +1949,13 @@
+       repy_prepend.extend(value.split())
+     elif flag == "--repy-prepend-dir":
+       repy_prepend_dir = value
++    # Check for resource overrides...
++    elif flag in ["--netrecv", "--netsend"]:
++      try:
++        benchmark_resources.DEFAULT_MAX_RESOURCE_DICT[flag.lstrip('-')] = int(value)
++      except ValueError:
++        usage()
++        return False
+ 
+   # Print this notification after having processed all the arguments in case one
+   # of the arguments specifies silent mode.
+@@ -2074,6 +2081,7 @@
+ 
+   print "[-s] [--usage] " \
+       + "[--disable-startup-script] [--percent float] " \
++      + "[--netrecv bytes] [--netsend bytes] " \
+       + "[--nm-key-bitsize bitsize] [--nm-ip ip] [--nm-iface iface] " \
+       + "[--repy-ip ip] [--repy-iface iface] [--repy-nootherips] " \
+       + "[--onlynetwork] [--repy-prepend args] [--repy-prepend-dir dir]"
+@@ -2086,6 +2094,8 @@
+   print "--percent percent\t\tSpecifies the desired percentage of available " \
+       + "system resources to donate. Default percentage: " \
+       + str(RESOURCE_PERCENTAGE)
++  print "--netrecv bytes\t\t\tSpecifies the total incoming bandwidth to donate."
++  print "--netsend bytes\t\t\tSpecifies the total outgoing bandwidth to donate."
+   print "--nm-key-bitsize bitsize\tSpecifies the desired bitsize of the Node " \
+       + "Manager keys. Default bitsize: " + str(KEYBITSIZE)
+   print "--nm-ip IP\t\t\tSpecifies a preferred IP for the NM. Multiple may " \
+@@ -2126,7 +2136,9 @@
+                                 "nm-iface=","repy-ip=","repy-iface=",
+                                 "repy-nootherips","onlynetwork",
+                                 "disable-startup-script","usage",
+-                                "repy-prepend=", "repy-prepend-dir="])
++                                "repy-prepend=", "repy-prepend-dir=",
++                                # Resource override arguments
++                                "netrecv=", "netsend="])
+   except getopt.GetoptError, err:
+     print str(err)
+     usage()

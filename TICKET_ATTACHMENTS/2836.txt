@@ -1,0 +1,51 @@
+Virtual Memory Map of process 2836 (Python)
+Output report format:  2.2  -- 32-bit process
+
+==== Non-writable regions for process 2836
+__PAGEZERO             00000000-00001000 [    4K/    0K] ---/--- SM=NUL  .../Frameworks/Python.framework/Versions/2.5/Resources/Python.app/Contents/MacOS/Python
+STACK GUARD            00006000-00007000 [    4K/    0K] ---/rwx SM=NUL  
+STACK GUARD            00008000-00009000 [    4K/    0K] ---/rwx SM=NUL  
+shared memory          000cb000-000cc000 [    4K/    4K] r--/rw- SM=SHM  
+STACK GUARD            b0000000-b0001000 [    4K/    0K] ---/rwx SM=NUL  
+STACK GUARD            b0082000-b0083000 [    4K/    0K] ---/rwx SM=NUL  
+STACK GUARD            b0104000-b0105000 [    4K/    0K] ---/rwx SM=NUL  
+STACK GUARD            bc000000-bf800000 [ 56.0M/    0K] ---/rwx SM=NUL  
+
+==== Writable regions for process 2836
+MALLOC (freed?)        00007000-00008000 [    4K/    4K] rw-/rwx SM=PRV  
+MALLOC_LARGE           000a3000-000a8000 [   20K/   16K] rw-/rwx SM=PRV  DefaultMallocZone_0x300000
+VM_ALLOCATE ?          000cd000-00119000 [  304K/    0K] rw-/rwx SM=NUL  
+MALLOC_LARGE           00232000-00272000 [  256K/  256K] rw-/rwx SM=PRV  DefaultMallocZone_0x300000
+MALLOC_LARGE           002b2000-002f2000 [  256K/  256K] rw-/rwx SM=PRV  DefaultMallocZone_0x300000
+MALLOC_LARGE           0045b000-00476000 [  108K/  108K] rw-/rwx SM=PRV  DefaultMallocZone_0x300000
+MALLOC_LARGE           00620000-00660000 [  256K/  256K] rw-/rwx SM=PRV  DefaultMallocZone_0x300000
+MALLOC_LARGE           006a0000-007e0000 [ 1280K/ 1280K] rw-/rwx SM=PRV  DefaultMallocZone_0x300000
+MALLOC_LARGE           01000000-01200000 [ 2048K/ 2048K] rw-/rwx SM=PRV  DefaultMallocZone_0x300000
+MALLOC_LARGE           01280000-01340000 [  768K/  768K] rw-/rwx SM=PRV  DefaultMallocZone_0x300000
+Stack                  b0001000-b0082000 [  516K/    8K] rw-/rwx SM=PRV  thread 1
+Stack                  b0083000-b0104000 [  516K/   24K] rw-/rwx SM=PRV  thread 2
+Stack                  b0105000-b0186000 [  516K/   40K] rw-/rwx SM=PRV  thread 3
+Stack                  bf800000-bffff000 [ 8188K/  108K] rw-/rwx SM=ZER  thread 0
+
+==== Legend
+SM=sharing mode:  
+	COW=copy_on_write PRV=private NUL=empty ALI=aliased 
+	SHM=shared ZER=zero_filled S/A=shared_alias
+
+==== Summary for process 2836
+ReadOnly portion of Libraries: Total=7836K resident=7384K(94%) swapped_out_or_unallocated=452K(6%)
+Writable regions: Total=26.0M written=8592K(32%) resident=9732K(37%) swapped_out=0K(0%) unallocated=16.5M(63%)
+
+REGION TYPE             [ VIRTUAL/RESIDENT]
+===========             [ =======/========]
+MALLOC                  [   15.8M/   9384K]
+STACK GUARD             [   56.0M/      0K]
+Stack                   [   9740K/    184K]
+VM_ALLOCATE ?           [    304K/      0K]
+__DATA                  [   1096K/    764K]
+__IMPORT                [     84K/     84K]
+__LINKEDIT              [   4272K/   4004K]
+__PAGEZERO              [      4K/      0K]
+__TEXT                  [   3564K/   3380K]
+shared memory           [      4K/      4K]
+shared pmap             [   4208K/   4204K]

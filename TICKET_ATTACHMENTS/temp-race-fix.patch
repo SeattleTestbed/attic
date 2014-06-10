@@ -1,0 +1,77 @@
+Index: dist/linux/scripts/uninstall.py
+===================================================================
+--- dist/linux/scripts/uninstall.py	(revision 754)
++++ dist/linux/scripts/uninstall.py	(working copy)
+@@ -11,25 +11,22 @@
+     # Kill seattle
+     seattlestopper.main()
+     crontab_f = os.popen("crontab -l")
+-    temp_f = open("temp.txt", "w")
++    fd, s_tmp = tempfile.mkstemp("temp", "seattle")
+     found = False
+     for line in crontab_f:
+         if not re.search("/" + STARTER_SCRIPT_NAME, line):
+-            temp_f.write(line)
++            os.write(fd, line)
+         else:
+             found = True
+     if found:
+-        temp_f.close()
+-        crontab_f.close()
+-        os.popen('crontab "' + os.getcwd() + '/temp.txt"') 
+-        
+-        
++        os.close(fd)
++        os.popen('crontab "' + s_tmp + "') 
+         output("Seattle has been uninstalled.")
+         output("If you wish, you may now delete this directory.")
+     else:
+-        temp_f.close()
++        os.close(fd)
+         output("Could not detect a seattle installation on your computer.")
+-    os.popen("rm -f temp.txt")
++    os.unlink(s_tmp)
+ 
+ if __name__ == "__main__":
+     main()
+Index: dist/linux/scripts/install.py
+===================================================================
+--- dist/linux/scripts/install.py	(revision 754)
++++ dist/linux/scripts/install.py	(working copy)
+@@ -1,6 +1,7 @@
+ import os
+ import re
+ import sys
++import tempfile
+ 
+ STARTER_SCRIPT_NAME = "start_seattle.sh"
+ 
+@@ -45,13 +46,14 @@
+         # our task
+         cron_line = '*/10 * * * * "' + os.getcwd() + '/' + STARTER_SCRIPT_NAME + '" &> "' + os.getcwd() + '/cron_log.txt"' +  os.linesep
+         crontab_f = os.popen("crontab -l")
+-        temp_f = open("temp.txt", "w")
++        fd, s_tmp = tempfile.mkstemp("temp", "seattle")
+         for line in crontab_f:
+-            temp_f.write(line)
+-        temp_f.write(cron_line)
+-        temp_f.close()
++            os.write(fd, line)
++        os.write(fd, cron_line)
++        os.close(fd)
+         # Then, replace the crontab with that file
+-        os.popen('crontab "' + os.getcwd() + '/temp.txt"')
++        os.popen('crontab "' + s_tmp + '"')
++        os.unlink(s_tmp)
+         output("Done.")
+ 
+         # Next, run the script to generate the node's keys
+@@ -90,8 +92,5 @@
+         # quit
+         output("Installation failed.")
+     
+-    os.popen("rm -f temp.txt")
+-
+-
+ if __name__ == "__main__":
+     main()

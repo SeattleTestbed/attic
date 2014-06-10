@@ -1,0 +1,47 @@
+--- D:\Dropbox\Seattle\seattle\trunk\seash\modules\clearinghouse\command_callbacks.py	Fri Feb 14 20:42:11 2014
++++ D:\Dropbox\Seattle\seattle\branches\repy_v2\seash\modules\clearinghouse\command_callbacks.py	Fri Feb 14 20:46:04 2014
+@@ -13,11 +13,16 @@
+ import seash_exceptions
+ import seash_global_variables
+ 
+-import fastnmclient
++nmclient_createhandle = seash_helper.nmclient_createhandle
++nmclient_getvesseldict = seash_helper.nmclient_getvesseldict
++nmclient_destroyhandle = seash_helper.nmclient_destroyhandle
++
+ import seattleclearinghouse_xmlrpc
+ 
+-import repyhelper
+-repyhelper.translate_and_import('rsa.repy')
++from repyportability import *
++add_dy_support(locals())
++
++dy_import_module_symbols('rsa.repy')
+ 
+ 
+ is_printed_m2crypto_not_installed = False
+@@ -274,19 +279,19 @@
+ 
+   # get information about the node's vessels
+   try:
+-    nodehandle = fastnmclient.nmclient_createhandle(host, port,
++    nodehandle = nmclient_createhandle(host, port,
+       timeout=seash_global_variables.globalseashtimeout)
+ 
+-  except fastnmclient.NMClientException,e:
++  except NMClientException,e:
+     return (False, str(e))
+ 
+   try:
+     # We need to get the nodekey on this vessel
+-    vesseldict = fastnmclient.nmclient_getvesseldict(nodehandle)
+-  except fastnmclient.NMClientException,e:
++    vesseldict = nmclient_getvesseldict(nodehandle)
++  except NMClientException,e:
+     return (False, str(e))
+   finally:
+-    fastnmclient.nmclient_destroyhandle(nodehandle)
++    nmclient_destroyhandle(nodehandle)
+ 
+   nodekeystr = rsa_publickey_to_string(vesseldict['nodekey'])
+   return (True, nodekeystr+':'+vesselname)

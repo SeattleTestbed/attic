@@ -1,0 +1,17 @@
+if callfunc == 'initialize':
+  readfile = openfile("filetoread",False)
+  start_readtime = getruntime()
+  data = readfile.readat(None,0)
+  finish_readtime = getruntime()
+  log ("\n Time to read:")
+  log (finish_readtime-start_readtime) 
+  
+  writefile = openfile("filetowrite",True)
+  start_writetime = getruntime()
+  writefile.writeat(data,0)
+  finish_writetime = getruntime()
+  log ("\n Time to write:")
+  log (finish_writetime-start_writetime)
+
+  readfile.close()
+  writefile.close()

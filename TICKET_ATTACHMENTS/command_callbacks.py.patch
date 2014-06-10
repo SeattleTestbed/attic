@@ -1,0 +1,37 @@
+--- C:\Users\Leonard\Dropbox\Seattle\seattle\trunk\seash\command_callbacks.py	Mon Jan 13 15:43:08 2014
++++ C:\Users\Leonard\Dropbox\Seattle\seattle\branches\repy_v2\seash\command_callbacks.py	Mon Feb  3 15:29:49 2014
+@@ -1146,6 +1146,7 @@
+   pubkeyfn = fileandpath+'.publickey'
+   privkeyfn = fileandpath+'.privatekey'
+ 
++  seash_helper.delete_files([pubkeyfn, privkeyfn])
+ 
+   # do the actual generation (will take a while)
+   newkeys = rsa_gen_pubpriv_keys(keylength)
+@@ -1187,6 +1188,8 @@
+   # do the actual generation (will take a while)
+   newkeys = rsa_gen_pubpriv_keys(keylength)
+ 
++  seash_helper.delete_files([pubkeyfn, privkeyfn])
++
+   rsa_privatekey_to_file(newkeys[1],privkeyfn)
+   rsa_publickey_to_file(newkeys[0],pubkeyfn)
+   seash_global_variables.keys[keyname] = {'publickey':newkeys[0], 'privatekey':newkeys[1]}
+@@ -1229,6 +1232,8 @@
+   # do the actual generation (will take a while)
+   newkeys = rsa_gen_pubpriv_keys(keylength)
+ 
++  seash_helper.delete_files([pubkeyfn, privkeyfn])
++
+   rsa_privatekey_to_file(newkeys[1],privkeyfn)
+   rsa_publickey_to_file(newkeys[0],pubkeyfn)
+   seash_global_variables.keys[keyname] = {'publickey':newkeys[0], 'privatekey':newkeys[1]}
+@@ -1262,6 +1267,8 @@
+ 
+   # do the actual generation (will take a while)
+   newkeys = rsa_gen_pubpriv_keys(keylength)
++
++  seash_helper.delete_files([pubkeyfn, privkeyfn])
+ 
+   rsa_privatekey_to_file(newkeys[1],privkeyfn)
+   rsa_publickey_to_file(newkeys[0],pubkeyfn)

@@ -1,0 +1,484 @@
+--- D:\Dropbox\Seattle\seattle\trunk\seash\seash_helper.py	Wed Feb 12 16:11:01 2014
++++ D:\Dropbox\Seattle\seattle\branches\repy_v2\seash\seash_helper.py	Fri Feb 14 19:49:14 2014
+@@ -13,29 +13,29 @@
+ 
+ import seash_exceptions
+ 
+-import repyhelper
+-
+-#repyhelper.translate_and_import("nmclient.repy")
+-import fastnmclient
++from repyportability import *
++add_dy_support(locals())
++
++dy_import_module_symbols("nmclient.repy")
+ 
+ # Use local clock for time if there is no network connectivity
+ import time
+ 
+-repyhelper.translate_and_import("time.repy")
+-
+-repyhelper.translate_and_import("rsa.repy")
+-
+-repyhelper.translate_and_import("listops.repy")
+-
+-repyhelper.translate_and_import("parallelize.repy")
+-
+-repyhelper.translate_and_import("domainnameinfo.repy")
+-
+-repyhelper.translate_and_import("advertise.repy")   #  used to do OpenDHT lookups
+-
+-repyhelper.translate_and_import("geoip_client.repy") # used for `show location`
+-
+-repyhelper.translate_and_import("serialize.repy") # used for loadstate and savestate
++dy_import_module_symbols("time.repy")
++
++dy_import_module_symbols("rsa.repy")
++
++dy_import_module_symbols("listops.repy")
++
++dy_import_module_symbols("parallelize.repy")
++
++dy_import_module_symbols("domainnameinfo.repy")
++
++dy_import_module_symbols("advertise.repy")   #  used to do OpenDHT lookups
++
++dy_import_module_symbols("geoip_client.repy") # used for `show location`
++
++dy_import_module_symbols("serialize.repy") # used for loadstate and savestate
+ 
+ 
+ 
+@@ -59,7 +59,11 @@
+   """
+   # Since we import time.repy, we will only use the local clock if none of
+   # the default time servers respond.
+-  time_register_method('local', local_updatetime)
++
++  # LAW: Disabling for now as it seems to be being triggered even though
++  # TCP/NTP time updates properly.  Its bringing up false negatives on
++  # the unit tests.
++  # time_register_method('local', local_updatetime)
+   time_updatetime(34612)
+ 
+ 
+@@ -106,7 +110,7 @@
+   # obtain the handle info dictionary
+   for longname in seash_global_variables.vesselinfo.keys():
+     vessel_handle = seash_global_variables.vesselinfo[longname]['handle']
+-    handleinfo[longname] = fastnmclient.nmclient_get_handle_info(vessel_handle)
++    handleinfo[longname] = nmclient_get_handle_info(vessel_handle)
+ 
+ 
+   state = {}
+@@ -162,11 +166,11 @@
+   return stringdata
+ 
+ 
+-nextidlock = getlock()
++nextidlock = createlock()
+ def atomically_get_nextid():
+ 
+   # mutex around getting an id
+-  nextidlock.acquire()
++  nextidlock.acquire(True)
+ 
+   myid = seash_global_variables.nextid
+   seash_global_variables.nextid = seash_global_variables.nextid + 1
+@@ -208,7 +212,7 @@
+ 
+ def copy_vessel(longname, newvesselname):
+ 
+-  newhandle = fastnmclient.nmclient_duplicatehandle(seash_global_variables.vesselinfo[longname]['handle'])
++  newhandle = nmclient_duplicatehandle(seash_global_variables.vesselinfo[longname]['handle'])
+   newlongname = seash_global_variables.vesselinfo[longname]['IP']+":"+str(seash_global_variables.vesselinfo[longname]['port'])+":"+newvesselname
+   add_vessel(newlongname,seash_global_variables.vesselinfo[longname]['keyname'],newhandle)
+   return newlongname
+@@ -317,9 +321,9 @@
+   vesselname = seash_global_variables.vesselinfo[longname]['vesselname']
+ 
+   try:
+-    filedata = fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'],"ListFilesInVessel",vesselname)
+-
+-  except fastnmclient.NMClientException, e:
++    filedata = nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'],"ListFilesInVessel",vesselname)
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -338,9 +342,9 @@
+   vesselname = seash_global_variables.vesselinfo[longname]['vesselname']
+ 
+   try:
+-    logdata = fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'],"ReadVesselLog",vesselname)
+-
+-  except fastnmclient.NMClientException, e:
++    logdata = nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'],"ReadVesselLog",vesselname)
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -356,9 +360,9 @@
+   vesselname = seash_global_variables.vesselinfo[longname]['vesselname']
+ 
+   try:
+-    resourcedata = fastnmclient.nmclient_rawsay(seash_global_variables.vesselinfo[longname]['handle'],"GetVesselResources",vesselname)
+-
+-  except fastnmclient.NMClientException, e:
++    resourcedata = nmclient_rawsay(seash_global_variables.vesselinfo[longname]['handle'],"GetVesselResources",vesselname)
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -371,9 +375,9 @@
+   vesselhandle = find_handle_for_node(nodename)
+ 
+   try:
+-    offcutdata = fastnmclient.nmclient_rawsay(vesselhandle,"GetOffcutResources")
+-
+-  except fastnmclient.NMClientException, e:
++    offcutdata = nmclient_rawsay(vesselhandle,"GetOffcutResources")
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -394,18 +398,18 @@
+ 
+   # get information about the node's vessels
+   try:
+-    nodehandle = fastnmclient.nmclient_createhandle(host, port,
++    nodehandle = nmclient_createhandle(host, port,
+                                        privatekey = seash_global_variables.keys[currentkeyname]['privatekey'],
+                                        publickey = seash_global_variables.keys[currentkeyname]['publickey'],
+                                        timeout=seash_global_variables.globalseashtimeout)
+ 
+-  except fastnmclient.NMClientException,e:
++  except NMClientException,e:
+     return (False, str(e))
+ 
+   try:
+     # need to contact the node to get the list of vessels we can perform
+     # actions on...
+-    ownervessels, uservessels = fastnmclient.nmclient_listaccessiblevessels(nodehandle,seash_global_variables.keys[currentkeyname]['publickey'])
++    ownervessels, uservessels = nmclient_listaccessiblevessels(nodehandle,seash_global_variables.keys[currentkeyname]['publickey'])
+ 
+     retlist = []
+ 
+@@ -416,10 +420,10 @@
+       # if we haven't discovered the vessel previously...
+       if longname not in seash_global_variables.targets:
+         # set the vesselname in the handle
+-        newhandle = fastnmclient.nmclient_duplicatehandle(nodehandle)
+-        handleinfo = fastnmclient.nmclient_get_handle_info(newhandle)
++        newhandle = nmclient_duplicatehandle(nodehandle)
++        handleinfo = nmclient_get_handle_info(newhandle)
+         handleinfo['vesselname'] = vesselname
+-        fastnmclient.nmclient_set_handle_info(newhandle, handleinfo)
++        nmclient_set_handle_info(newhandle, handleinfo)
+ 
+         # then add the vessel to the target list, etc.
+         # add_vessel has no race conditions as long as longname is unique
+@@ -433,7 +437,7 @@
+ 
+ 
+   finally:
+-    fastnmclient.nmclient_destroyhandle(nodehandle)
++    nmclient_destroyhandle(nodehandle)
+ 
+   return (True, retlist)
+ 
+@@ -443,9 +447,9 @@
+   vesselname = seash_global_variables.vesselinfo[longname]['vesselname']
+ 
+   try:
+-    vesseldict = fastnmclient.nmclient_getvesseldict(seash_global_variables.vesselinfo[longname]['handle'])
+-
+-  except fastnmclient.NMClientException, e:
++    vesseldict = nmclient_getvesseldict(seash_global_variables.vesselinfo[longname]['handle'])
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -469,9 +473,9 @@
+ 
+   try:
+     # add the file data...
+-    fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "AddFileToVessel", vesselname, remotefn, filedata)
+-
+-  except fastnmclient.NMClientException, e:
++    nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "AddFileToVessel", vesselname, remotefn, filedata)
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -486,9 +490,9 @@
+ 
+   try:
+     # get the file data...
+-    retrieveddata = fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "RetrieveFileFromVessel", vesselname, remotefn)
+-
+-  except fastnmclient.NMClientException, e:
++    retrieveddata = nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "RetrieveFileFromVessel", vesselname, remotefn)
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -508,9 +512,9 @@
+ 
+   try:
+     # get the file data...
+-    retrieveddata = fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "RetrieveFileFromVessel", vesselname, remotefn)
+-
+-  except fastnmclient.NMClientException, e:
++    retrieveddata = nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "RetrieveFileFromVessel", vesselname, remotefn)
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -525,9 +529,9 @@
+ 
+   try:
+     # delete the file...
+-    fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "DeleteFileInVessel", vesselname, remotefn)
+-
+-  except fastnmclient.NMClientException, e:
++    nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "DeleteFileInVessel", vesselname, remotefn)
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -540,20 +544,13 @@
+ 
+   vesselname = seash_global_variables.vesselinfo[longname]['vesselname']
+ 
+-  # start the program
+-  try:
+-    # Backwards compatibility with old nodemanagers that don't support
+-    # StartVesselEX
+-    if prog_platform == "repyV1":
+-      fastnmclient.nmclient_signedsay(
+-        seash_global_variables.vesselinfo[longname]['handle'],
+-        "StartVessel", vesselname, argstring)
+-    else:
+-      fastnmclient.nmclient_signedsay(
+-        seash_global_variables.vesselinfo[longname]['handle'],
+-        "StartVesselEx", vesselname, prog_platform, argstring)
+-
+-  except fastnmclient.NMClientException, e:
++  try:
++    # start the program
++    nmclient_signedsay(
++      seash_global_variables.vesselinfo[longname]['handle'],
++      "StartVesselEx", vesselname, prog_platform, argstring)
++
++  except NMClientException, e:
+     print str(e)
+     return (False, str(e))
+ 
+@@ -569,9 +566,9 @@
+ 
+   try:
+     # stop the programs
+-    fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "StopVessel", vesselname)
+-
+-  except fastnmclient.NMClientException, e:
++    nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "StopVessel", vesselname)
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -586,9 +583,9 @@
+ 
+   try:
+     # reset the target
+-    fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "ResetVessel", vesselname)
+-
+-  except fastnmclient.NMClientException, e:
++    nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "ResetVessel", vesselname)
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -602,19 +599,12 @@
+   vesselname = seash_global_variables.vesselinfo[longname]['vesselname']
+ 
+   try:
+-    fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "AddFileToVessel", vesselname, filename, filedata)
+-    # Backwards compatibility with old nodemanagers that don't support
+-    # StartVesselEX
+-    if prog_platform == "repyV1":
+-      fastnmclient.nmclient_signedsay(
+-        seash_global_variables.vesselinfo[longname]['handle'],
+-        "StartVessel", vesselname, argstring)
+-    else:
+-      fastnmclient.nmclient_signedsay(
+-        seash_global_variables.vesselinfo[longname]['handle'],
+-        "StartVesselEx", vesselname, prog_platform, argstring)
+-
+-  except fastnmclient.NMClientException, e:
++    nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "AddFileToVessel", vesselname, filename, filedata)
++    nmclient_signedsay(
++      seash_global_variables.vesselinfo[longname]['handle'],
++      "StartVesselEx", vesselname, prog_platform, argstring)
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -629,9 +619,9 @@
+   vesselname = seash_global_variables.vesselinfo[longname]['vesselname']
+ 
+   try:
+-    newvesselnames = fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "SplitVessel", vesselname, resourcedata)
+-
+-  except fastnmclient.NMClientException, e:
++    newvesselnames = nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "SplitVessel", vesselname, resourcedata)
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -663,9 +653,9 @@
+     vesselname = seash_global_variables.vesselinfo[longname]['vesselname']
+ 
+     try:
+-      newvesselname = fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "JoinVessels", currentvesselname, vesselname)
+-
+-    except fastnmclient.NMClientException, e:
++      newvesselname = nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "JoinVessels", currentvesselname, vesselname)
++
++    except NMClientException, e:
+       return (False, str(e))
+ 
+     else:
+@@ -689,9 +679,9 @@
+   vesselname = seash_global_variables.vesselinfo[longname]['vesselname']
+ 
+   try:
+-    fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "ChangeOwner", vesselname, rsa_publickey_to_string(seash_global_variables.keys[newowner]['publickey']))
+-
+-  except fastnmclient.NMClientException, e:
++    nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "ChangeOwner", vesselname, rsa_publickey_to_string(seash_global_variables.keys[newowner]['publickey']))
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -707,9 +697,9 @@
+ 
+   try:
+     # do the actual advertisement changes
+-    fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "ChangeAdvertise", vesselname, newadvert)
+-
+-  except fastnmclient.NMClientException, e:
++    nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "ChangeAdvertise", vesselname, newadvert)
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -724,9 +714,9 @@
+ 
+   try:
+     # do the actual advertisement changes
+-    fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "ChangeOwnerInformation", vesselname, newownerinformation)
+-
+-  except fastnmclient.NMClientException, e:
++    nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "ChangeOwnerInformation", vesselname, newownerinformation)
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -740,9 +730,9 @@
+   vesselname = seash_global_variables.vesselinfo[longname]['vesselname']
+ 
+   try:
+-    fastnmclient.nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "ChangeUsers", vesselname, userkeystring)
+-
+-  except fastnmclient.NMClientException, e:
++    nmclient_signedsay(seash_global_variables.vesselinfo[longname]['handle'], "ChangeUsers", vesselname, userkeystring)
++
++  except NMClientException, e:
+     return (False, str(e))
+ 
+   else:
+@@ -805,18 +795,18 @@
+ 
+   # create new handle for the vessel
+   try:
+-    vessel_handle = fastnmclient.nmclient_createhandle(host, port, privatekey = priKey, publickey = pubKey, timeout=seash_global_variables.globalseashtimeout)
+-
+-  except fastnmclient.NMClientException, error:
++    vessel_handle = nmclient_createhandle(host, port, privatekey = priKey, publickey = pubKey, timeout=seash_global_variables.globalseashtimeout)
++
++  except NMClientException, error:
+     return (False, str(error))
+ 
+ 
+   try:
+-    fastnmclient.nmclient_set_handle_info(vessel_handle, handleinfo[longname])
++    nmclient_set_handle_info(vessel_handle, handleinfo[longname])
+     seash_global_variables.vesselinfo[longname]['handle'] = vessel_handle
+ 
+     # hello test to see if the vessel is available
+-    (ownervessels, uservessels) = fastnmclient.nmclient_listaccessiblevessels(vessel_handle, pubKey)
++    (ownervessels, uservessels) = nmclient_listaccessiblevessels(vessel_handle, pubKey)
+     if not (ownervessels + uservessels):
+       return (False, "Vessel is not available for keyname " + keyname + ".")
+ 
+@@ -841,9 +831,9 @@
+ 
+     for longname in seash_global_variables.vesselinfo:
+       thisvesselhandle = seash_global_variables.vesselinfo[longname]['handle']
+-      thisvesselhandledict = fastnmclient.nmclient_get_handle_info(thisvesselhandle)
++      thisvesselhandledict = nmclient_get_handle_info(thisvesselhandle)
+       thisvesselhandledict['timeout'] = est_upload_time
+-      fastnmclient.nmclient_set_handle_info(thisvesselhandle,thisvesselhandledict)
++      nmclient_set_handle_info(thisvesselhandle,thisvesselhandledict)
+ 
+ 
+ 
+@@ -854,9 +844,9 @@
+   # resets each vessel's timeout to the original values before file upload
+   for longname in seash_global_variables.vesselinfo:
+     thisvesselhandle = seash_global_variables.vesselinfo[longname]['handle']
+-    thisvesselhandledict = fastnmclient.nmclient_get_handle_info(thisvesselhandle)
++    thisvesselhandledict = nmclient_get_handle_info(thisvesselhandle)
+     thisvesselhandledict['timeout'] = seash_global_variables.globalseashtimeout
+-    fastnmclient.nmclient_set_handle_info(thisvesselhandle,thisvesselhandledict)
++    nmclient_set_handle_info(thisvesselhandle,thisvesselhandledict)
+ 
+ 
+ def get_execution_platform(command, filename):
+@@ -1063,3 +1053,19 @@
+     else:
+       commands.append(command)
+   return commands
++
++
++def backup_files(files):
++  # Let's use the current time to indicate when the backup was
++  # performed.
++  current_time = time_gettime()
++
++  # We can't rely on querying the OS for the existence of the files, as
++  # someone could delete the files after we check and before we rename.
++  for fn in files:
++    backup_filename = fn + '.' + str(current_time) + '.old'
++    try:
++      os.rename(fn, backup_filename)
++    except OSError, e:
++      if not "cannot find the file" in str(e):
++        raise

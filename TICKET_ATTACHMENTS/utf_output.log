@@ -1,0 +1,1440 @@
+Testing module: repyv2api
+	Running: ut_repyv2api_listenforconn-args.py                 [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_openconnectionsanitychecksargs.py     [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_randombytesissane.py                  [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_getlasterrorworks.py                  [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_connectionrecvremoteclose.py          [ PASS ]
+	Running: ut_repyv2api_multipleopenconnections2.py           [ PASS ]
+	Running: ut_repyv2api_openconnectiontimeout.py              [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_tcpserver_wouldblock.py               [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_connectionrecvwouldblock.py           [ PASS ]
+	Running: ut_repyv2api_listenforconn-badport.py              [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_createlockblocks.py                   [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_openfileperformsresourceaccounting.py [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_connectionsendwilleventuallyblock.py  [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 154, in execute_namespace_until_completion
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/virtual_namespace.py", line 117, in evaluate
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/safe.py", line 586, in safe_run
+  "dylink.repy", line 537, in <module>
+  "dylink.repy", line 426, in dylink_dispatch
+  "dylink.repy", line 521, in evaluate
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/virtual_namespace.py", line 117, in evaluate
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/safe.py", line 586, in safe_run
+  "ut_repyv2api_connectionsendwilleventuallyblock", line 42, in <module>
+
+User traceback:
+  "dylink.repy", line 537, in <module>
+  "dylink.repy", line 426, in dylink_dispatch
+  "dylink.repy", line 521, in evaluate
+  "ut_repyv2api_connectionsendwilleventuallyblock", line 42, in <module>
+
+Exception (with type 'exceptions.AssertionError'): 
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_connectionsendlocalclose.py           [ PASS ]
+	Running: ut_repyv2api_exitallstopsanotherthread.py          [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_listfilesperformsresourceaccounting.py [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_listenforconn-cleanup.py              [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_unicodedisallowed.py                  [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+Standard out :
+..............................Produced..............................
+None
+..............................Expected..............................
+
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_fileclosemakesothercallsfail.py       [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_multipleopenconnections.py            [ PASS ]
+	Running: ut_repyv2api_initialusevaluesaresane.py            [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Resource 'fileread' utilization should be 0! Is: 12254.8121338 
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_virtualnamespace-eval.py              [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_connectionrecvlocalclose.py           [ PASS ]
+	Running: ut_repyv2api_filereadatsanitychecksargs.py         [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_virtualnamespace-init.py              [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_openconnectionfailswithoutlisten.py   [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_openfilesanitychecksargs.py           [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_listenforconn-addrbinding.py          [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_filereadatperformsresourceaccounting.py [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_virtualnamespacecontextsafety.py      [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_randombytesisresourcelimited.py       [ PASS ]
+	Running: ut_repyv2api_listfilesbasictest.py                 [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_listenforconn-resources.py            [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_sleepbasictest.py                     [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_sendmessagebasictest.py               [ PASS ]
+	Running: ut_repyv2api_createthreadissane.py                 [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_connectionsendremoteclose.py          [ PASS ]
+	Running: ut_repyv2api_getresourcedataisvalid.py             [ PASS ]
+	Running: ut_repyv2api_listencloselisten.py                  [ PASS ]
+	Running: ut_repyv2api_filewriteatbasictest.py               [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_listenclosesend.py                    [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 154, in execute_namespace_until_completion
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/virtual_namespace.py", line 117, in evaluate
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/safe.py", line 586, in safe_run
+  "dylink.repy", line 537, in <module>
+  "dylink.repy", line 426, in dylink_dispatch
+  "dylink.repy", line 521, in evaluate
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/virtual_namespace.py", line 117, in evaluate
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/safe.py", line 586, in safe_run
+  "ut_repyv2api_listenclosesend", line 48, in <module>
+
+User traceback:
+  "dylink.repy", line 537, in <module>
+  "dylink.repy", line 426, in dylink_dispatch
+  "dylink.repy", line 521, in evaluate
+  "ut_repyv2api_listenclosesend", line 48, in <module>
+
+Exception (with type 'exceptions.AssertionError'): 
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_connectionduplicateclose.py           [ PASS ]
+	Running: ut_repyv2api_openconnectionresourceforbidden.py    [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_listenforconn-dup.py                  [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_getthreadnamebasictest.py             [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_stoptimesaresane.py                   [ PASS ]
+	Running: ut_repyv2api_filereadatbasictest.py                [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_exitallstopscurrentthread.py          [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_sendmessage5ktest.py                  [ PASS ]
+	Running: ut_repyv2api_filecloseconcurrecy.py                [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_filereadatpastendoffile.py            [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_removefileissane.py                   [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_typetypeisblocked.py                  [ PASS ]
+	Running: ut_repyv2api_listencloselisten2.py                 [ PASS ]
+	Running: ut_repyv2api_createlocknonblocking.py              [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_openconnectionduplicatetuple.py       [ PASS ]
+	Running: ut_repyv2api_openconnectionalreadyalistening.py    [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_nannyupdatesresourceconsumption.py    [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_filewriteatperformsresourceaccounting.py [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_openconnectionwithbadlocalip.py       [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_openfileconsumesfilehandles.py        [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_filewriteatsanitychecksargs.py        [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_connectionserversendblocks.py         [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 154, in execute_namespace_until_completion
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/virtual_namespace.py", line 117, in evaluate
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/safe.py", line 586, in safe_run
+  "dylink.repy", line 537, in <module>
+  "dylink.repy", line 426, in dylink_dispatch
+  "dylink.repy", line 521, in evaluate
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/virtual_namespace.py", line 117, in evaluate
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/safe.py", line 586, in safe_run
+  "ut_repyv2api_connectionserversendblocks", line 42, in <module>
+
+User traceback:
+  "dylink.repy", line 537, in <module>
+  "dylink.repy", line 426, in dylink_dispatch
+  "dylink.repy", line 521, in evaluate
+  "ut_repyv2api_connectionserversendblocks", line 42, in <module>
+
+Exception (with type 'exceptions.AssertionError'): 
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_removefileperformsresourceaccounting.py [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_fileclosereleasesresource.py          [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_createthreadhasresourcecontrols.py    [ PASS ]
+	Running: ut_repyv2api_openfileduplicatefilefails.py         [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+
+Full debugging traceback:
+  "repy.py", line 399, in <module>
+  "repy.py", line 350, in main
+  "repy.py", line 305, in initialize_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+User traceback:
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/nanny.py", line 388, in start_resource_nanny
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 98, in read_resourcedict_from_file
+  "/home/sburnett/git/seattle/prepared_tests_repyv2/resourcemanipulation.py", line 181, in parse_resourcedict_from_string
+
+Exception (with class 'resourcemanipulation.ResourceParseError'): Line 'resource messport <messport>' has an invalid resource value '<messport>'
+---
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_connectionsendwillnotblock.py         [ PASS ]
+	Running: ut_repyv2api_sendmessagecheckstypes.py             [ PASS ]

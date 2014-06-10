@@ -1,0 +1,31 @@
+--- C:\Users\Leonard\Dropbox\Seattle\seattle\trunk\seash\seash_helper.py	Tue Jan 21 14:14:31 2014
++++ C:\Users\Leonard\Dropbox\Seattle\seattle\branches\repy_v2\seash\seash_helper.py	Mon Feb  3 15:05:01 2014
+@@ -162,11 +162,11 @@
+   return stringdata
+ 
+ 
+-nextidlock = getlock()
++nextidlock = createlock()
+ def atomically_get_nextid():
+ 
+   # mutex around getting an id
+-  nextidlock.acquire()
++  nextidlock.acquire(True)
+ 
+   myid = seash_global_variables.nextid
+   seash_global_variables.nextid = seash_global_variables.nextid + 1
+@@ -1049,3 +1049,14 @@
+     else:
+       commands.append(command)
+   return commands
++
++
++def delete_files(files):
++  # We can't rely on querying the OS for the existence of the files, as
++  # someone could delete the files after we check and before we delete.
++  for fn in files:
++    try:
++      os.remove(fn)
++    except OSError, e:
++      if not "cannot find the file" in str(e):
++        raise

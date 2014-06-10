@@ -1,0 +1,153 @@
+Index: branches/repy_v2/seattlelib/tcp_time.repy
+===================================================================
+--- branches/repy_v2/seattlelib/tcp_time.repy	(revision 6925)
++++ branches/repy_v2/seattlelib/tcp_time.repy	(working copy)
+@@ -44,27 +44,14 @@
+   <Returns>
+     An integer port
+   """
+-  port_found = False
+-  port_min = 63100
+-  port_max = 63180
+-  port_iter = port_min
+-  local_addr = getmyip()
++  resources = getresources()
++  ports = list(resources[0]['connport'] - resources[1]['connport'])
++  # getresources() returns ports as floats, but the repyV2 socket API expects
++  # port numbers to be ints.
++  return int(random_sample(ports, 1)[0])
+ 
+-  while not port_found:
+-    if port_iter > port_max:
+-      raise Exception("Network restriction error! Unable to find a free port!")
+-    try:
+-      tcp_test_socket = listenforconnection(local_addr, port_iter)
+-      tcp_test_socket.close()
+-      port_found = True
+-    except Exception, e:
+-      log(str(e) + "\n")
+-      port_iter += 1
+ 
+-  return port_iter
+ 
+-
+-
+ # This function contacts the server to get the time from a NTP
+ def tcp_time_updatetime(localport):
+   """
+Index: branches/repy_v2/seattlelib/centralizedadvertise_v2.repy
+===================================================================
+--- branches/repy_v2/seattlelib/centralizedadvertise_v2.repy	(revision 6925)
++++ branches/repy_v2/seattlelib/centralizedadvertise_v2.repy	(working copy)
+@@ -40,25 +40,13 @@
+   <Returns>
+     An integer port
+   """
+-  port_found = False
+-  port_min = 63100
+-  port_max = 63180
+-  port_iter = port_min
+-  local_addr = getmyip()
++  resources = getresources()
++  ports = list(resources[0]['connport'] - resources[1]['connport'])
++  # getresources() returns ports as floats, but the repyV2 socket API expects
++  # port numbers to be ints.
++  return int(random_sample(ports, 1)[0])
+ 
+-  while not port_found:
+-    if port_iter > port_max:
+-      raise Exception("Network restriction error! Unable to find a free port!")
+-    try:
+-      tcp_test_socket = listenforconnection(local_addr, port_iter)
+-      tcp_test_socket.close()
+-      port_found = True
+-    except Exception, e:
+-      port_iter += 1
+ 
+-  return port_iter
+-
+-
+ class CentralAdvertiseError(Exception):
+   """Error when advertising a value to the central advertise service."""
+ 
+Index: branches/repy_v2/seattlelib/centralizedadvertise.repy
+===================================================================
+--- branches/repy_v2/seattlelib/centralizedadvertise.repy	(revision 6925)
++++ branches/repy_v2/seattlelib/centralizedadvertise.repy	(working copy)
+@@ -13,6 +13,7 @@
+ # I'll use socket timeout to prevent hanging when it takes a long time...
+ include sockettimeout.repy
+ include serialize.repy
++include random.repy
+ 
+ 
+ # Hmm, perhaps I should make an initialization call instead of hardcoding this?
+@@ -40,26 +41,13 @@
+   <Returns>
+     An integer port
+   """
+-  port_found = False
+-  port_min = 63100
+-  port_max = 63180
+-  port_iter = port_min
+-  local_addr = getmyip()
++  resources = getresources()
++  ports = list(resources[0]['connport'] - resources[1]['connport'])
++  # getresources() returns ports as floats, but the repyV2 socket API expects
++  # port numbers to be ints.
++  return int(random_sample(ports, 1)[0])
+ 
+-  while not port_found:
+-    if port_iter > port_max:
+-      raise Exception("Network restriction error! Unable to find a free port!")
+-    try:
+-      tcp_test_socket = listenforconnection(local_addr, port_iter)
+-      tcp_test_socket.close()
+-      port_found = True
+-    except Exception, e:
+-      log(str(e) + "\n")
+-      port_iter += 1
+ 
+-  return port_iter
+-
+-
+ class CentralAdvertiseError(Exception):
+   """Error when advertising a value to the central advertise service."""
+ 
+Index: branches/repy_v2/seattlelib/udpcentralizedadvertise.repy
+===================================================================
+--- branches/repy_v2/seattlelib/udpcentralizedadvertise.repy	(revision 6925)
++++ branches/repy_v2/seattlelib/udpcentralizedadvertise.repy	(working copy)
+@@ -55,27 +55,15 @@
+   <Returns>
+     An integer port
+   """
+-  port_found = False
+-  port_min = 63100
+-  port_max = 63180
+-  port_iter = port_min
+-  local_addr = getmyip()
++  resources = getresources()
++  ports = list(resources[0]['messport'] - resources[1]['messport'])
++  # getresources() returns ports as floats, but the repyV2 socket API expects
++  # port numbers to be ints.
++  return int(random_sample(ports, 1)[0])
+ 
+-  while not port_found:
+-    if port_iter > port_max:
+-      raise Exception("Network restriction error! Unable to find a free port!")
+-    try:
+-      udp_test_socket = listenformessage(local_addr, port_iter)
+-      udp_test_socket.close()
+-      port_found = True
+-    except Exception, e:
+-      port_iter += 1
+ 
+-  return port_iter
+ 
+ 
+-
+-
+ # This helper function handles communications with the server
+ def _udpcentralizedadvertise_communicate(datastringtosend, timeout, queryid):
+ 

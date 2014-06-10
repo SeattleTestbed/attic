@@ -1,0 +1,12 @@
+--- ut_seattlelibtests_testxmlrpc_common.py.orig	2009-12-23 20:30:32.000000000 -0800
++++ ut_seattlelibtests_testxmlrpc_common.py	2009-12-23 20:27:44.000000000 -0800
+@@ -3659,7 +3659,8 @@
+   expected_output_faultString = "foo fault"
+   expected_output_faultCode = -1
+   actual_output = xmlrpc_common_response2python(test_input)
+-  assert(expected_output_faultString == actual_output.message)
++  assert(type(actual_output) == xmlrpc_common_Fault)
++  assert(expected_output_faultString == str(actual_output))
+   assert(expected_output_faultCode == actual_output.code)
+ 
+ 

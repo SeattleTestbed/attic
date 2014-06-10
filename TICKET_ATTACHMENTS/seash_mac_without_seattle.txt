@@ -1,0 +1,54 @@
+Tests-Mac-mini:seashtest leonwlaw$ python utf.py -m seash
+Testing module: seash
+Now starting subprocess: ut_seash_subprocess.py
+Generating key...
+Writing config file...
+Writing vessel dictionary...
+	Running: ut_seash_fileoperations.py                         [ FAIL ]
+--------------------------------------------------------------------------------
+Standard out :
+..............................Produced..............................
+Error: 'Node Manager error 'Error, File Not Found'' when attempting to download a file from 10.0.0.150:1224:v3.
+
+..............................Expected..............................
+Failure 'Node Manager error 'Error, File Not Found'' downloading from
+--------------------------------------------------------------------------------
+	Running: ut_seash_genkeys.py                                [ PASS ]
+	Running: ut_seash_help.py                                   [ PASS ]
+	Running: ut_seash_loadkeys.py                               [ PASS ]
+	Running: ut_seash_parseerror.py                             [ PASS ]
+	Running: ut_seash_parsing.py                                [ PASS ]
+	Running: ut_seash_savestate.py                              [ PASS ]
+	Running: ut_seash_setandshow.py                             [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Traceback (most recent call last):
+  File "ut_seash_setandshow.py", line 49, in <module>
+    seash.command_loop(command_list)
+  File "/Users/leonwlaw/seashtest/seash.py", line 168, in command_loop
+    seash_dictionary.command_dispatch(cmd_input, environment_dict)
+  File "/Users/leonwlaw/seashtest/seash_dictionary.py", line 1522, in command_dispatch
+    current_callback(input_dict.copy(), environment_dict)
+  File "/Users/leonwlaw/seashtest/command_callbacks.py", line 658, in show_coordinates
+    location_dict = geoip_record_by_addr(thisnodeIP)
+  File "/Users/leonwlaw/seashtest/geoip_client_repy.py", line 91, in geoip_record_by_addr
+    raise Exception("Unable to contact the geoip server.")
+Exception: Unable to contact the geoip server.
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_seash_splitjoin.py                              [ PASS ]
+	Running: ut_seash_targetmanipulation.py                     [ PASS ]
+Now stopping subprocess: ut_seash_subprocess.py
+Removing: v1
+Removing: v12
+Removing: v13
+Removing: v2
+Removing: v3
+Removing: v4
+Removing: v5
+Removing: v6
+Removing: v7
+Removing: v8

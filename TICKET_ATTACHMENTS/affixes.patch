@@ -1,0 +1,218 @@
+Index: common/api/nodemanager.py
+===================================================================
+--- common/api/nodemanager.py	(revision 7138)
++++ common/api/nodemanager.py	(working copy)
+@@ -46,17 +46,46 @@
+ 
+ from seattlegeni.common.util.decorators import log_function_call_without_first_argument
+ 
+-from seattle import repyhelper
+-from seattle import repyportability
++# Let's keep a copy of the built-ins, as repyportability destroys them
++import __builtin__
++builtins = __builtin__.__dict__.copy()
+ 
+-from fastnmclient import *
+-repyhelper.translate_and_import("listops.repy")
+-repyhelper.translate_and_import("time.repy")
++from repyportability import *
++add_dy_support(locals())
+ 
++###### code to enable affixes #########
++dy_import_module_symbols('affixstackinterface.repy')
+ 
++affix_obj = AffixStackInterface('(CoordinationAffix)')
+ 
++old_openconnection = openconnection
+ 
++def new_openconnection(destip, destport, localip, localport, timeout):
++  # we may get a unicode string.  repy's network API only accepts
++  # standard python strs.
++  destip = str(destip)
++  if destip.endswith('zenodotus.poly.edu'):
++    return affix_obj.openconnection(destip, destport, localip, localport, timeout)
++  else:
++    return old_openconnection(destip, destport, localip, localport, timeout)
+ 
++openconnection = new_openconnection
++
++# overwrite the openconnection that is provided to modules we import
++sys.modules['dylink_repy'].openconnection = openconnection
++
++####### end code to enable affixes ######
++
++dy_import_module_symbols('nmclient.repy')
++dy_import_module_symbols("listops.repy")
++dy_import_module_symbols("time.repy")
++
++# Restore built-ins so that django and other libraries don't complain
++for i in builtins:
++  __builtin__.__dict__[i] = builtins[i]
++
++
++
+ # The number of times to try to do a time update before init_nodemanager() will
+ # raise an exception.
+ MAX_TIME_UPDATE_ATTEMPTS = 5
+Index: common/util/nodestatus.py
+===================================================================
+--- common/util/nodestatus.py	(revision 7138)
++++ common/util/nodestatus.py	(working copy)
+@@ -38,7 +38,7 @@
+ from seattlegeni.common.api import maindb
+ from seattlegeni.common.api import nodemanager
+ 
+-from seattlegeni.common.util import log
++from seattlegeni.common.util import log as log_module
+ 
+ from seattlegeni.common.exceptions import *
+ 
+@@ -49,6 +49,9 @@
+ 
+ repyhelper.translate_and_import("rsa.repy")
+ 
++# Restore the log module as repy's log function is copied into our
++# namespace when we are importing rsa.repy
++log = log_module
+ 
+ 
+ 
+Index: deploymentscripts/start_seattlegeni_components.sh
+===================================================================
+--- deploymentscripts/start_seattlegeni_components.sh	(revision 7138)
++++ deploymentscripts/start_seattlegeni_components.sh	(working copy)
+@@ -66,7 +66,8 @@
+ sleep 1 # Wait a moment to make sure it has started (lockserver is used by other components).
+ 
+ echo "Starting backend."
+-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/backend/backend_daemon.py >>$LOG_DIR/backend.log 2>&1 &
++# We use dylink to enable affixes.  Dylink only imports from the current directory...
++cd $SEATTLECLEARINGHOUSE_DIR/backend/ && $SUDO_CMD python backend_daemon.py >>$LOG_DIR/backend.log 2>&1 &
+ sleep 1 # Wait a moment to make sure it has started (backend is used by other components).
+ 
+ echo "Gracefully restarting apache."
+@@ -73,7 +74,8 @@
+ apache2ctl graceful
+ 
+ echo "Starting check_active_db_nodes.py."
+-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/polling/check_active_db_nodes.py >>$LOG_DIR/check_active_db_nodes.log 2>&1 &
++# We use dylink to enable affixes.  Dylink only imports from the current directory...
++cd $SEATTLECLEARINGHOUSE_DIR/polling/ && $SUDO_CMD python check_active_db_nodes.py >>$LOG_DIR/check_active_db_nodes.log 2>&1 &
+ sleep 1 # We need to wait for each process to start before beginning the next
+         # because repyhelper has an issue with concurrent file access.
+ 
+@@ -81,22 +83,26 @@
+ 
+ TRANSITION_NAME=transition_donation_to_canonical
+ echo "Starting transition script $TRANSITION_NAME"
+-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/$TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
++# We use dylink to enable affixes.  Dylink only imports from the current directory...
++cd $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/ && $SUDO_CMD python $TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
+ sleep 1
+ 
+ TRANSITION_NAME=transition_canonical_to_twopercent
+ echo "Starting transition script $TRANSITION_NAME"
+-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/$TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
++# We use dylink to enable affixes.  Dylink only imports from the current directory...
++cd $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/ && $SUDO_CMD python $TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
+ sleep 1
+ 
+ TRANSITION_NAME=transition_twopercent_to_twopercent
+ echo "Starting transition script $TRANSITION_NAME"
+-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/$TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
++# We use dylink to enable affixes.  Dylink only imports from the current directory...
++cd $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/ && $SUDO_CMD python $TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
+ sleep 1
+ 
+ TRANSITION_NAME=transition_onepercentmanyevents_to_canonical
+ echo "Starting transition script $TRANSITION_NAME"
+-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/$TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
++# We use dylink to enable affixes.  Dylink only imports from the current directory...
++cd $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/ && $SUDO_CMD python $TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
+ 
+ echo "All components started. Kill this process (CTRL-C or 'kill $$') to stop all started components (except apache)."
+ 
+Index: node_state_transitions/node_transition_lib.py
+===================================================================
+--- node_state_transitions/node_transition_lib.py	(revision 7138)
++++ node_state_transitions/node_transition_lib.py	(working copy)
+@@ -47,8 +47,7 @@
+ import django.db
+ 
+ from seattle import runonce
+-from seattle import repyhelper
+-from seattle import repyportability
++from repyportability import *
+ 
+ import seattlegeni.common.util.log
+ 
+@@ -67,11 +66,12 @@
+ from seattlegeni.website import settings
+ 
+ # Import all the repy files.
+-repyhelper.translate_and_import('advertise.repy')
+-repyhelper.translate_and_import('rsa.repy')
+-repyhelper.translate_and_import('listops.repy')
+-repyhelper.translate_and_import('parallelize.repy')
+-repyhelper.translate_and_import('random.repy')
++add_dy_support(locals())
++dy_import_module_symbols('advertise.repy')
++dy_import_module_symbols('rsa.repy')
++dy_import_module_symbols('listops.repy')
++dy_import_module_symbols('parallelize.repy')
++dy_import_module_symbols('random.repy')
+ 
+ 
+ 
+Index: node_state_transitions/transition_canonical_to_twopercent.py
+===================================================================
+--- node_state_transitions/transition_canonical_to_twopercent.py	(revision 7138)
++++ node_state_transitions/transition_canonical_to_twopercent.py	(working copy)
+@@ -25,7 +25,7 @@
+ 
+ import os
+ 
+-from seattlegeni.node_state_transitions import node_transition_lib
++import node_transition_lib
+ 
+ 
+ 
+Index: node_state_transitions/transition_donation_to_canonical.py
+===================================================================
+--- node_state_transitions/transition_donation_to_canonical.py	(revision 7138)
++++ node_state_transitions/transition_donation_to_canonical.py	(working copy)
+@@ -25,7 +25,7 @@
+ """
+ 
+ 
+-from seattlegeni.node_state_transitions import node_transition_lib
++import node_transition_lib
+ 
+ 
+ 
+Index: node_state_transitions/transition_onepercentmanyevents_to_canonical.py
+===================================================================
+--- node_state_transitions/transition_onepercentmanyevents_to_canonical.py	(revision 7138)
++++ node_state_transitions/transition_onepercentmanyevents_to_canonical.py	(working copy)
+@@ -34,7 +34,7 @@
+ 
+ from seattlegeni.common.util.decorators import log_function_call
+ 
+-from seattlegeni.node_state_transitions import node_transition_lib
++import node_transition_lib
+ 
+ 
+ 
+Index: node_state_transitions/transition_twopercent_to_twopercent.py
+===================================================================
+--- node_state_transitions/transition_twopercent_to_twopercent.py	(revision 7138)
++++ node_state_transitions/transition_twopercent_to_twopercent.py	(working copy)
+@@ -23,7 +23,7 @@
+ """
+ 
+ 
+-from seattlegeni.node_state_transitions import node_transition_lib
++import node_transition_lib
+ 
+ 
+ def main():

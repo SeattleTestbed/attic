@@ -1,0 +1,22 @@
+def got_connection(destip, destport, socket, ch, mainch):
+  size = 0
+  print getruntime(), "got connection from",destip,destport
+  while True:
+    try:
+      data = socket.recv(1024)
+    except:
+      data = ''
+    size = size + len(data)
+    if not data:
+      print getruntime(), "connection closed after",size,"bytes"
+      return
+#    print getruntime(), "relaying: '"+data+"'"
+    try:
+      socket.send(data)
+    except:
+      pass
+    
+
+
+if callfunc=='initialize':
+  waitforconn(getmyip(), int(callargs[0]), got_connection)

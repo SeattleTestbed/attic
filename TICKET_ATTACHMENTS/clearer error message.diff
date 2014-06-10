@@ -1,0 +1,18 @@
+Index: portability/repyhelper.py
+===================================================================
+--- portability/repyhelper.py	(revision 5718)
++++ portability/repyhelper.py	(working copy)
+@@ -225,8 +225,11 @@
+       os.makedirs(os.path.dirname(generatedfilename))
+     fh = open(generatedfilename, "w")
+   except IOError, e:
+-    # this is likely a directory permissions error
+-    raise TranslationError("Cannot open file for translation '" + repyfilename + "': " + str(e))
++    # This is likely a directory permissions error
++    if e.errno == 13: # Permission denied
++       raise TranslationError("Unable to translate %s. Received a '%s' error when when trying to access or create %s.  This is likely because repy is unable to write in the current directory" % (repyfilename, e.strerror, e.filename))
++    else:
++      raise TranslationError("Cannot open file for translation '" + repyfilename + "': " + str(e))
+ 
+   # always close the file
+   try:

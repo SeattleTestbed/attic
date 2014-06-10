@@ -1,0 +1,148 @@
+Index: advertiseserver.py
+===================================================================
+--- advertiseserver.py	(revision 6756)
++++ advertiseserver.py	(working copy)
+@@ -19,6 +19,7 @@
+ import threading
+ import datetime
+ import serialize
++import Queue
+ 
+ # This is the dictionary which holds advertisement associations. Entries will 
+ # be of the form:
+@@ -57,8 +58,26 @@
+ query_times = [] # Store the query times here.
+ 
+ 
++# How many connections be queued in the listening TCP socket
++# 5 is usually the maximum, though this is system dependent.
++max_queued_connections = 5
+ 
++# How many threads should run in parallel to receive TCP queries
++num_tcp_handler_threads = max_queued_connections
+ 
++# Queries that have been retrieved, and are awaiting processing.
++# Items in this queue should be handled almost instantaneously by the
++# handler thread.
++# It should contain dictionaries containing the following keys:
++# 'request':
++#    The GET/PUT request string.
++# 'callback':
++#    This function is called when processing has finished.  It will be
++#    passed the result of the request.
++# Let's cap this queue's size, so that it doesn't grow *TOO* large.
++pending_tcp_queries = Queue.Queue(maxsize=num_tcp_handler_threads * 4)
++
++
+ def _purge_expired_items():
+   """
+   <Purpose>
+@@ -394,9 +413,26 @@
+   return
+ 
+ 
++def _tcp_query_handler_thread():
++  global query_times
+ 
++  while True:
++    try:
++      query = pending_tcp_queries.get(block=True)
++      response = _handle_request(query['request'])
+ 
++      # The client may have initiated the request in session format (session.repy)
++      # Return the response in the same format.
++      if query['session']:
++        response = str(len(response)) + "\n" + response
+ 
++      query['socket'].send(response)
++      query['socket'].close()
++      query_times.append(time.time() - query['start_time'])
++    except Exception, e:
++      _log_with_timestamp("Exception while handling request: " + str(e), 'error')
++
++
+ def _udp_callback():
+   # AF_INET - Internet socket
+   # SOCK_DGRAM - We're using UDP
+@@ -445,16 +481,41 @@
+   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+   sock.bind((local_ip, tcp_port))
+ 
+-  sock.listen(5)
++  sock.listen(max_queued_connections)
+ 
+   # Slow it down a bit to prevent messing up our debugging.
+   time.sleep(0.005)
+ 
++  # No reason to accept any more than what we can handle.
++  accepted_sockets = Queue.Queue(maxsize=num_tcp_handler_threads)
++
++  # Start multiple threads to accept connections in parallel.
++  for thread_no in xrange(num_tcp_handler_threads):
++    tcp_handler_thread = threading.Thread(
++      group=None, 
++      target=_tcp_handler, 
++      name="THREAD-TCP-HANDLER-"+str(thread_no), 
++      args=(accepted_sockets,), 
++      kwargs={})
++    tcp_handler_thread.setDaemon(True)
++    tcp_handler_thread.start()
++
+   _log_with_timestamp("TCP Callback started, now listening on: " + str(local_ip) + ":" + str(tcp_port) + "\n")
+ 
++  # Accept any TCP connections and insert them into the accepted sockets
++  # queue.  This allows multiple threads to be able to handle these
++  # sockets in parallel, so that a single slow connection won't affect
++  # faster connections, so long as all the threads aren't being blocked
++  # by slow connections simultaneously.
+   while True:
++    connection_socket, addr = sock.accept()
++    accepted_sockets.put(connection_socket, block=True)
++
++
++def _tcp_handler(accepted_sockets):
++  while True:
+     try:
+-      connection_socket, addr = sock.accept()
++      connection_socket = accepted_sockets.get(block=True)
+ 
+       start = time.time()
+ 
+@@ -468,16 +529,14 @@
+         data = data.split('\n')[1]
+         session_request = True
+ 
+-      formatted_response = _handle_request(data)
+-
+-      if session_request:
+-        formatted_response = str(len(formatted_response)) + "\n" + formatted_response
+-
+-      connection_socket.send(formatted_response)
+-
+-      connection_socket.close()
+-
+-      query_times.append(time.time() - start)
++      # Queue it up in the queue of pending queries, to be handled
++      # by the TCP request handler thread.
++      pending_tcp_queries.put({
++        'request': data,
++        'socket': connection_socket,
++        'session': session_request,
++        'start_time': start,
++      })
+     except socket.timeout, e:
+       _log_with_timestamp("[TIMEOUT ERROR] " + str(e) + "\n", output='error')
+     except Exception, e:
+@@ -531,6 +590,12 @@
+   udp_thread.start()
+   sys.stdout.write("[DONE]\n")
+ 
++  _log_with_timestamp("Starting TCP query handler . . ")
++  tcp_thread = threading.Thread(group=None, target=_tcp_query_handler_thread, name="THREAD-TCP", args = (), kwargs = {})
++  tcp_thread.setDaemon(True)
++  tcp_thread.start()
++  sys.stdout.write("[DONE]\n")
++
+   _log_with_timestamp("Starting TCP callback . . . . . . ")
+   tcp_thread = threading.Thread(group=None, target=_tcp_callback, name="THREAD-TCP", args = (), kwargs = {})
+   tcp_thread.setDaemon(True)

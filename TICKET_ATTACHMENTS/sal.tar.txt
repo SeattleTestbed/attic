@@ -1,0 +1,33 @@
+Grading Completed 
+grading in progress...
+test_client_timeout.repy: FAILURE
+test_file_not_found.repy: FAILURE
+test_invalid_request.repy: FAILURE
+test_multiple_connections.repy: SUCCESS
+test_multiple_requests_per_conn.repy: FAILURE
+test.repy: FAILURE
+test_valid_request.repy: FAILURE
+
+FULL DETAILS
+test_client_timeout.repy details: 
+The server processed client request after timeout period
+
+test_file_not_found.repy details: 
+test completed
+
+test_invalid_request.repy details: 
+test completed
+
+test_multiple_connections.repy details: 
+Testing 100 client transactions . . .
+Error:  a client transaction failed with the following error:  test completed
+0 connections passed with a total time of 0.00592994689941 seconds.
+
+test_multiple_requests_per_conn.repy details: 
+test completed
+
+test.repy details: 
+
+test_valid_request.repy details: 
+test completed
+

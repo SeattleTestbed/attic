@@ -1,0 +1,194 @@
+Index: seattlelib/tests/restrictions.udpadvertisetest
+===================================================================
+--- seattlelib/tests/restrictions.udpadvertisetest	(revision 0)
++++ seattlelib/tests/restrictions.udpadvertisetest	(working copy)
+@@ -0,0 +1,62 @@
++resource cpu .50
++resource memory 20000000   # 20 Million bytes
++resource diskused 100000000 # 100 MB
++resource events 10
++resource filewrite 10000
++resource fileread 10000
++resource filesopened 5
++resource insockets 5
++resource outsockets 5
++resource netsend 10000
++resource netrecv 10000
++resource loopsend 1000000
++resource looprecv 1000000
++resource lograte 30000
++resource random 100
++resource messport 63000
++resource messport 63001
++resource messport 63002
++resource messport 63003
++resource messport 63004
++resource messport 63005
++resource messport 63006
++resource messport 63007
++resource messport 63008
++resource messport 63009
++resource messport 63010
++
++
++call gethostbyname_ex allow
++call sendmess allow 	# the local port type
++call stopcomm allow 			# it doesn't make sense to restrict
++call recvmess allow 	# Allow listening on this port
++call openconn allow 	# allow connections to this port
++call waitforconn allow 	# allow listening on this port
++call socket.close allow 		# let's not restrict
++call socket.send allow 			# let's not restrict
++call socket.recv allow 			# let's not restrict
++# open and file.__init__ both have built in restrictions...
++call open allow 	# can write to junk_test.out
++call file.__init__ allow # can write to junk_test.out
++call file.close allow 			# shouldn't restrict
++call file.flush allow 			# they are free to use
++call file.next allow 			# free to use as well...
++call file.read allow 			# allow read
++call file.readline allow 		# shouldn't restrict
++call file.readlines allow 		# shouldn't restrict
++call file.seek allow 			# seek doesn't restrict
++call file.write allow 			# shouldn't restrict (open restricts)
++call file.writelines allow 		# shouldn't restrict (open restricts)
++call sleep allow			# harmless
++call settimer allow			# we can't really do anything smart
++call canceltimer allow			# should be okay
++call exitall allow			# should be harmless 
++
++call log.write allow
++call log.writelines allow
++call getmyip allow			# They can get the external IP address
++call listdir allow			# They can list the files they created
++call removefile allow			# They can remove the files they create
++call randomfloat allow			# can get random numbers
++call getruntime allow			# can get the elapsed time
++call getlock allow			# can get a mutex
+Index: seattlelib/tests/ut_seattlelibtests_testadvertise_udpbaddata.mix
+===================================================================
+--- seattlelib/tests/ut_seattlelibtests_testadvertise_udpbaddata.mix	(revision 0)
++++ seattlelib/tests/ut_seattlelibtests_testadvertise_udpbaddata.mix	(working copy)
+@@ -0,0 +1,52 @@
++"""
++<Purpose>
++  Ensures that UDP advertises do not cause the process to crash when it
++  receives data (especially malformed data) from a source that it does
++  not care about.
++
++"""
++#pragma repy restrictions.udpadvertisetest
++
++include udpcentralizedadvertise.repy
++
++
++mycontext['send_badly_formatted_advertise_data'] = True
++
++
++def send_badly_formatted_advertise_data():
++  """
++  <Purpose>
++    Continuously spams the port with bad UDP advertise data until
++    mycontext['send_badly_formatted_advertise_data'] gets set to True.
++
++  <Arguments>
++    None
++
++  <Side Effects>
++    Continuously sends a message not in the UDP advertise format to the
++    specified port acquired by _getusableport.
++
++  <Exceptions>
++    None
++
++  <Returns>
++    None
++
++  """
++  while mycontext['send_badly_formatted_advertise_data']:
++    # _getusableport() is a helper function found in
++    # udpcentralizedadvertise.repy.  This is how the UDP client gets
++    # its port number, so we should do the exact same thing.
++    sendmess(getmyip(), _getusableport(), 'some bad data')
++
++    # We don't want to generate so much traffic that the handler drops
++    # the proper server response
++    sleep(1)
++
++
++if callfunc == 'initialize':
++  settimer(0, send_badly_formatted_advertise_data, ())
++  udpcentralizedadvertise_announce('test', 'testing', 60)
++  udpcentralizedadvertise_lookup('test')
++  mycontext['send_badly_formatted_advertise_data'] = False
++
+Index: seattlelib/udpcentralizedadvertise.repy
+===================================================================
+--- seattlelib/udpcentralizedadvertise.repy	(revision 6800)
++++ seattlelib/udpcentralizedadvertise.repy	(working copy)
+@@ -19,6 +19,13 @@
+ udpservername = "udpadvertiseserver.poly.edu"
+ udpserverport = 10102
+ 
++# We want to cache the DNS lookups, so that we don't needlessly query
++# the servers if the DNS entries haven't changed.
++mycontext['udpserver_iplist'] = []
++mycontext['udpserver_ipexpiretime'] = 0
++# Updating once every hour seems fair.
++mycontext['udpserver_ipexpireduration'] = 60 * 60
++
+ # how long to wait for timeouts...
+ udpcentralizedservertimeouts = [1,2,4,8]
+ 
+@@ -29,6 +36,9 @@
+ # Need this for receiving over UDP. The Repy v1 API forces us to use 
+ # a callback, which requires this roundabout solution.
+ mycontext['advertise_response'] = []
++# This will contain any exceptions from the UDP recvmess callback, if
++# they arise...
++mycontext['advertise_errors'] = []
+ 
+ mycontext['udprequestport'] = 0
+ 
+@@ -90,6 +100,14 @@
+     udprequestport = _getusableport()
+     mycontext['udprequestport'] = udprequestport
+ 
++
++  # We can't assume that the DNS entries for the UDP advertise server
++  # will never change...
++  if getruntime() > mycontext['udpserver_ipexpiretime']:
++    (hostname, aliaslist, ipaddresslist) = gethostbyname_ex(udpservername)
++    mycontext['udpserver_iplist'] = ipaddresslist
++    mycontext['udpserver_ipexpiretime'] = getruntime() + mycontext['udpserver_ipexpireduration']
++
+   starttime = getruntime()
+ 
+   # Let's get ready to receive a response...
+@@ -103,6 +121,8 @@
+     sendmess(udpservername, udpserverport, datastringtosend, getmyip(), udprequestport)
+ 
+     while getruntime() < starttime + timeout:
++      if mycontext['advertise_errors']:
++        raise UDPCentralAdvertiseError("Advertising failed with error(s): " + str(mycontext['advertise_errors']))
+ 
+       for entry in mycontext['advertise_response']:
+         if entry[len(entry) - 1] == queryid:
+@@ -129,9 +149,14 @@
+ # This is our roundabout solution for a UDP callback.
+ # Could crash. Probably should if something bad happens.
+ def _listenformessage(remoteIP, remoteport, message, commhandle):
+-  mycontext['advertise_response'].append(serialize_deserializedata(message))
+-
+-  stopcomm(commhandle)
++  # Its possible that someone tried to pretend to be the advertise
++  # server... Ignore their response if that's the case.
++  if remoteIP in mycontext['udpserver_iplist']:
++    try:
++      mycontext['advertise_response'].append(serialize_deserializedata(message))
++      stopcomm(commhandle)
++    except Exception, e:
++      mycontext['advertise_errors'].append(e)
+   return
+ 
+ 

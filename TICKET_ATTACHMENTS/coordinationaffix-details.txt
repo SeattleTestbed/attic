@@ -1,0 +1,142 @@
+albert@raspberrypi ~/patching/seattle_repy $ python nmmain.py --foreground
+16.6827797223 Coord(<Coord 0x13cd5a8>)(<Legacy 0x13cda08>)(<RNAW 0x13d52d8>) announces zeno-name 192.168.1.69
+18.2432262899 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x13dd288>) announces zeno-name 192.168.1.69
+23.6240930082 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<RNAW 0x13dd580>) announces zeno-name 192.168.1.69
+29.3063768866 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x13e34b8>) announces zeno-name 192.168.1.69
+35.1141127589 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13dd300>)(<RNAW 0x13e3af8>) announces zeno-name 192.168.1.69
+40.5329880716 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x13df6c0>) announces zeno-name 192.168.1.69
+46.4138252547 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x1326ee0>) announces zeno-name 192.168.1.69
+51.9682506087 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x13e3968>) announces zeno-name 192.168.1.69
+57.8272473337 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x13d5418>) announces zeno-name 192.168.1.69
+63.4522461417 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x13267d8>) announces zeno-name 192.168.1.69
+69.05253315 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x13eaaa8>) announces zeno-name 192.168.1.69
+74.5079138569 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<RNAW 0x13e3990>) announces zeno-name 192.168.1.69
+74.6444108776 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x13266e8>) announces zeno-name 192.168.1.69
+80.3584770779 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x13df378>) announces zeno-name 192.168.1.69
+85.7809090141 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x13f9580>) announces zeno-name 192.168.1.69
+85.7748660568 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x13f9580>) announces zeno-name 192.168.1.69
+92.3200013736 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x1329350>) announces zeno-name 192.168.1.69
+97.3277661327 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x13296e8>) announces zeno-name 192.168.1.69
+97.388829184 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x1329738>) announces zeno-name 192.168.1.69
+103.79841115 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x132b8f0>) announces zeno-name 192.168.1.69
+108.903900137 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x132bee0>) announces zeno-name 192.168.1.69
+109.012890091 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x132bee0>) announces zeno-name 192.168.1.69
+116.086806078 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x132e148>) announces zeno-name 192.168.1.69
+120.605561362 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x132bd50>) announces zeno-name 192.168.1.69
+120.954086409 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x132e5a8>) announces zeno-name 192.168.1.69
+128.088458949 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x13335f8>) announces zeno-name 192.168.1.69
+130.146906271 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x1333940>)(<RNAW 0x13f7468>) announces zeno-name 192.168.1.69
+132.541636057 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x13e3f58>) announces zeno-name 192.168.1.69
+132.973714962 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x13364e0>) announces zeno-name 192.168.1.69
+140.190468264 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x1338170>) announces zeno-name 192.168.1.69
+142.129916477 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x1338990>) announces zeno-name 192.168.1.69
+144.68196846 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x1336260>) announces zeno-name 192.168.1.69
+145.459028426 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x133c9e0>) announces zeno-name 192.168.1.69
+153.069052239 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x1338210>) announces zeno-name 192.168.1.69
+154.991470347 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x1341a30>) announces zeno-name 192.168.1.69
+157.936648732 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x13f9bc0>) announces zeno-name 192.168.1.69
+158.047074681 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x13418a0>) announces zeno-name 192.168.1.69
+165.935594959 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x13413a0>) announces zeno-name 192.168.1.69
+167.631556969 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x13485f8>) announces zeno-name 192.168.1.69
+170.324121866 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x1348d00>) announces zeno-name 192.168.1.69
+170.353331719 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x1348cd8>) announces zeno-name 192.168.1.69
+178.220540495 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x134f328>) announces zeno-name 192.168.1.69
+179.94930749 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x134f5d0>) announces zeno-name 192.168.1.69
+182.917943373 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x134fd78>) announces zeno-name 192.168.1.69
+184.153380537 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x134ffd0>) announces zeno-name 192.168.1.69
+189.206033602 Coord(<Coord 0x1355a08>)(<NatDec 0x1355990>)(<NatPunch 0x1355af8>)(<RNAW 0x1355e18>) announces zeno-name 192.168.1.69
+190.764359579 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x135b2d8>) announces zeno-name 192.168.1.69
+192.028478489 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x132b2d8>) announces zeno-name 192.168.1.69
+197.096575556 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x134fb70>) announces zeno-name 192.168.1.69
+199.594711237 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x135adc8>) announces zeno-name 192.168.1.69
+202.69004014 Coord(<Coord 0x1355a08>)(<NatDec 0x1355990>)(<NatPunch 0x135e080>)(<NatPunch 0x1355af8>)(<RNAW 0x135eb98>) announces zeno-name 192.168.1.69
+204.2117663 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x135edc8>) announces zeno-name 192.168.1.69
+207.273971167 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x1362850>) announces zeno-name 192.168.1.69
+210.337554512 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x1362e40>) announces zeno-name 192.168.1.69
+213.501018458 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x2463b20>) announces zeno-name 192.168.1.69
+215.671509304 Coord(<Coord 0x1355a08>)(<NatDec 0x1355990>)(<NatPunch 0x24636c0>)(<NatPunch 0x135e080>)(<NatPunch 0x1355af8>)(<RNAW 0x2468350>) announces zeno-name 192.168.1.69
+217.307781105 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x246b030>) announces zeno-name 192.168.1.69
+222.641434841 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x246bbc0>) announces zeno-name 192.168.1.69
+223.416327782 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x132b8c8>) announces zeno-name 192.168.1.69
+227.157036867 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x246ecb0>) announces zeno-name 192.168.1.69
+229.550128937 Coord(<Coord 0x1355a08>)(<NatDec 0x1355990>)(<NatPunch 0x246bd78>)(<NatPunch 0x24636c0>)(<NatPunch 0x135e080>)(<NatPunch 0x1355af8>)(<RNAW 0x2463a30>) announces zeno-name 192.168.1.69
+229.813271847 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x246e3c8>) announces zeno-name 192.168.1.69
+236.324277268 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x2470e90>) announces zeno-name 192.168.1.69
+236.550820217 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x2470e90>) announces zeno-name 192.168.1.69
+241.555435772 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x24750f8>) announces zeno-name 192.168.1.69
+243.568889733 Coord(<Coord 0x1355a08>)(<NatDec 0x1355990>)(<NatPunch 0x24709e0>)(<NatPunch 0x246bd78>)(<NatPunch 0x24636c0>)(<NatPunch 0x135e080>)(<NatPunch 0x1355af8>)(<RNAW 0x246ead0>) announces zeno-name 192.168.1.69
+243.61749279 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x246ead0>) announces zeno-name 192.168.1.69
+250.155006609 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x1355940>) announces zeno-name 192.168.1.69
+250.410885592 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x1355940>) announces zeno-name 192.168.1.69
+256.773858404 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x247f2b0>) announces zeno-name 192.168.1.69
+257.198326445 Coord(<Coord 0x1355a08>)(<NatDec 0x1355990>)(<NatPunch 0x24709e0>)(<NatPunch 0x246bd78>)(<NatPunch 0x24636c0>)(<NatPunch 0x135e080>)(<NatPunch 0x1355af8>)(<RNAW 0x247f300>) announces zeno-name 192.168.1.69
+256.693683481 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x247f238>) announces zeno-name 192.168.1.69
+264.035810089 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x2480f08>) announces zeno-name 192.168.1.69
+264.738019095 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x24822b0>) announces zeno-name 192.168.1.69
+265.406910048 Coord(<Coord 0x247c828>)(<Legacy 0x247f508>)(<RNAW 0x13e3a30>) announces zeno-name 192.168.1.69
+265.73888813 Coord(<Coord 0x2482148>)(<NatDec 0x2482120>)(<NatPunch 0x2482170>)(<RNAW 0x24823a0>) announces zeno-name 192.168.1.69
+271.118358422 Coord(<Coord 0x1355a08>)(<NatDec 0x1355990>)(<NatPunch 0x24709e0>)(<NatPunch 0x246bd78>)(<NatPunch 0x24636c0>)(<NatPunch 0x135e080>)(<NatPunch 0x1355af8>)(<RNAW 0x248a878>) announces zeno-name 192.168.1.69
+271.15658741 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x248a8a0>) announces zeno-name 192.168.1.69
+272.197337675 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x248a940>) announces zeno-name 192.168.1.69
+277.64458458 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x2492260>) announces zeno-name 192.168.1.69
+279.333135491 Coord(<Coord 0x2482148>)(<NatDec 0x2482120>)(<NatPunch 0x2482170>)(<RNAW 0x24925d0>) announces zeno-name 192.168.1.69
+279.813940297 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x24927d8>) announces zeno-name 192.168.1.69
+280.28625537 Coord(<Coord 0x247c828>)(<Legacy 0x247f508>)(<RNAW 0x2492558>) announces zeno-name 192.168.1.69
+287.087246094 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x2497d00>) announces zeno-name 192.168.1.69
+288.280964346 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x2497f58>) announces zeno-name 192.168.1.69
+288.01315425 Coord(<Coord 0x1355a08>)(<NatDec 0x1355990>)(<NatPunch 0x24709e0>)(<NatPunch 0x246bd78>)(<NatPunch 0x24636c0>)(<NatPunch 0x135e080>)(<NatPunch 0x1355af8>)(<RNAW 0x2497eb8>) announces zeno-name 192.168.1.69
+292.368740263 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x2492238>) announces zeno-name 192.168.1.69
+294.62222601 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x249ec88>) announces zeno-name 192.168.1.69
+296.579583884 Coord(<Coord 0x2482148>)(<NatDec 0x2482120>)(<NatPunch 0x13266e8>)(<NatPunch 0x24926c0>)(<NatPunch 0x2482170>)(<RNAW 0x249ee40>) announces zeno-name 192.168.1.69
+298.990269795 Coord(<Coord 0x247c828>)(<Legacy 0x247f508>)(<RNAW 0x24a05f8>) announces zeno-name 192.168.1.69
+301.347784977 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x30bb418>) announces zeno-name 192.168.1.69
+302.794450903 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x30bb738>) announces zeno-name 192.168.1.69
+302.848902846 Coord(<Coord 0x1355a08>)(<NatDec 0x1355990>)(<NatPunch 0x24709e0>)(<NatPunch 0x246bd78>)(<NatPunch 0x24636c0>)(<NatPunch 0x135e080>)(<NatPunch 0x1355af8>)(<RNAW 0x30bbb98>) announces zeno-name 192.168.1.69
+310.384017983 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x30bd5a8>) announces zeno-name 192.168.1.69
+311.889874974 Coord(<Coord 0x2482148>)(<NatDec 0x2482120>)(<NatPunch 0x30bdc10>)(<NatPunch 0x13266e8>)(<NatPunch 0x24926c0>)(<NatPunch 0x2482170>)(<RNAW 0x30c1c10>) announces zeno-name 192.168.1.69
+314.21937994 Coord(<Coord 0x247c828>)(<Legacy 0x247f508>)(<RNAW 0x30c1b20>) announces zeno-name 192.168.1.69
+315.852278033 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x30c34b8>) announces zeno-name 192.168.1.69
+318.575456982 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x30c82b0>) announces zeno-name 192.168.1.69
+318.645455961 Coord(<Coord 0x1355a08>)(<NatDec 0x1355990>)(<NatPunch 0x24709e0>)(<NatPunch 0x246bd78>)(<NatPunch 0x24636c0>)(<NatPunch 0x135e080>)(<NatPunch 0x1355af8>)(<RNAW 0x30c8530>) announces zeno-name 192.168.1.69
+318.974007969 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x30bbe18>) announces zeno-name 192.168.1.69
+327.075928831 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x30ca210>) announces zeno-name 192.168.1.69
+329.514321623 Coord(<Coord 0x247c828>)(<Legacy 0x247f508>)(<RNAW 0x13333c8>) announces zeno-name 192.168.1.69
+329.69036561 Coord(<Coord 0x2482148>)(<NatDec 0x2482120>)(<NatPunch 0x30ca328>)(<NatPunch 0x30bdc10>)(<NatPunch 0x13266e8>)(<NatPunch 0x24926c0>)(<NatPunch 0x2482170>)(<RNAW 0x30cd8a0>) announces zeno-name 192.168.1.69
+332.308747521 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x30c1fd0>) announces zeno-name 192.168.1.69
+338.274956608 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x30d3558>) announces zeno-name 192.168.1.69
+338.018867636 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x30d3580>) announces zeno-name 192.168.1.69
+340.256886626 Coord(<Coord 0x1355a08>)(<NatDec 0x1355990>)(<NatPunch 0x24709e0>)(<NatPunch 0x246bd78>)(<NatPunch 0x24636c0>)(<NatPunch 0x135e080>)(<NatPunch 0x1355af8>)(<RNAW 0x30d3f08>) announces zeno-name 192.168.1.69
+344.76575388 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x30d6c88>) announces zeno-name 192.168.1.69
+344.883271828 Coord(<Coord 0x247c828>)(<Legacy 0x247f508>)(<RNAW 0x30d6dc8>) announces zeno-name 192.168.1.69
+346.752829914 Coord(<Coord 0x2482148>)(<NatDec 0x2482120>)(<NatPunch 0x30ca328>)(<NatPunch 0x30bdc10>)(<NatPunch 0x13266e8>)(<NatPunch 0x24926c0>)(<NatPunch 0x2482170>)(<RNAW 0x30d6328>) announces zeno-name 192.168.1.69
+348.90620389 Coord(<Coord 0x30d69e0>)(<NatDec 0x30d68f0>)(<NatPunch 0x30db4b8>)(<RNAW 0x30da148>) announces zeno-name 192.168.1.69
+349.440953875 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x30daaf8>) announces zeno-name 192.168.1.69
+355.350613623 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x30d3328>) announces zeno-name 192.168.1.69
+357.05201066 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x30e3760>) announces zeno-name 192.168.1.69
+359.613030758 Coord(<Coord 0x1355a08>)(<NatDec 0x1355990>)(<NatPunch 0x24709e0>)(<NatPunch 0x246bd78>)(<NatPunch 0x24636c0>)(<NatPunch 0x135e080>)(<NatPunch 0x1355af8>)(<RNAW 0x30e52d8>) announces zeno-name 192.168.1.69
+363.574963589 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x30e5fa8>) announces zeno-name 192.168.1.69
+363.507551451 Coord(<Coord 0x247c828>)(<Legacy 0x247f508>)(<RNAW 0x30e5dc8>) announces zeno-name 192.168.1.69
+363.571844597 Coord(<Coord 0x2482148>)(<NatDec 0x2482120>)(<NatPunch 0x30ca328>)(<NatPunch 0x30bdc10>)(<NatPunch 0x13266e8>)(<NatPunch 0x24926c0>)(<NatPunch 0x2482170>)(<RNAW 0x30e5f08>) announces zeno-name 192.168.1.69
+367.603764601 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x30e8fa8>) announces zeno-name 192.168.1.69
+369.221429634 Coord(<Coord 0x30d69e0>)(<NatDec 0x30d68f0>)(<NatPunch 0x30e58c8>)(<NatPunch 0x30db4b8>)(<RNAW 0x30ec940>) announces zeno-name 192.168.1.69
+375.495175953 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x30f4198>) announces zeno-name 192.168.1.69
+377.281549149 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x30d6418>) announces zeno-name 192.168.1.69
+380.472749949 Coord(<Coord 0x1355a08>)(<NatDec 0x1355990>)(<NatPunch 0x24709e0>)(<NatPunch 0x246bd78>)(<NatPunch 0x24636c0>)(<NatPunch 0x135e080>)(<NatPunch 0x1355af8>)(<RNAW 0x30f4d00>) announces zeno-name 192.168.1.69
+381.58563304 Coord(<Coord 0x2482148>)(<NatDec 0x2482120>)(<NatPunch 0x30ca328>)(<NatPunch 0x30bdc10>)(<NatPunch 0x13266e8>)(<NatPunch 0x24926c0>)(<NatPunch 0x2482170>)(<RNAW 0x30f4e68>) announces zeno-name 192.168.1.69
+382.731106043 Coord(<Coord 0x247c828>)(<Legacy 0x247f508>)(<RNAW 0x30f4f08>) announces zeno-name 192.168.1.69
+383.672000962 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x30f4620>) announces zeno-name 192.168.1.69
+386.38921793 Coord(<Coord 0x30d69e0>)(<NatDec 0x30d68f0>)(<NatPunch 0x30f4c88>)(<NatPunch 0x30e58c8>)(<NatPunch 0x30db4b8>)(<RNAW 0x30f5288>) announces zeno-name 192.168.1.69
+391.224891835 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x30f5e40>) announces zeno-name 192.168.1.69
+393.257332716 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x3cf7328>) announces zeno-name 192.168.1.69
+397.87848073 Coord(<Coord 0x2482148>)(<NatDec 0x2482120>)(<NatPunch 0x30ca328>)(<NatPunch 0x30bdc10>)(<NatPunch 0x13266e8>)(<NatPunch 0x24926c0>)(<NatPunch 0x2482170>)(<RNAW 0x30f4760>) announces zeno-name 192.168.1.69
+399.323672829 Coord(<Coord 0x1355a08>)(<NatDec 0x1355990>)(<NatPunch 0x24709e0>)(<NatPunch 0x246bd78>)(<NatPunch 0x24636c0>)(<NatPunch 0x135e080>)(<NatPunch 0x1355af8>)(<RNAW 0x3cf7cd8>) announces zeno-name 192.168.1.69
+400.477218685 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x3cf7530>) announces zeno-name 192.168.1.69
+405.50071167 Coord(<Coord 0x13dd260>)(<NatDec 0x13dd238>)(<RNAW 0x3cf8f58>) announces zeno-name 192.168.1.69
+404.955290547 Coord(<Coord 0x247c828>)(<Legacy 0x247f508>)(<RNAW 0x3cf8ee0>) announces zeno-name 192.168.1.69
+407.145262709 Coord(<Coord 0x30d69e0>)(<NatDec 0x30d68f0>)(<NatPunch 0x3cf79e0>)(<NatPunch 0x30f4c88>)(<NatPunch 0x30e58c8>)(<NatPunch 0x30db4b8>)(<RNAW 0x1333c88>) announces zeno-name 192.168.1.69
+413.885699845 Coord(<Coord 0x13335f8>)(<NatDec 0x13333a0>)(<NatPunch 0x134ed78>)(<NatPunch 0x13413f0>)(<NatPunch 0x13f9350>)(<NatPunch 0x13381e8>)(<NatPunch 0x1333940>)(<RNAW 0x3cfec38>) announces zeno-name 192.168.1.69
+414.10491272 Coord(<Coord 0x13dd788>)(<NatDec 0x13dd698>)(<NatPunch 0x13e38c8>)(<NatPunch 0x1326a30>)(<NatPunch 0x13d57d8>)(<NatPunch 0x13dd300>)(<RNAW 0x3cfec38>) announces zeno-name 192.168.1.69
+418.194457588 Coord(<Coord 0x13dd670>)(<NatDec 0x1326f58>)(<NatPunch 0x13f7c88>)(<NatPunch 0x1329648>)(<NatPunch 0x13f9378>)(<NatPunch 0x13f7350>)(<NatPunch 0x13e3990>)(<RNAW 0x3d01210>) announces zeno-name 192.168.1.69
+418.920992775 Coord(<Coord 0x2482148>)(<NatDec 0x2482120>)(<NatPunch 0x30ca328>)(<NatPunch 0x30bdc10>)(<NatPunch 0x13266e8>)(<NatPunch 0x24926c0>)(<NatPunch 0x2482170>)(<RNAW 0x3d018c8>) announces zeno-name 192.168.1.69
+Terminated
+albert@raspberrypi ~/patching/seattle_repy $ 

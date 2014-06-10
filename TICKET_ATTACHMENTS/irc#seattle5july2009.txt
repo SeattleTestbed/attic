@@ -1,0 +1,20 @@
+(03:05:17 PM) ericK: justincappos and zackrb1 here's what i had to do to get time.repy to work with repyhelper.    1. wrap the TIME_IMP_DICT inside of  mycontext , 2. include time_settime in TIME_IMP_DICT, for other layers to reference.     This makes it a little less pretty than before, but repyhelper doesn't faltten everything into one namespace like repypp.py does, so it was nessicary
+(03:05:58 PM) justincappos: perhaps we should modify repyhelper instead?
+(03:06:06 PM) justincappos: I think it would be an easy change
+(03:06:30 PM) justincappos: I imagine it inspects the items in moves into your namespace and only operates on functions
+(03:07:22 PM) ericK: Im not volunteering for that one.
+(03:08:19 PM) justincappos: hmm
+(03:08:30 PM) justincappos: so, let me understand something
+(03:09:00 PM) justincappos: what exactly do the setup lines of code in the other modules look like
+(03:09:53 PM) ericK: im not sure if you're right about repyhelper.. i think it does bring in globals, but it keeps seperate name spaces.  so the globals in time.repy won't be seen in ntp_time.repy
+(03:10:35 PM) ericK: mycontext['TIME_IMP_DICT']['ntp'] = {'update':ntp_time_updatetime}
+(03:10:45 PM) justincappos: so why is there a problem though?
+(03:11:41 PM) ericK: because when it was just TIME_IMP_DICT['ntp'] = {'update':ntp_time_updatetime}, TIME_IMP_DICT would be seen as undefined inside of ntp_time.repy
+(03:12:04 PM) ericK: because the TIME_IMP_DICT defined in time.repy is not shared with modules that it brings in
+(03:12:21 PM) justincappos: I see
+(03:12:29 PM) ericK: so i use mycontext as a shared space between everything
+(03:12:29 PM) justincappos: so the sharing would need to be both ways
+(03:13:27 PM) ericK: right.  for instance when ntp_time.repy calls time_settime it actually has to do :   mycontext['TIME_IMP_DICT']['time']['set']
+(03:14:31 PM) justincappos: I see
+(03:14:33 PM) ericK: of course this all works fine if you are just using repy.  The problem is only with importing it to python
+(03:14:53 PM) ericK: which is why i didnt notice it until today.

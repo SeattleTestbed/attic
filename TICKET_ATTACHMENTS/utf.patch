@@ -1,0 +1,56 @@
+Index: tests/ut_utftests_test_module_companion.py
+===================================================================
+--- tests/ut_utftests_test_module_companion.py	(revision 0)
++++ tests/ut_utftests_test_module_companion.py	(working copy)
+@@ -0,0 +1,25 @@
++"""
++Makes sure that module-level companion scripts do not get run twice.
++See: https://seattle.poly.edu/ticket/1384#comment:6
++"""
++
++import subprocess
++import sys
++
++process = subprocess.Popen([sys.executable, 'utf.py', '-m', 'stagedtestsetup'],
++                           stderr=subprocess.PIPE,
++                           stdout=subprocess.PIPE)
++
++(out, err) = process.communicate()
++
++# Newlines on windows are represented as \r\n, whereas on Unix-like
++# systems they are \n.  Let's make all newlines \n to reduce headaches.
++out = out.replace('\r\n', '\n')
++
++expected_output = open('utftests_module_companion_output.txt').read()
++if out != expected_output:
++  print "Output does not match expected output!"
++  print "Generated output:"
++  print out
++if err:
++  print err
+Index: tests/utftests_module_companion_output.txt
+===================================================================
+--- tests/utftests_module_companion_output.txt	(revision 0)
++++ tests/utftests_module_companion_output.txt	(working copy)
+@@ -0,0 +1,7 @@
++Testing module: stagedtestsetup
++Now starting subprocess: ut_stagedtestsetup_subprocess.py
++Now running setup script: ut_stagedtestsetup_setup.py
++	Running: ut_stagedtestsetup_setup.py                        [ PASS ]
++Now running shutdown script: ut_stagedtestsetup_shutdown.py
++	Running: ut_stagedtestsetup_shutdown.py                     [ PASS ]
++Now stopping subprocess: ut_stagedtestsetup_subprocess.py
+Index: utf.py
+===================================================================
+--- utf.py	(revision 7245)
++++ utf.py	(working copy)
+@@ -386,8 +386,7 @@
+ 
+   # test_file() is responsible for running companion tests.
+   # We shouldn't run them directly.
+-  valid_files = filter_files(glob.glob("*"))
+-  all_module_files = filter_files(valid_files, module=module_name)
++  all_module_files = filter_files(module_file_list, module=module_name)
+   all_test_files = all_module_files[:]
+   for mod_file in all_module_files:
+     if get_script_type(mod_file, all_module_files) is not None:

@@ -1,0 +1,34 @@
+Index: parallelize.repy
+===================================================================
+--- parallelize.repy	(revision 6996)
++++ parallelize.repy	(working copy)
+@@ -251,7 +251,7 @@
+     try:
+       
+       def function_to_run():
+-        parallelize_execute_function(parallelizehandle, workercount)
++        parallelize_execute_function(parallelizehandle)
+         
+       createthread(function_to_run)
+       
+@@ -268,7 +268,7 @@
+     
+ 
+ 
+-def parallelize_execute_function(handle, myid):
++def parallelize_execute_function(handle):
+   # This is internal only.   It's used to execute the user function...
+ 
+   # No matter what, an exception in me should not propagate up!   Otherwise,
+@@ -313,9 +313,9 @@
+     log('Internal Error: Exception in parallelize_execute_function', e, '\n')
+ 
+   finally:
+-    # remove my entry from the list of running worker threads...
++    # remove one entry from the list of running worker threads...
+     try:
+-      parallelize_info_dict[handle]['runninglist'].remove(myid)
++      parallelize_info_dict[handle]['runninglist'].pop()
+     except (ValueError, KeyError):
+       pass
+     

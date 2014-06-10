@@ -1,0 +1,23 @@
+# Repy V2 Security Layer Sample - Function - Code
+# slacker_sleep.repy
+
+# Defining constants for later use
+TYPE="type"
+ARGS="args"
+RETURN="return"
+EXCP="exceptions"
+TARGET="target"
+FUNC="func"
+OBJC="objc"
+
+# Defining our function
+def slacker_sleep(seconds):
+  if(seconds < 2.0):
+    seconds = 2.0
+  sleep(seconds)
+
+# Mapping our function to sleep() 
+CHILD_CONTEXT_DEF["sleep"] = {TYPE:FUNC,ARGS:((int,long,float),),EXCP:None,RETURN:None,TARGET:slacker_sleep}
+
+# Dispatch
+secure_dispatch_module()

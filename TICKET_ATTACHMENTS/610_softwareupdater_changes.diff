@@ -1,0 +1,44 @@
+Index: softwareupdater/test/test_updater_local.py
+===================================================================
+--- softwareupdater/test/test_updater_local.py	(revision 3189)
++++ softwareupdater/test/test_updater_local.py	(working copy)
+@@ -302,7 +302,7 @@
+     # The 'u' shows the username rather than user id running the process.
+     pscommand = 'ps auxww'
+  
+-    updateprocess = subprocess.Popen(['python', 'softwareupdater.py'])
++    updateprocess = subprocess.Popen(['python', 'softwareupdater.py', '-f'])
+     if not no_ps:
+       # Only do the ps check if ps is available
+       ps = subprocess.Popen(pscommand + ' | grep "softwareupdater.py" | grep -v grep', shell=True, stdout=subprocess.PIPE)
+Index: softwareupdater/softwareupdater.py
+===================================================================
+--- softwareupdater/softwareupdater.py	(revision 3189)
++++ softwareupdater/softwareupdater.py	(working copy)
+@@ -20,6 +20,8 @@
+ import sys
+ import os
+ 
++import daemon
++
+ import repyhelper
+ 
+ # I need to make a cachedir for repyhelper...
+@@ -781,6 +783,17 @@
+     
+ 
+ if __name__ == '__main__':
++  FOREGROUND = False
++
++  for arg in sys.argv[1:]:
++    if arg == '-f':
++      # Take a commandline option to stay in the foreground.
++      FOREGROUND = True
++
++  if not FOREGROUND:
++    # Background ourself.
++    daemon.daemonize()
++
+   # Initialize the service logger.
+   safe_servicelogger_init()
+   

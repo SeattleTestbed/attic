@@ -1,0 +1,53 @@
+diff --from-file . ./command_callbacks.py /Users/albert/trunk/seash/command_callbacks.py
+2783,2804d2782
+< # set maxthreads threads     -- Sets the maximum amount of threads Seash can use when handling multiple vessels
+< def set_maxthreads_arg(input_dict, environment_dict):
+< 
+<   try:
+<     command_key = input_dict.keys()[0]
+< 
+<     # Iterates through the dictionary to retrieve the user's argument
+<     while input_dict[command_key]['name'] is not 'args':
+<       input_dict = input_dict[command_key]['children']
+<       command_key = input_dict.keys()[0]
+< 
+<     seash_global_variables.globalmaxthreads = int(command_key)
+<   except ValueError:
+<     raise seash_exceptions.UserError("The thread value must be a number")
+< 
+< 
+< 
+< def show_maxthreads(input_dict, environment_dict):
+<   print seash_global_variables.globalmaxthreads
+< 
+< 
+< 
+diff --from-file . ./seash_dictionary.py /Users/albert/trunk/seash/seash_dictionary.py
+490d489
+<       'maxthreads':{'name':'maxthreads', 'callback':command_callbacks.show_maxthreads, 'help_text':"", 'children':{}},
+632,635d630
+< set maxthreads count -- Sets the maximum amount of threads that Seash can be
+<                         handling at once when working with multiple vessels in
+<                         parallel. The number of working threads will never
+<                         exceed the number of vessels in the group.
+788,791d782
+<       'maxthreads':{'name':'maxthreads', 'callback':None, 'help_text':"""
+< """, 'children':{
+<           '[ARGUMENT]':{'name':'args', 'callback':command_callbacks.set_maxthreads_arg, 'help_text':'', 'children':{}},
+<       }},
+diff --from-file . ./seash_global_variables.py /Users/albert/trunk/seash/seash_global_variables.py
+29,33d28
+< 
+< # this is the maximum amount of threads Seash can have running at the same time
+< # when handling group vessel activities
+< # default is 10 threads
+< globalmaxthreads = 10
+diff --from-file . ./seash_helper.py /Users/albert/trunk/seash/seash_helper.py
+204a205,207
+> MAX_CONTACT_WORKER_THREAD_COUNT = 10
+> 
+> 
+211c214
+<   phandle = parallelize_initfunction(targetlist, func, seash_global_variables.globalmaxthreads, *args)
+---
+>   phandle = parallelize_initfunction(targetlist, func, MAX_CONTACT_WORKER_THREAD_COUNT, *args)

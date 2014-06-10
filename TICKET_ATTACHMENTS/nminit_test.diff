@@ -1,0 +1,40 @@
+--- D:\Dropbox\Seattle\seattle\trunk\seash\tests\nminit_test.mix	Mon Sep 16 22:43:15 2013
++++ D:\Dropbox\Seattle\seattle\branches\repy_v2\seash\tests\nminit_test.py	Mon Feb  3 15:49:41 2014
+@@ -15,8 +15,11 @@
+ 
+ """
+ 
++from repyportability import *
++add_dy_support(locals())
++
+ # need to generate a public key
+-include rsa.repy
++dy_import_module_symbols('rsa')
+ 
+ # need randomfloat...
+ import random
+@@ -46,8 +49,22 @@
+   publickey, privatekey = rsa_gen_pubpriv_keys(keylen)
+   publickeys.append(publickey)
+   # The unit tests need access to these keys
+-  rsa_publickey_to_file(publickey, 'guest' + str(i) + '.publickey')
+-  rsa_privatekey_to_file(privatekey, 'guest' + str(i) + '.privatekey')
++  publickey_file = 'guest' + str(i) + '.publickey'
++  privatekey_file = 'guest' + str(i) + '.privatekey'
++
++  # If the existing file is longer than the generated public key as a
++  # string, then the resulting generated file will be invalid.
++  for filename in (publickey_file, privatekey_file):
++    # We shouldn't rely on querying if the files exist before
++    # deleting, as someone can get to the file after we query
++    # and before we delete.
++    try:
++      removefile(filename)
++    except FileNotFoundError:
++      pass
++
++  rsa_publickey_to_file(publickey, publickey_file)
++  rsa_privatekey_to_file(privatekey, privatekey_file)
+ 
+ ( guest0pubkey,
+   guest1pubkey,

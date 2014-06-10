@@ -1,0 +1,4 @@
+New installation, beginning benchmark.
+Total resources measured by the script for Linux OS: {'diskused': 5400113152L, 'fileread': 93359, 'filewrite': 93359, 'loopsend': None, 'lograte': None, 'netrecv': None, 'random': 74329, 'insockets': 341, 'filesopened': 341, 'looprecv': None, 'cpu': 'cpu cores data not found', 'memory': 448736000L, 'netsend': None, 'outsockets': 341, 'events': None}
+Benchmark failed for cpu resource: cpu cores data not found
+Installation terminated by user after one or more failed benchmarks.

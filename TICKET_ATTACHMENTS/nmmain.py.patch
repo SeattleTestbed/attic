@@ -1,0 +1,26 @@
+Index: nmmain.py
+===================================================================
+--- nmmain.py	(revision 6835)
++++ nmmain.py	(working copy)
+@@ -39,6 +39,12 @@
+ import daemon
+ import optparse
+ 
++# runonce relies on tempfile, whose components utilize the abc library.
++# Since we clobber built-ins in repyV2, we have to be sure that any
++# python libraries that require the built-ins intact be initialized
++# before we import repy code.  See #1273 for more information.
++import runonce
++
+ import repyhelper #used to bring in NAT Layer
+ 
+ # needed to log OS type / Python version
+@@ -84,8 +90,6 @@
+ 
+ import persist
+ 
+-import runonce
+-
+ # for getruntime...
+ import nonportable
+ 

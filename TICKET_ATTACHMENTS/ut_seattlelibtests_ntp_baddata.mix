@@ -1,0 +1,46 @@
+"""
+<Purpose>
+  Ensures that NTP updates do not cause the process to crash when it
+  receives data (especially malformed data) from a source that it does
+  not care about.
+
+"""
+#pragma repy restrictions.ntptest
+
+include ntp_time.repy
+
+
+mycontext['TIME_PORT'] = 12345
+mycontext['send_badly_formatted_ntp_data'] = True
+
+
+def send_badly_formatted_ntp_data():
+  """
+  <Purpose>
+    Continuously spams the port with bad ntptime data until
+    mycontext['send_badly_formatted_ntp_data'] gets set to True.
+
+  <Arguments>
+    None
+
+  <Side Effects>
+    Continuously sends a message not in the NTP format to the specified
+    port in mycontext['TIME_PORT'].  If the port is not open, nothing
+    bad should happen since UDP is connectionless.
+
+  <Exceptions>
+    None
+
+  <Returns>
+    None
+
+  """
+  while mycontext['send_badly_formatted_ntp_data']:
+    sendmess(getmyip(), mycontext['TIME_PORT'], 'some non-ntp data')
+
+
+if callfunc == 'initialize':
+  settimer(0, send_badly_formatted_ntp_data, ())
+  time_updatetime(mycontext['TIME_PORT'])
+  mycontext['send_badly_formatted_ntp_data'] = False
+

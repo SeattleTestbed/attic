@@ -1,0 +1,174 @@
+--- D:\Dropbox\Seattle\seattle\trunk\seash\command_callbacks.py	Fri Dec 20 14:43:32 2013
++++ D:\Dropbox\Seattle\seattle\branches\repy_v2\seash\command_callbacks.py	Fri Feb 14 20:44:26 2014
+@@ -62,25 +62,38 @@
+ 
+ import os.path
+ import sys
+-import repyhelper
+-
+-#repyhelper.translate_and_import("nmclient.repy")
+-import fastnmclient
+-
+-repyhelper.translate_and_import("time.repy")
+-
+-repyhelper.translate_and_import("rsa.repy")
+-
+-repyhelper.translate_and_import("listops.repy")
+-
+-repyhelper.translate_and_import("parallelize.repy")
+-
+-repyhelper.translate_and_import("domainnameinfo.repy")
+-
+-repyhelper.translate_and_import("advertise.repy")   #  used to do OpenDHT lookups
+-
+-repyhelper.translate_and_import("serialize.repy") # used for loadstate and savestate
+-
++
++from repyportability import *
++add_dy_support(locals())
++
++# dy_import_module_symbols("nmclient.repy")
++
++# This is a temporary workaround for the problem where nmclient is being
++# initialized multiple times by dylink.repy when it is imported multiple
++# times.  The handles returned by the nmclient imported here will be
++# completely different from the set of handles that the nmclient
++# imported in seash_helper knows about.  This needs to be removed once
++# dylink is properly fixed. See #1319 for more information.
++
++nmclient_createhandle = seash_helper.nmclient_createhandle
++nmclient_listaccessiblevessels = seash_helper.nmclient_listaccessiblevessels
++nmclient_duplicatehandle = seash_helper.nmclient_duplicatehandle
++nmclient_get_handle_info = seash_helper.nmclient_get_handle_info
++nmclient_set_handle_info = seash_helper.nmclient_set_handle_info
++
++dy_import_module_symbols("time.repy")
++
++dy_import_module_symbols("rsa.repy")
++
++dy_import_module_symbols("listops.repy")
++
++dy_import_module_symbols("parallelize.repy")
++
++dy_import_module_symbols("domainnameinfo.repy")
++
++dy_import_module_symbols("advertise.repy")   #  used to do OpenDHT lookups
++
++dy_import_module_symbols("serialize.repy") # used for loadstate and savestate
+ 
+ # The versions of Seattle that we officially support.
+ SUPPORTED_PROG_PLATFORMS = ["repyV1", "repyV2"]
+@@ -961,8 +974,8 @@
+ 
+ 
+   # get information about the node's vessels
+-  thishandle = fastnmclient.nmclient_createhandle(environment_dict['host'], environment_dict['port'], privatekey = seash_global_variables.keys[environment_dict['currentkeyname']]['privatekey'], publickey = seash_global_variables.keys[environment_dict['currentkeyname']]['publickey'], vesselid = vesselname, timeout = seash_global_variables.globalseashtimeout)
+-  ownervessels, uservessels = fastnmclient.nmclient_listaccessiblevessels(thishandle,seash_global_variables.keys[environment_dict['currentkeyname']]['publickey'])
++  thishandle = nmclient_createhandle(environment_dict['host'], environment_dict['port'], privatekey = seash_global_variables.keys[environment_dict['currentkeyname']]['privatekey'], publickey = seash_global_variables.keys[environment_dict['currentkeyname']]['publickey'], vesselid = vesselname, timeout = seash_global_variables.globalseashtimeout)
++  ownervessels, uservessels = nmclient_listaccessiblevessels(thishandle,seash_global_variables.keys[environment_dict['currentkeyname']]['publickey'])
+ 
+   newidlist = []
+   # determine if we control the specified vessel...
+@@ -986,10 +999,10 @@
+         # set the vesselname
+         # NOTE: we leak handles (no cleanup of thishandle).   
+         # I think we don't care...
+-        newhandle = fastnmclient.nmclient_duplicatehandle(thishandle)
+-        environment_dict['handleinfo'] = fastnmclient.nmclient_get_handle_info(newhandle)
++        newhandle = nmclient_duplicatehandle(thishandle)
++        environment_dict['handleinfo'] = nmclient_get_handle_info(newhandle)
+         environment_dict['handleinfo']['vesselname'] = vesselname
+-        fastnmclient.nmclient_set_handle_info(newhandle, environment_dict['handleinfo'])
++        nmclient_set_handle_info(newhandle, environment_dict['handleinfo'])
+ 
+         id = seash_helper.add_vessel(longname,environment_dict['currentkeyname'],newhandle)
+         newidlist.append('%'+str(id)+"("+longname+")")
+@@ -1003,10 +1016,10 @@
+         # set the vesselname
+         # NOTE: we leak handles (no cleanup of thishandle).   
+         # I think we don't care...
+-        newhandle = fastnmclient.nmclient_duplicatehandle(thishandle)
+-        environment_dict['handleinfo'] = fastnmclient.nmclient_get_handle_info(newhandle)
++        newhandle = nmclient_duplicatehandle(thishandle)
++        environment_dict['handleinfo'] = nmclient_get_handle_info(newhandle)
+         environment_dict['handleinfo']['vesselname'] = vesselname
+-        fastnmclient.nmclient_set_handle_info(newhandle, environment_dict['handleinfo'])
++        nmclient_set_handle_info(newhandle, environment_dict['handleinfo'])
+ 
+         id = seash_helper.add_vessel(longname,environment_dict['currentkeyname'],newhandle)
+         newidlist.append('%'+str(id)+"("+longname+")")
+@@ -1146,6 +1159,14 @@
+   pubkeyfn = fileandpath+'.publickey'
+   privkeyfn = fileandpath+'.privatekey'
+ 
++  # RepyV2's API does not allow us to truncate a file in-place.
++  # Therefore, we need to make sure we're creating a new file, otherwise
++  # the contents of the public/private key files that we create will be
++  # corrupt.
++
++  # Let's retain any any existing keys of the same name, just in case
++  # they are important.
++  seash_helper.backup_files([pubkeyfn, privkeyfn])
+ 
+   # do the actual generation (will take a while)
+   newkeys = rsa_gen_pubpriv_keys(keylength)
+@@ -1187,6 +1208,15 @@
+   # do the actual generation (will take a while)
+   newkeys = rsa_gen_pubpriv_keys(keylength)
+ 
++  # RepyV2's API does not allow us to truncate a file in-place.
++  # Therefore, we need to make sure we're creating a new file, otherwise
++  # the contents of the public/private key files that we create will be
++  # corrupt.
++
++  # Let's retain any any existing keys of the same name, just in case
++  # they are important.
++  seash_helper.backup_files([pubkeyfn, privkeyfn])
++
+   rsa_privatekey_to_file(newkeys[1],privkeyfn)
+   rsa_publickey_to_file(newkeys[0],pubkeyfn)
+   seash_global_variables.keys[keyname] = {'publickey':newkeys[0], 'privatekey':newkeys[1]}
+@@ -1229,6 +1259,15 @@
+   # do the actual generation (will take a while)
+   newkeys = rsa_gen_pubpriv_keys(keylength)
+ 
++  # RepyV2's API does not allow us to truncate a file in-place.
++  # Therefore, we need to make sure we're creating a new file, otherwise
++  # the contents of the public/private key files that we create will be
++  # corrupt.
++
++  # Let's retain any any existing keys of the same name, just in case
++  # they are important.
++  seash_helper.backup_files([pubkeyfn, privkeyfn])
++
+   rsa_privatekey_to_file(newkeys[1],privkeyfn)
+   rsa_publickey_to_file(newkeys[0],pubkeyfn)
+   seash_global_variables.keys[keyname] = {'publickey':newkeys[0], 'privatekey':newkeys[1]}
+@@ -1262,6 +1301,15 @@
+ 
+   # do the actual generation (will take a while)
+   newkeys = rsa_gen_pubpriv_keys(keylength)
++
++  # RepyV2's API does not allow us to truncate a file in-place.
++  # Therefore, we need to make sure we're creating a new file, otherwise
++  # the contents of the public/private key files that we create will be
++  # corrupt.
++
++  # Let's retain any any existing keys of the same name, just in case
++  # they are important.
++  seash_helper.backup_files([pubkeyfn, privkeyfn])
+ 
+   rsa_privatekey_to_file(newkeys[1],privkeyfn)
+   rsa_publickey_to_file(newkeys[0],pubkeyfn)
+@@ -2727,9 +2775,9 @@
+   # let's reset the timeout for existing handles...
+   for longname in seash_global_variables.vesselinfo:
+     thisvesselhandle = seash_global_variables.vesselinfo[longname]['handle']
+-    thisvesselhandledict = fastnmclient.nmclient_get_handle_info(thisvesselhandle)
++    thisvesselhandledict = nmclient_get_handle_info(thisvesselhandle)
+     thisvesselhandledict['timeout'] = seash_global_variables.globalseashtimeout
+-    fastnmclient.nmclient_set_handle_info(thisvesselhandle,thisvesselhandledict)
++    nmclient_set_handle_info(thisvesselhandle,thisvesselhandledict)
+ 
+ 
+           

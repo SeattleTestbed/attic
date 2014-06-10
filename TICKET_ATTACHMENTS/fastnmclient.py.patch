@@ -1,0 +1,50 @@
+--- C:\Users\Leonard\Dropbox\Seattle\seattle\trunk\seattlelib\fastnmclient.py	Mon Sep 16 22:43:58 2013
++++ C:\Users\Leonard\Dropbox\Seattle\seattle\branches\repy_v2\seattlelib\fastnmclient.py	Wed Jan 29 00:39:44 2014
+@@ -22,11 +22,6 @@
+ repyhelper.translate_and_import("session.repy")
+ 
+ 
+-
+-#allow nat layer
+-repyhelper.translate_and_import("NATLayer_rpc.repy")
+-
+-
+ # makes connections time out
+ repyhelper.translate_and_import("sockettimeout.repy")
+ 
+@@ -73,7 +68,7 @@
+ 
+ # BUG: How do I do this and have it be portable across repy <-> python?
+ # needed when assigning new handles to prevent race conditions...
+-nmclient_handledictlock = getlock()
++nmclient_handledictlock = createlock()
+ 
+ 
+ 
+@@ -97,7 +92,7 @@
+   else:
+     # do the normal openconn
+     try:
+-      thisconnobject = timeout_openconn(nmclient_handledict[nmhandle]['IP'], nmclient_handledict[nmhandle]['port'],timeout=nmclient_handledict[nmhandle]['timeout']) 
++      thisconnobject = timeout_openconnection(nmclient_handledict[nmhandle]['IP'], nmclient_handledict[nmhandle]['port'],timeout=nmclient_handledict[nmhandle]['timeout']) 
+     except Exception, e:
+       raise NMClientException, str(e)
+ 
+@@ -188,7 +183,7 @@
+   else:  
+ 
+     try:
+-      thisconnobject = timeout_openconn(nmclient_handledict[nmhandle]['IP'], nmclient_handledict[nmhandle]['port'], timeout=nmclient_handledict[nmhandle]['timeout'])
++      thisconnobject = timeout_openconnection(nmclient_handledict[nmhandle]['IP'], nmclient_handledict[nmhandle]['port'], timeout=nmclient_handledict[nmhandle]['timeout'])
+     except Exception, e:
+       raise NMClientException, str(e)
+ 
+@@ -216,7 +211,7 @@
+ def nmclient_safelygethandle():
+   # I lock to prevent a race when adding handles to the dictionary.   I don't
+   # need a lock when removing because a race is benign (it prevents reuse)
+-  nmclient_handledictlock.acquire()
++  nmclient_handledictlock.acquire(True)
+   try:
+     potentialhandle = randomfloat()
+     while potentialhandle in nmclient_handledict:

@@ -1,0 +1,133 @@
+diff -C 5 /home/albert/SAMS-VERSION/seattle_repy/coordinationaffix.repy ./coordinationaffix.repy
+*** /home/albert/SAMS-VERSION/seattle_repy/coordinationaffix.repy	2014-03-12 14:32:34.000000000 +0000
+--- ./coordinationaffix.repy	2014-03-17 16:11:39.745508201 +0000
+***************
+*** 141,154 ****
+      # to establish, if user is using it for localhost.
+      for i in range(5):
+        try:
+          tcpserversocket = self.peek().listenforconnection(localhost, localport)
+          break
+!       except AddressBindingError:
+!         sleep(0.1)
+      else:
+!       raise AddressBindingError("Unable to bind with the localhost '%s' provided." % localhost)
+  
+      if _COORDINATION_AFFIX_DEBUG_MODE:
+        log("CoordinationAffix started listening socket on '%s:%d'\n" % (localip, localport))
+  
+      # The underlying affix stack has been built completely. We can advertise the
+--- 141,155 ----
+      # to establish, if user is using it for localhost.
+      for i in range(5):
+        try:
+          tcpserversocket = self.peek().listenforconnection(localhost, localport)
+          break
+!       except (AddressBindingError, RepyArgumentError), e:
+!         sleep(1)
+      else:
+!       raise AddressBindingError("Unable to bind with the localhost " + 
+!         str(localhost) + " (IP " + str(localip) + ") provided.")
+  
+      if _COORDINATION_AFFIX_DEBUG_MODE:
+        log("CoordinationAffix started listening socket on '%s:%d'\n" % (localip, localport))
+  
+      # The underlying affix stack has been built completely. We can advertise the
+
+
+
+
+diff -C 5 /home/albert/SAMS-VERSION/seattle_repy/natdecideraffix.repy ./natdecideraffix.repy
+*** /home/albert/SAMS-VERSION/seattle_repy/natdecideraffix.repy	2014-03-12 14:32:34.000000000 +0000
+--- ./natdecideraffix.repy	2014-03-17 16:11:50.445210727 +0000
+***************
+*** 51,67 ****
+  
+      <Return>
+        A listening socket.
+      """
+  
+!     # If node is behind a NAT then we add in the NatPunchAffix
+!     # to the stack. If we are unable to load it, we just move
+!     # on.
+      try:
+        enable_nat = self._is_node_behind_nat(gethostbyname(localip)) 
+      except NetworkAddressError:
+!       enable_nat = False
+        
+      # Add in the NatPunchAffix if we are behind Nat.
+      # If we are unable to either register, create the NatPunchAffix
+      # or are unable to push the NatPunchAffix onto the stack, we
+      # just move on and not use the NatPunchAffix.
+--- 51,73 ----
+  
+      <Return>
+        A listening socket.
+      """
+  
+!     # Check if the node has a private IP address by resolving our 
+!     # localip parameter. If localip is a (public or private) IP address, 
+!     # it resolves to itself. If localip is a resolvable domain name, it 
+!     # resolves to some IP address. Finally, if localip doesn't resolve, 
+!     # then inform our caller. Maybe it is a Zenodotus name that has not 
+!     # (yet) been advertised?
+!     # Note that in order to respect the RepyV2 API, we must wrap 
+!     # gethostbyname's actual NetworkAddressError as RepyArgumentError.
+      try:
+        enable_nat = self._is_node_behind_nat(gethostbyname(localip)) 
+      except NetworkAddressError:
+!       errormessage = "NatDeciderAffix.listenforconnection could not resolve its `localip' parameter " + str(localip)
+!       raise RepyArgumentError(errormessage)
+        
+      # Add in the NatPunchAffix if we are behind Nat.
+      # If we are unable to either register, create the NatPunchAffix
+      # or are unable to push the NatPunchAffix onto the stack, we
+      # just move on and not use the NatPunchAffix.
+***************
+*** 70,86 ****
+          find_and_register_affix("NatPunchAffix")
+          nat_affix = create_affix_object("NatPunchAffix", [], None)
+          
+          # Now we push the new NatPunchAffix onto our stack.
+          self.push(nat_affix)
+!       except AffixNotFoundError:
+!         pass
+!       except AffixStackError:
+!         pass
+!       
+  
+-     tcpserversocket = self.peek().listenforconnection(localip, localport)
+      return AffixTCPServerSocket(tcpserversocket, self)
+  
+  
+  
+  
+--- 76,106 ----
+          find_and_register_affix("NatPunchAffix")
+          nat_affix = create_affix_object("NatPunchAffix", [], None)
+          
+          # Now we push the new NatPunchAffix onto our stack.
+          self.push(nat_affix)
+!       except (AffixNotFoundError, AffixStackError), e:
+!         # Remove the current (void) NatPunchAffix from the stack.
+!         self.pop()
+!       except Exception, e:
+!         # Remove the current (void) NatPunchAffix from the stack.
+!         self.pop()
+!         raise
+! 
+!     # If we reach this point, we either got the NatPunchAffix registered, 
+!     # or decided we don't need one.
+!     try:
+!       tcpserversocket = self.peek().listenforconnection(localip, localport)
+!     except AttributeError, e:
+!       # Hmm, looks like the object has no peek(). It's probably a 
+!       # RepyNetworkApiWrapper, not an Affix. Go without peek() then.
+!       tcpserversocket = self.listenforconnection(localip, localport)
+!     except Exception, e:
+!       # The NatPunchAffix we just pushed gave us this error. Remove it!
+!       self.pop()
+!       raise
+  
+      return AffixTCPServerSocket(tcpserversocket, self)
+  

@@ -1,0 +1,102 @@
+27a28
+> from seattlegeni.website import settings
+34c35,38
+< 
+---
+> # Import necessary repy files
+> from seattle import repyhelper
+> repyhelper.translate_and_import('advertise.repy')
+> repyhelper.translate_and_import('rsa.repy')
+137a142,145
+> def _state_key_file_to_publickey(key_file_name):
+>   """ Retrieve pubkey from file and return the dictionary form of key"""
+>   return rsa_file_to_publickey(os.path.join(settings.STATE_KEYS_DIR, key_file_name))
+> 
+140a149,173
+>   """
+>   <Purpose>
+>     Lookup the nodes with their transition state key in order
+>     to find out how many nodes are in each state. Then print the
+>     number of nodes that are in each state.
+> 
+>   <Arguments>
+>     None
+> 
+>   <Exception>
+>     None
+> 
+>   <Side Effects>
+>     None
+>   
+>   <Return>
+>     None
+>   """
+> 
+>   state_keys = {"canonical" : _state_key_file_to_publickey("canonical.publickey"),
+>                 "acceptdonation" : _state_key_file_to_publickey("acceptdonation.publickey"),
+>                 "movingtoonepercent_manyevents" : _state_key_file_to_publickey("movingtoonepercent_manyevents.publickey"),
+>                 "onepercent_manyevents" : _state_key_file_to_publickey("onepercentmanyevents.publickey")}
+> 
+>  
+143,145c176,179
+<   parts.append(str(_advertising_donation()))
+<   parts.append(str(_advertising_canonical()))
+<   parts.append(str(_advertising_onepercent()))
+---
+>   parts.append(str(_advertising_donation(state_keys["acceptdonation"])))
+>   parts.append(str(_advertising_canonical(state_keys["canonical"])))
+>   parts.append(str(_advertising_movingtoonepercent(state_keys["movingtoonepercent_manyevents"])))
+>   parts.append(str(_advertising_onepercent(state_keys["onepercent_manyevents"])))
+149,151c183,216
+< def _advertising_donation():
+<   # TODO: implement
+<   return 0
+---
+> def _lookup_nodes(node_state_pubkey):
+>   """
+>   <Purpose>
+>     Lookup nodes given a publickey.
+> 
+>   <Arguments>
+>     node_state_pubkey - publickey to use to lookup nodes.
+> 
+>   <Exception>
+>     Exception raised from advertise_lookup.
+> 
+>   <Side Effects>
+>     None
+> 
+>   <Return>
+>     The number of nodes found using the public key.
+>   """
+> 
+>   # Lookup nodes using publickey
+>   try:
+>     node_list = advertise_lookup(node_state_pubkey, maxvals = 10*1024*1024, lookuptype=["central"])
+>   except:
+>     raise
+>   
+>   return len(node_list)
+> 
+> 
+> 
+> def _advertising_donation(state_pubkey):
+>   return " Acceptdonation: " + str(_lookup_nodes(state_pubkey))
+> 
+> 
+> def _advertising_canonical(state_pubkey):
+>   return  " Canonical: " + str(_lookup_nodes(state_pubkey))
+154,156c219,220
+< def _advertising_canonical():
+<   # TODO: implement
+<   return 0
+---
+> def _advertising_movingtoonepercent(state_pubkey):
+>   return " Moving_to_onepercent: " + str(_lookup_nodes(state_pubkey))
+159,161c223,224
+< def _advertising_onepercent():
+<   # TODO: implement
+<   return 0
+---
+> def _advertising_onepercent(state_pubkey):
+>   return " Onepercent: " + str(_lookup_nodes(state_pubkey))

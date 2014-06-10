@@ -1,0 +1,39 @@
+moshe@moshe-desktop:~/seattle/repy_v2_testing/result$ /usr/bin/python2.6 utf.py -a
+Testing module: shims
+	Running: ut_shims_datalimitshim_medmsg.py                   [ PASS ]
+	Running: ut_shims_rsashim_medmsg.py                         [ FAIL ]
+--------------------------------------------------------------------------------
+Standard out :
+..............................Produced..............................
+None
+..............................Expected..............................
+
+--------------------------------------------------------------------------------
+	Running: ut_shims_testchunklib_bigchunk_smallmsg.py         [ PASS ]
+	Running: ut_shims_ratelimitshim_lowbandwidth.py             [ PASS ]
+	Running: ut_shims_multipath_mixshims.py                    ^C Internal error. Trace:
+--------------------------------------------------------------------------------
+Traceback (most recent call last):
+  File "utf.py", line 662, in <module>
+    main()
+  File "utf.py", line 210, in main
+    test_all(valid_files)
+  File "utf.py", line 367, in test_all
+    test_module(module_name, module_file_list)
+  File "utf.py", line 313, in test_module
+    execute_and_check_program(test_file)
+  File "utf.py", line 241, in execute_and_check_program
+    testing_monitor(file_path)
+  File "utf.py", line 415, in testing_monitor
+    report = execution_monitor(file_path, pragmas)
+  File "utf.py", line 500, in execution_monitor
+    (out, error) = utfutil.execute(popen_args)
+  File "/home/moshe/seattle/repy_v2_testing/result/utfutil.py", line 31, in execute
+    (stdoutdata, stderrdata) = process.communicate()
+  File "/usr/lib/python2.6/subprocess.py", line 691, in communicate
+    return self._communicate(input)
+  File "/usr/lib/python2.6/subprocess.py", line 1211, in _communicate
+    rlist, wlist, xlist = select.select(read_set, write_set, [])
+KeyboardInterrupt
+moshe@moshe-desktop:~/seattle/repy_v2_testing/result$ 
+

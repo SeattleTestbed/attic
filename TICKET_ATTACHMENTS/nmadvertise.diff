@@ -1,0 +1,73 @@
+Index: nodemanager/nmadvertise.mix
+===================================================================
+--- nodemanager/nmadvertise.mix	(revision 6753)
++++ nodemanager/nmadvertise.mix	(working copy)
+@@ -94,14 +94,16 @@
+         # we're using membership in the dict to indicate a need to advertise
+         clean_advertise_dict()
+ 
+-        # this list contains the keys we will advertise
+-        advertisekeylist = []
++        # this list contains the data we will advertise
++        advertisedatalist = []
+ 
++        mynamestr = str(myname)
++
+         # JAC: advertise under the node's key
+-        if rsa_publickey_to_string(self.nodekey) not in lastadvertisedict and self.nodekey not in advertisekeylist:
+-          advertisekeylist.append(self.nodekey)
++        node_advertise_keyvalue = (rsa_publickey_to_string(self.nodekey), mynamestr)
++        if node_advertise_keyvalue not in lastadvertisedict and node_advertise_keyvalue not in advertisedatalist:
++          advertisedatalist.append(node_advertise_keyvalue)
+ 
+-
+         # make a copy so there isn't an issue with a race
+         for vesselname in self.addict.keys()[:]:
+ 
+@@ -114,31 +116,33 @@
+           # if I advertise the vessel...
+           if thisentry['advertise']:
+             # add the owner key if not there already...
+-            if rsa_publickey_to_string(thisentry['ownerkey']) not in lastadvertisedict and thisentry['ownerkey'] not in advertisekeylist:
+-              advertisekeylist.append(thisentry['ownerkey'])
++            owner_advertise_keyvalue = (rsa_publickey_to_string(thisentry['ownerkey']), mynamestr)
++            if owner_advertise_keyvalue not in lastadvertisedict and owner_advertise_keyvalue not in advertisedatalist:
++              advertisedatalist.append(owner_advertise_keyvalue)
+ 
+             # and all user keys if not there already
+             for userkey in thisentry['userkeys']:
+-              if rsa_publickey_to_string(userkey) not in lastadvertisedict and userkey not in advertisekeylist:
+-                advertisekeylist.append(userkey)
++              user_advertise_keyvalue = (rsa_publickey_to_string(userkey), mynamestr)
++              if user_advertise_keyvalue not in lastadvertisedict and user_advertise_keyvalue not in advertisedatalist:
++                advertisedatalist.append(user_advertise_keyvalue)
+ 
++        # Code to make node tracking easier (#1231)
++        nodetrack_advertise_keyvalue = ('nodetrack', str(myname)+':'+rsa_publickey_to_string(self.nodekey)+":"+str(len(self.addict)))
++        if nodetrack_advertise_keyvalue not in lastadvertisedict and nodetrack_advertise_keyvalue not in advertisedatalist:
++          advertisedatalist.append(nodetrack_advertise_keyvalue)
+ 
+         # there should be no dups.   
+-        assert(advertisekeylist == listops_uniq(advertisekeylist))
++        assert(advertisedatalist == listops_uniq(advertisedatalist))
+ 
+-        # Code to make node tracking easier (#1231)
+-        try:
+-          advertise_announce('nodetrack', str(myname)+':'+rsa_publickey_to_string(self.nodekey)+":"+str(len(self.addict)), adTTL)
+-        except AdvertiseError, e:
+-          servicelogger.log('nodetrack AdvertiseError occured, continuing: '+str(e))
+ 
+         # now that I know who to announce to, send messages to annouce my IP and 
+         # port to all keys I support
+-        for advertisekey in advertisekeylist:
++        for advertisepair in advertisedatalist:
++          advertisekey, advertisevalue = advertisepair
+           try:
+-            advertise_announce(advertisekey, str(myname), adTTL)
++            advertise_announce(advertisekey, advertisevalue, adTTL)
+             # mark when we advertise
+-            lastadvertisedict[rsa_publickey_to_string(advertisekey)] = getruntime()
++            lastadvertisedict[advertisepair] = getruntime()
+          
+             # If the announce succeeded, and node was offline, log info message
+             # and switch it back to online mode.

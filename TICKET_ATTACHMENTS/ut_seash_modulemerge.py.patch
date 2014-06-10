@@ -1,0 +1,12 @@
+--- C:\Users\Leonard\Dropbox\Seattle\seattle\trunk\seash\tests\ut_seash_modulemerge.py	Mon Sep 16 22:43:15 2013
++++ C:\Users\Leonard\Dropbox\Seattle\seattle\branches\repy_v2\seash\tests\ut_seash_modulemerge.py	Wed Jan 29 14:32:07 2014
+@@ -2,6 +2,9 @@
+ Test the merging of commanddicts.
+ 
+ """
++# Needed so that the built-in type function is restored to the python
++# abc library
++import seash_dictionary
+ 
+ import seash_modules
+ from copy import deepcopy

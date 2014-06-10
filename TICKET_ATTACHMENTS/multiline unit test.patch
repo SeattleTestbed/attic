@@ -1,0 +1,35 @@
+Index: ut_stagedtestmultiline_missing.py
+===================================================================
+--- ut_stagedtestmultiline_missing.py	(revision 0)
++++ ut_stagedtestmultiline_missing.py	(working copy)
+@@ -0,0 +1,5 @@
++# This test should fail since message one is not printed out.
++
++#pragma out message one
++#pragma out message two
++print "Test message two"
+Index: ut_utftests_multiline_missing.py
+===================================================================
+--- ut_utftests_multiline_missing.py	(revision 0)
++++ ut_utftests_multiline_missing.py	(working copy)
+@@ -0,0 +1,20 @@
++"""
++Makes sure that missing multiline pragmas fail.
++"""
++
++import subprocess
++import sys
++
++#pragma out FAIL
++
++process = subprocess.Popen([sys.executable, 'utf.py', '-f', 'ut_stagedtestmultiline_missing.py'],
++                           stderr=subprocess.PIPE,
++                           stdout=subprocess.PIPE)
++
++(out, err) = process.communicate()
++
++if out:
++  print out
++
++if err:
++  print err

@@ -1,0 +1,73 @@
+Index: ut_stagedtestnobase_test_setup.py
+===================================================================
+--- ut_stagedtestnobase_test_setup.py	(revision 0)
++++ ut_stagedtestnobase_test_setup.py	(working copy)
+@@ -0,0 +1,3 @@
++#pragma out PASS
++
++print "PASS"
+\ No newline at end of file
+Index: ut_stagedtestnobase_test_shutdown.py
+===================================================================
+--- ut_stagedtestnobase_test_shutdown.py	(revision 0)
++++ ut_stagedtestnobase_test_shutdown.py	(working copy)
+@@ -0,0 +1,3 @@
++#pragma out PASS
++
++print "PASS"
+\ No newline at end of file
+Index: ut_stagedtestnobase_test_subprocess.py
+===================================================================
+--- ut_stagedtestnobase_test_subprocess.py	(revision 0)
++++ ut_stagedtestnobase_test_subprocess.py	(working copy)
+@@ -0,0 +1,3 @@
++#pragma out PASS
++
++print "PASS"
+\ No newline at end of file
+Index: ut_utftests_nobasetest.py
+===================================================================
+--- ut_utftests_nobasetest.py	(revision 0)
++++ ut_utftests_nobasetest.py	(working copy)
+@@ -0,0 +1,25 @@
++"""
++Makes sure that setup, subprocess and shutdown scripts without a base
++test do not get skipped.  See #1384.
++"""
++
++# utf will print out the names of the tests if they get run.
++# since the modules there is no test with the name
++# ut_stagedtestnobase_test.py, they must be executed in this order.
++#pragma out ut_stagedtestnobase_test_setup.py
++#pragma out ut_stagedtestnobase_test_shutdown.py
++#pragma out ut_stagedtestnobase_test_subprocess.py
++
++import subprocess
++import sys
++
++process = subprocess.Popen([sys.executable, 'utf.py', '-m', 'stagedtestnobase'],
++                           stderr=subprocess.PIPE,
++                           stdout=subprocess.PIPE)
++
++(out, err) = process.communicate()
++
++if out:
++  print out
++if err:
++  print err
+Index: ut_utftests_nobasetest_setup.py
+===================================================================
+--- ut_utftests_nobasetest_setup.py	(revision 0)
++++ ut_utftests_nobasetest_setup.py	(working copy)
+@@ -0,0 +1,11 @@
++"""
++Make sure the nobasetest runs without a file with the base filename in
++the current directory.  See #1384.
++"""
++
++import os
++
++try:
++  os.remove('ut_stagedtestnobase_test.py')
++except OSError:
++  pass

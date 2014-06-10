@@ -1,0 +1,39 @@
+--- D:\Dropbox\Seattle\seattle\trunk\seash\seash.py	Mon Sep 16 22:43:19 2013
++++ D:\Dropbox\Seattle\seattle\branches\repy_v2\seash\seash.py	Fri Feb 14 18:04:07 2014
+@@ -50,6 +50,12 @@
+ 
+ # simple client.   A better test client (but nothing like what a real client
+ # would be)
++
++# Restores the original python built-in type() to certain built-in libraries
++# as repyportability destroys it.
++
++# Needed for parsing user commands and executing command functions
++import seash_dictionary
+ 
+ ### Integration fix here...
+ from repyportability import *
+@@ -94,9 +100,6 @@
+ if rename_readline_so_file:
+   os.rename(EXPOSED_READLINE_SO_FN, HIDDEN_READLINE_SO_FN)
+ 
+-# Needed for parsing user commands and executing command functions
+-import seash_dictionary
+-
+ # Used for re-enabling modules on the last run
+ import seash_modules
+ 
+@@ -105,9 +108,10 @@
+ 
+ import seash_helper
+ 
+-import repyhelper
+-
+-repyhelper.translate_and_import("time.repy")
++from repyportability import *
++add_dy_support(locals())
++
++dy_import_module_symbols("time.repy")
+ 
+ import traceback
+ 

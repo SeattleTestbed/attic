@@ -1,0 +1,62 @@
+Index: natdecideraffix.repy
+===================================================================
+--- natdecideraffix.repy	(revision 7249)
++++ natdecideraffix.repy	(working copy)
+@@ -177,36 +177,39 @@
+     enable_nat = is_node_behind_nat(localip) 
+       
+     # Add in the NatPunchAffix if we are behind NAT.
+-    # If we are unable to either register, create the NatPunchAffix
+-    # or are unable to push the NatPunchAffix onto the stack, we
+-    # just move on and not use the NatPunchAffix.
++    # If we are unable to either register or create the NatPunchAffix, 
++    # are unable to push it onto the stack, or listen on it, we just 
++    # move on and not use the NatPunchAffix.
++
+     if enable_nat:
+       try:
+         find_and_register_affix("NatPunchAffix")
+         nat_affix = create_affix_object("NatPunchAffix", [], None)
+-        
+-        # Now we push the new NatPunchAffix onto our stack.
+-        self.push(nat_affix)
+       except (AffixNotFoundError, AffixStackError), e:
+-        # Remove the current (void) NatPunchAffix from the stack.
+-        self.pop()
+-      except Exception, e:
+-        # Remove the current (void) NatPunchAffix from the stack.
+-        self.pop()
+-        raise
++        # find_and_register_affix or instantiation failed. Continue 
++        # outside of the ``if'' clause without the Affix in place.
++        pass
++      else:
++        # We found, registered, and instantiated the NatPunchAffix.
++        try:
++	  self.push(nat_affix)
++          tcpserversocket = self.peek().listenforconnection(localip, localport)
++        except:
++          # Pushing or actually listening didn't work. Try below 
++          # without the NatPunchAffix.
++          self.pop()
++        else:
++          # All is well, the NatPunchAffix listens for connection. Return it!
++          return AffixTCPServerSocket(tcpserversocket, self)
+ 
+-    # If we reach this point, we either got the NatPunchAffix registered, 
+-    # or decided we don't need one.
++    # If we reach this point, we didn't find/get the NatPunchAffix registered, 
++    # failed trying to push it or listen on it, or decided we don't need one.
+     try:
+       tcpserversocket = self.peek().listenforconnection(localip, localport)
+     except AttributeError, e:
+       # Hmm, looks like the object has no peek(). It's probably a 
+       # RepyNetworkApiWrapper, not an Affix. Go without peek() then.
+       tcpserversocket = self.listenforconnection(localip, localport)
+-    except Exception, e:
+-      # The NatPunchAffix we just pushed gave us this error. Remove it!
+-      self.pop()
+-      raise
+ 
+     # If we reach this point, all went well
+     return AffixTCPServerSocket(tcpserversocket, self)

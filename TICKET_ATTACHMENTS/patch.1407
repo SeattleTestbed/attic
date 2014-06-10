@@ -1,0 +1,67 @@
+Index: affix_wrapper_lib.repy
+===================================================================
+--- affix_wrapper_lib.repy	(revision 7286)
++++ affix_wrapper_lib.repy	(working copy)
+@@ -10,7 +10,6 @@
+   wrapper library that are used by the Affix framework.
+ """  
+ 
+-cachedadvertise = dy_import_module('cachedadvertise.r2py')
+ 
+ DEBUG_MODE = False
+ zenodotus_subdomain = 'zenodotus.poly.edu'
+@@ -322,6 +321,13 @@
+     return hostname
+ 
+   if hostname.endswith(zenodotus_subdomain):
++    # We import cachedadvertise in the function rather than
++    # at the top of the file to address ticket #1407. This
++    # ensures that sockettimeout.repy is only imported when
++    # we call these functionalities. This will allow us to
++    # overload the Repy network API calls properly in 
++    # applications that use Affixes.
++    cachedadvertise = dy_import_module('cachedadvertise.r2py')
+     try:
+       # If we have found a value, we recursively check it
+       # in the case of one zenodotus address pointing to 
+@@ -329,9 +335,11 @@
+       # Increase the depth before doing the next lookup.
+       lookup_depth += 1
+       return lookup_address(cachedadvertise.lookup(hostname)[0], lookup_depth)
+-    except NetworkAddressError:
++    except (NetworkAddressError, IndexError):
+       # If we get a NetworkAddressError, there isn't much we can
+       # do, so we just return.
++      # Similarly, if we get an IndexError then we failed to do a 
++      # lookup for the hostname.
+       return hostname
+ 
+ 
+Index: coordinationaffix.repy
+===================================================================
+--- coordinationaffix.repy	(revision 7286)
++++ coordinationaffix.repy	(working copy)
+@@ -40,7 +40,7 @@
+ advertisepipe = dy_import_module("advertisepipe.r2py")
+ 
+ # Whether we want to print debug statements.
+-_COORDINATION_AFFIX_DEBUG_MODE = True
++_COORDINATION_AFFIX_DEBUG_MODE = False
+ 
+ zenodotus_subdomain = 'zenodotus.poly.edu'
+ 
+@@ -222,7 +222,13 @@
+       # use the vaue we added to the advertisepipe before.
+       try:
+         destip = cachedadvertise.lookup(desthost, timeout=0)[0]
+-      except NetworkAddressError:
++      except (NetworkAddressError, IndexError):
++        # We catch an indexerror as there is a possibility that
++        # the advertise lookup returns an empty list.
++        # In this situation we just set the destination IP as 
++        # the hostname. Note that Affixes attempts to do a 
++        # name lookup before it does a listenforconnection or
++        # openconnection.
+         destip = desthost
+     else:
+       destip = desthost

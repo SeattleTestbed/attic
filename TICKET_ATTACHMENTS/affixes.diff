@@ -1,0 +1,884 @@
+Index: deploymentscripts/start_seattlegeni_components.sh
+===================================================================
+--- deploymentscripts/start_seattlegeni_components.sh	(revision 7038)
++++ deploymentscripts/start_seattlegeni_components.sh	(working copy)
+@@ -17,7 +17,7 @@
+ #    all components of seattlegeni (except apache), send a SIGINT or SIGTERM to
+ #    this process.
+ 
+-export PYTHONPATH="/home/geni/live/:/home/geni/live/seattle:/usr/local/lib/python2.5/site-packages"
++export PYTHONPATH="/home/geni/live/:/home/geni/live/seattle:/usr/local/lib/python2.7/site-packages"
+ export DJANGO_SETTINGS_MODULE="seattlegeni.website.settings"
+ 
+ # The seattlegeni/ directory in the directory deployed to (by the deployment script)
+@@ -66,14 +66,14 @@
+ sleep 1 # Wait a moment to make sure it has started (lockserver is used by other components).
+ 
+ echo "Starting backend."
+-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/backend/backend_daemon.py >>$LOG_DIR/backend.log 2>&1 &
++cd $SEATTLECLEARINGHOUSE_DIR/backend/ && $SUDO_CMD python backend_daemon.py >>$LOG_DIR/backend.log 2>&1 &
+ sleep 1 # Wait a moment to make sure it has started (backend is used by other components).
+ 
+ echo "Gracefully restarting apache."
+ apache2ctl graceful
+ 
+ echo "Starting check_active_db_nodes.py."
+-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/polling/check_active_db_nodes.py >>$LOG_DIR/check_active_db_nodes.log 2>&1 &
++cd $SEATTLECLEARINGHOUSE_DIR/polling/ && $SUDO_CMD python check_active_db_nodes.py >>$LOG_DIR/check_active_db_nodes.log 2>&1 &
+ sleep 1 # We need to wait for each process to start before beginning the next
+         # because repyhelper has an issue with concurrent file access.
+ 
+@@ -81,22 +81,22 @@
+ 
+ TRANSITION_NAME=transition_donation_to_canonical
+ echo "Starting transition script $TRANSITION_NAME"
+-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/$TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
++cd $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/ && $SUDO_CMD python $TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
+ sleep 1
+ 
+ TRANSITION_NAME=transition_canonical_to_twopercent
+ echo "Starting transition script $TRANSITION_NAME"
+-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/$TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
++cd $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/ && $SUDO_CMD python $TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
+ sleep 1
+ 
+ TRANSITION_NAME=transition_twopercent_to_twopercent
+ echo "Starting transition script $TRANSITION_NAME"
+-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/$TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
++cd $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/ && $SUDO_CMD python $TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
+ sleep 1
+ 
+ TRANSITION_NAME=transition_onepercentmanyevents_to_canonical
+ echo "Starting transition script $TRANSITION_NAME"
+-$SUDO_CMD python $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/$TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
++cd $SEATTLECLEARINGHOUSE_DIR/node_state_transitions/ && $SUDO_CMD python $TRANSITION_NAME.py >>$LOG_DIR/$TRANSITION_NAME.log 2>&1 &
+ 
+ echo "All components started. Kill this process (CTRL-C or 'kill $$') to stop all started components (except apache)."
+ 
+Index: common/util/nodestatus.py
+===================================================================
+--- common/util/nodestatus.py	(revision 7038)
++++ common/util/nodestatus.py	(working copy)
+@@ -38,7 +38,7 @@
+ from seattlegeni.common.api import maindb
+ from seattlegeni.common.api import nodemanager
+ 
+-from seattlegeni.common.util import log
++from seattlegeni.common.util import log as log_module
+ 
+ from seattlegeni.common.exceptions import *
+ 
+@@ -49,10 +49,12 @@
+ 
+ repyhelper.translate_and_import("rsa.repy")
+ 
++# Restore the log module as repy's log function is copied into our
++# namespace when we are importing rsa.repy
++log = log_module
+ 
+ 
+ 
+-
+ def _readfilecontents(filename):
+   f = open(filename)
+   contents = f.read()
+Index: common/api/nodemanager.py
+===================================================================
+--- common/api/nodemanager.py	(revision 7038)
++++ common/api/nodemanager.py	(working copy)
+@@ -46,17 +46,46 @@
+ 
+ from seattlegeni.common.util.decorators import log_function_call_without_first_argument
+ 
+-from seattle import repyhelper
+-from seattle import repyportability
++# Let's keep a copy of the built-ins, as repyportability destroys them
++import __builtin__
++builtins = __builtin__.__dict__.copy()
+ 
+-from fastnmclient import *
+-repyhelper.translate_and_import("listops.repy")
+-repyhelper.translate_and_import("time.repy")
++from repyportability import *
++add_dy_support(locals())
+ 
++###### code to enable affixes #########
++dy_import_module_symbols('affixstackinterface.repy')
+ 
++affix_obj = AffixStackInterface('(CoordinationAffix)')
+ 
++old_openconnection = openconnection
+ 
++def new_openconnection(destip, destport, localip, localport, timeout):
++  # we may get a unicode string.  repy's network API only accepts
++  # standard python strs.
++  destip = str(destip)
++  if destip.endswith('zenodotus.poly.edu'):
++    return affix_obj.openconnection(destip, destport, localip, localport, timeout)
++  else:
++    return old_openconnection(destip, destport, localip, localport, timeout)
+ 
++openconnection = new_openconnection
++
++# overwrite the openconnection that is provided to modules we import
++sys.modules['dylink_repy'].openconnection = openconnection
++
++####### end code to enable affixes ######
++
++dy_import_module_symbols('nmclient.repy')
++dy_import_module_symbols("listops.repy")
++dy_import_module_symbols("time.repy")
++
++# Restore built-ins so that django and other libraries don't complain
++for i in builtins:
++  __builtin__.__dict__[i] = builtins[i]
++
++
++
+ # The number of times to try to do a time update before init_nodemanager() will
+ # raise an exception.
+ MAX_TIME_UPDATE_ATTEMPTS = 5
+Index: keydb/config.py
+===================================================================
+--- keydb/config.py	(revision 7038)
++++ keydb/config.py	(working copy)
+@@ -5,7 +5,7 @@
+ """
+ 
+ # Fill these in with the information needed to use the key database.
+-dbuser = ""
+-dbpass = ""
++dbuser = "keydb"
++dbpass = "falz8,geliSTETem"
+ dbname = "keydb"
+ dbhost = "localhost"
+Index: website/html/templates/accounts/help.html
+===================================================================
+--- website/html/templates/accounts/help.html	(revision 7038)
++++ website/html/templates/accounts/help.html	(working copy)
+@@ -12,7 +12,7 @@
+   Gaetano Pressimone 2012
+   
+ <Purpose>
+-  Django template file for Seattle Clearinghouse's 'help' page.  This help page
++  Django template file for the Sensibility Testbed  Clearinghouse's 'help' page.  This help page
+   is for non-logged in users only.
+ 
+ <Extends>
+@@ -61,21 +61,21 @@
+ 
+ 			<p>
+ 			  Clearinghouse is a web-based portal for
+-			  managing <a href="https://seattle.cs.washington.edu/">Seattle</a>
++                          for managing the <a href="https://sensibilitytestbed.com/">Sensibility Testbed</a>
+ 			  resources. These resources are donated by
+-			  users who have installed Seattle on their
++			  users who have installed the Sensibility Testbed on their
+ 			  machines. In return these users are allowed
+ 			  to use resources donated by others. Clearinghouse
+ 			  enables users of donated resources to
+ 			  acquire nodes around the world on which they
+ 			  can then execute programs written
+ 			  in <a href="https://seattle.cs.washington.edu/wiki/RepyTutorial">Repy</a>,
+-			  the Seattle platform programming
++			  the platform programming
+ 			  language. Clearinghouse also lets users to share
+ 			  their resources with other users, and
+ 			  perform a variety of other tasks. For more
+ 			  information about about how Clearinghouse fits with
+-			  the rest of the Seattle platform,
++			  the rest of the platform,
+ 			  see <a href="https://seattle.cs.washington.edu/wiki/SeattleComponents">this
+ 			    page</a>.
+ 			</p>
+@@ -107,7 +107,7 @@
+ 			  
+ 			<li><strong>My Public Key.</strong> If you
+ 			  have a personal public/private key pair that
+-			  you would like to use to access Seattle
++			  you would like to use to access Sensibility Testbed
+ 			  nodes, please select "Let me upload my
+ 			  public key" and select to upload
+ 			  your <strong>public key</strong> by clicking
+Index: website/html/templates/accounts/login.html
+===================================================================
+--- website/html/templates/accounts/login.html	(revision 7038)
++++ website/html/templates/accounts/login.html	(working copy)
+@@ -12,8 +12,8 @@
+   Gaetano Pressimone 2012
+   
+ <Purpose>
+-  Django template file for Seattle Clearinghouse's 'login' page.  The page 
+-  allows a visitor to login using OpenID/OAuth or with a Seattle Clearinghouse
++  Django template file for the Sensibility Testbed Clearinghouse's 'login' page.  The page 
++  allows a visitor to login using OpenID/OAuth or with a Sensibility Testbed Clearinghouse
+   account.
+ 
+ <Extends>
+@@ -61,8 +61,8 @@
+ 	<div id="main">
+ 		<div id="middle">
+ 		  <div id="learn-about-seattle">
+-		    New to Seattle? We suggest you first
+-		    <a href="https://seattle.cs.washington.edu/">learn about Seattle</a>
++		    New to the Sensibility Testbed? We suggest you first
++		    <a href="https://sensibilitytestbed.com/">learn about the Sensibility Testbed</a>
+ 		    before using the Clearinghouse, a resource sharing website.
+ 		  </div>
+ 		
+Index: website/html/templates/accounts/auto_register.html
+===================================================================
+--- website/html/templates/accounts/auto_register.html	(revision 7038)
++++ website/html/templates/accounts/auto_register.html	(working copy)
+@@ -9,9 +9,9 @@
+   Gaetano Pressimone 2012
+   
+ <Purpose>
+-  Django template file for Seattle Clearinghouse's 'auto_register' page.  The page 
++  Django template file for the Sensibility Testbed Clearinghouse's 'auto_register' page.  The page 
+   allows a visitor to create a Clearinghouse account quickly if logging in
+-  with a OpenID/OAuth account that has not yet been linked with a Seattle Clearinghouse
++  with a OpenID/OAuth account that has not yet been linked with a the Sensibility Testbed Clearinghouse
+   account.
+ 
+ <Extends>
+@@ -51,7 +51,7 @@
+     <div id="main">
+ 		<div id="middle">		
+ 		  <div id="learn-about-seattle">
+-		    This {{backend}} account is not linked with a Seattle Clearinghouse account so we're creating one for you.  Already a user? <a href="{% url login %}">Login</a>
++		    This {{backend}} account is not linked with a the Sensibility Testbed Clearinghouse account so we're creating one for you.  Already a user? <a href="{% url login %}">Login</a>
+ 		  </div>
+ <form action="{% url auto_register %}" method="POST"> 
+  {% if username_form.errors %}
+Index: website/html/templates/accounts/simplelogin.html
+===================================================================
+--- website/html/templates/accounts/simplelogin.html	(revision 7038)
++++ website/html/templates/accounts/simplelogin.html	(working copy)
+@@ -4,7 +4,7 @@
+ </head>
+ <body>
+ <div class="simpleloginoutter">
+-    <br><h2 style="text-align:left"><b>Seattle Clearinghouse Portal Login:</b></h2>
++    <br><h2 style="text-align:left"><b>The Sensibility Testbed Clearinghouse Portal Login:</b></h2>
+ 	  <div id="simplelogininner">
+ 		  <form method="post" action="https://seattlegeni.cs.washington.edu/geni/accounts/login">
+ 		  {% if err %}
+Index: website/html/templates/accounts/register.html
+===================================================================
+--- website/html/templates/accounts/register.html	(revision 7038)
++++ website/html/templates/accounts/register.html	(working copy)
+@@ -12,7 +12,7 @@
+   Gaetano Pressimone 2012
+   
+ <Purpose>
+-  Django template file for Seattle Clearinghouse's 'register' page.  The page 
++  Django template file for the Sensibility Testbed Clearinghouse's 'register' page.  The page 
+   allows a visitor to create a new account.
+ 
+ <Extends>
+@@ -58,8 +58,8 @@
+ 		<div id="middle">
+ 		
+ 		  <div id="learn-about-seattle">
+-		    New to Seattle? We suggest you first
+-		    <a href="https://seattle.cs.washington.edu/">learn about Seattle</a>
++		    New to the Sensibility Testbed? We suggest you first
++		    <a href="https://sensibilitytestbed.com/">learn about the Sensibility Testbed</a>
+ 		    before using the Clearinghouse, a resource sharing website.
+ 		  </div>
+ 		
+Index: website/html/templates/control/profile.html
+===================================================================
+--- website/html/templates/control/profile.html	(revision 7038)
++++ website/html/templates/control/profile.html	(working copy)
+@@ -12,7 +12,7 @@
+   Gaetano Pressimone Aug 2012
+   
+ <Purpose>
+-  Django template file for Seattle Clearinghouse's 'Profile' page.  The page 
++  Django template file for The Sensibility Testbed Clearinghouse's 'Profile' page.  The page 
+   shows user information and also allows editing of certain user fields.
+ 
+ <extends>
+@@ -85,7 +85,7 @@
+ {% endblock script %}
+ 
+ {% block title %}
+-Profile - Seattle Clearinghouse
++Profile - The Sensibility Testbed Clearinghouse
+ {% endblock title %}
+ 
+ {% block nav_profile %}
+Index: website/html/templates/control/api_info.html
+===================================================================
+--- website/html/templates/control/api_info.html	(revision 7038)
++++ website/html/templates/control/api_info.html	(working copy)
+@@ -6,7 +6,7 @@
+ {% endblock style %}
+ 
+ {% block title %}
+-API Info - Seattle Clearinghouse
++API Info - The Sensibility Testbed Clearinghouse
+ {% endblock title %}
+ 
+ {% block nav_profile %}
+@@ -16,15 +16,15 @@
+ {% block content %}
+ 	<div id="main">
+ 		<div id="middle">
+-			<h2>Seattle Clearinghouse API Info</h2>
++			<h2>The Sensibility Testbed Clearinghouse API Info</h2>
+ 
+-			<p>Seattle Clearinghouse offers an XML-RPC interface to perform actions such
++			<p>The Sensibility Testbed Clearinghouse offers an XML-RPC interface to perform actions such
+ 			   as acquiring, releasing, and renewing vessels. To authenticate yourself
+ 			   using this API you use an API key rather than your account password.</p>
+ 
+-			<p>You don't need to use the XML-RPC interface in order to use Seattle Clearinghouse.
++			<p>You don't need to use the XML-RPC interface in order to use the Sensibility Testbed Clearinghouse.
+ 			   If you'd like to do so, though, take a look at the
+-			   <a href="https://seattle.cs.washington.edu/wiki/SeattleGeniClientLib">Seattle Clearinghouse XML-RPC client library</a>.</p>
++			   <a href="https://seattle.cs.washington.edu/wiki/SeattleGeniClientLib">Clearinghouse XML-RPC client library</a>.</p>
+ 
+ 			<p>Your API key is:
+ 			
+Index: website/html/templates/control/help.html
+===================================================================
+--- website/html/templates/control/help.html	(revision 7038)
++++ website/html/templates/control/help.html	(working copy)
+@@ -12,7 +12,7 @@
+   Gaetano Pressimone 2012
+   
+ <Purpose>
+-  Django template file for Seattle Clearinghouse's 'help' page.  This help page
++  Django template file for the Sensibility Testbed Clearinghouse's 'help' page.  This help page
+   is for logged in users only.
+ 
+ <Extends>
+@@ -32,7 +32,7 @@
+ {% endcomment %}
+ 
+ {% block title %}
+-Help - Seattle Clearinghouse
++Help - The Sensibility Testbed Clearinghouse
+ {% endblock title %}
+ 
+ {% block style %}
+@@ -50,8 +50,8 @@
+ 			<div id="toc">
+ 				<h3>Table of Contents</h3>
+ 				<ul>
+-					<li><a href="#whatisgeni">What is Seattle Clearinghouse/Seattle</a></li>
+-					<li><a href="#howtouse">How to use the Seattle Clearinghouse portal</a></li>
++					<li><a href="#whatisgeni">What is the Sensibility Testbed Clearinghouse/Sensibility Testbed</a></li>
++					<li><a href="#howtouse">How to use the Sensibility Testbed Clearinghouse portal</a></li>
+ 					<ul>
+ 						<li><a href="#profile">Profile : User keys, port, and other information</a></li>
+ 						<li><a href="#myvessels">My Vessels : Managing vessels -- acquiring and releasing vessel resources</a></li>
+@@ -60,36 +60,36 @@
+ 					<li><a href="#contact">Who to contact for more help</a></li>
+ 				</ul>
+ 			</div>
+-			<h2><a name="whatisgeni">What is Seattle Clearinghouse</a></h2>
++			<h2><a name="whatisgeni">What is the Sensibility Testbed Clearinghouse</a></h2>
+ 			<p>
+ 			
+-			  Seattle Clearinghouse is a web-based portal for managing <a
+-			    href="https://seattle.cs.washington.edu/">Seattle</a>
++			  The Sensibility Testbed Clearinghouse is a web-based portal for managing the <a
++			    href="https://sensibilitytestbed.com/">Sensibility Testbed</a>
+ 			   resources. These resources are donated by
+-			   users who install Seattle on their
+-			   machines. In return these users are allowed
+-			   to use resources donated by others. Seattle Clearinghouse
++			   users who install the Sensibility Testbed on their
++			   devices. In return these users are allowed
++			   to use resources donated by others. The Sensibility Testbed Clearinghouse
+ 			   enables users of donated resources to
+ 			   acquire nodes around the world on which
+ 			   they can then execute programs written in
+ 			   <a
+ 			    href="https://seattle.cs.washington.edu/wiki/RepyTutorial">Repy</a>,
+-			   the Seattle platform programming language.
++			   the platform programming language.
+ 			   Our current policy is that if you donate
+ 			   10% of resources on your computer, you can
+ 			   trade these donated resources in for 1% of
+ 			   resources on 10 other computers. Using
+-			   Seattle Clearinghouse, users can also share their resources
+-			   with other Seattle Clearinghouse users, and to perform a
++			   the Sensibility Testbed Clearinghouse, users can also share their resources
++			   with other Sensibility Testbed Clearinghouse users, and to perform a
+ 			   variety of other tasks. For more
+-			   information about about how Seattle Clearinghouse fits with
+-			   the rest of the Seattle platform, see <a
++			   information about about how the Sensibility Testbed Clearinghouse fits with
++			   the rest of the platform, see <a
+ 			    href="https://seattle.cs.washington.edu/wiki/SeattleComponents">this
+ 			   page</a>. </p>
+ 
+-			<h2><a name="howtouse">How to use the Seattle Clearinghouse portal</a></h2>
++			<h2><a name="howtouse">How to use the Sensibility Testbed Clearinghouse portal</a></h2>
+ 			
+-			<p>The Seattle Clearinghouse portal is divided into four
++			<p>The Sensibility Testbed Clearinghouse portal is divided into four
+ 			  sections, each of which can be accessed
+ 			  through a tab at the top of the
+ 			  page. Remember to maintain account security
+@@ -107,25 +107,25 @@
+ 			information</a></h3>
+ 
+ 			
+-			<p>Here you you can manage your Seattle Clearinghouse account
++			<p>Here you you can manage your Sensibility Testbed Clearinghouse account
+ 			and find out meta information necessary for
+-			you to write programs for Seattle.</p>
++			you to write programs for the Sensibility Testbed.</p>
+ 
+ 
+ 			<ul>
+ 			  <li><strong>Download the demokit.</strong> The demokit
+-			  includes the Seattle shell which you will
++			  includes a shell which you will
+ 			  need to run programs on your acquired
+ 			  vessels. For more information on how to use
+-			  the Seattle shell, see <a href="https://seattle.cs.washington.edu/wiki/SeattleShell">this page</a>.
++			  the shell, see <a href="https://seattle.cs.washington.edu/wiki/SeattleShell">this page</a>.
+ 			  </li>
+ 
+ 			  <li><strong>Download the public and private
+ 			  keys.</strong> You will need these two key files
+ 			  to access your acquired vessels. Once you
+ 			  download them, place the two key files in
+-			  the same directory as Seattle shell you
+-			  downloaded with the Seattle demokit
++			  the same directory as the shell you
++			  downloaded with the demokit
+ 			  above. <p class="warning">For better security we recommend
+ 			  that you download and delete your private
+ 			  key from the server. Always store your
+@@ -135,7 +135,7 @@
+ 			  <li><strong>User Port.</strong> Each user is allocated
+ 			  unique UDP and TCP port resources. The
+ 			  port number you see on this page is a port
+-			  number you will be able to use in your Seattle
++			  number you will be able to use in your Sensibility Testbed
+ 			  programs.  </li>
+ 			</ul>
+ 			
+@@ -157,7 +157,8 @@
+ 			  will display when you browse your vessels. Each vessel also
+ 			  has an <strong>expiration time</strong> listed. This is the
+ 			  time remaining until your hold on the vessel expires and it
+-			  is returned to the Seattle pool for use by other users.
++                          is returned to the Sensibility Testbed pool for use by other
++                          users. </li>
+ 
+ 			  <li><strong>Getting more vessels.</strong>
+ 
+@@ -189,19 +190,19 @@
+ 
+ 			<p>
+ 
+-			  This page contains links to Seattle
++			  This page contains links to the Sensibility Testbed
+ 			  installers for different platforms: Windows,
+ 			  OS X, and Linux. These installers donate the
+ 			  resources on a machine to your account. To
+ 			  simplify distribution of these installers,
+ 			  this page also includes a link at the top
+ 			  that you can email to people who might help
+-			  you by installing Seattle and contributing
++			  you by installing the Sensibility Testbed and contributing
+ 			  resources on their machines on your behalf.
+ 			  This link points to a page that
+ 			  contains the same set of installers, and a
+ 			  help page that explains what is involved in
+-			  donating to the Seattle platform.
++			  donating to the Sensibility Testbed.
+ 
+ 			</p>
+ 
+Index: website/html/templates/control/mygeni.html
+===================================================================
+--- website/html/templates/control/mygeni.html	(revision 7038)
++++ website/html/templates/control/mygeni.html	(working copy)
+@@ -13,12 +13,12 @@
+   Ivan Beschastnikh
+   
+ <Purpose>
+-  Django template file for Seattle Clearinghouse's 'My Seattle Clearinghouse' page.
++  Django template file for Sensibility Testbed Clearinghouse's 'My Sensibility Testbed Clearinghouse' page.
+   The older mygeni.js functionality (graphics logic) has been ported into this page as inline javascript. 
+ {% endcomment %}
+ 
+ {% block title %}
+-My Seattle Clearinghouse - Seattle Clearinghouse
++My Sensibility Testbed Clearinghouse - Sensibility Testbed Clearinghouse
+ {% endblock title %}
+ 
+ {% block style %}
+@@ -261,7 +261,7 @@
+ {% endblock script %}
+ 
+ {% block nav_mygeni %}
+-<td class="active"><a href="{% url mygeni %}">My Seattle Clearinghouse</a></td>
++<td class="active"><a href="{% url mygeni %}">My Sensibility Testbed Clearinghouse</a></td>
+ {% endblock nav_mygeni %}
+ 
+ {% block content %}
+Index: website/html/templates/control/construction.html
+===================================================================
+--- website/html/templates/control/construction.html	(revision 7038)
++++ website/html/templates/control/construction.html	(working copy)
+@@ -1,7 +1,7 @@
+ {% extends "control/control_base.html" %}
+ 
+ {% block title %}
+-Under Construction - Seattle Clearinghouse
++Under Construction - The Sensibility Testbed Clearinghouse
+ {% endblock title %}
+ 
+ {% block content %}
+Index: website/html/templates/control/myvessels.html
+===================================================================
+--- website/html/templates/control/myvessels.html	(revision 7038)
++++ website/html/templates/control/myvessels.html	(working copy)
+@@ -12,7 +12,7 @@
+   Gaetano Pressimone Aug 14 2012
+   
+ <Purpose>
+-  Django template file for Seattle Clearinghouse's 'My Vessels' page.  The page 
++  Django template file for The Sensibility Testbed Clearinghouse's 'My Vessels' page.  The page 
+   allows a logged in user to acquire, renew or remove vessels.
+ 
+ <Extends>
+@@ -76,7 +76,7 @@
+ {% endcomment %}
+ 
+ {% block title %}
+-My Vessels - Seattle Clearinghouse
++My Vessels - The Sensibility Testbed Clearinghouse
+ {% endblock title %}
+ 
+ {% block style %}
+Index: website/html/templates/control/change_key.html
+===================================================================
+--- website/html/templates/control/change_key.html	(revision 7038)
++++ website/html/templates/control/change_key.html	(working copy)
+@@ -6,7 +6,7 @@
+ {% endblock style %}
+ 
+ {% block title %}
+-Change Key - Seattle Clearinghouse
++Change Key - The Sensibility Testbed Clearinghouse
+ {% endblock title %}
+ 
+ {% block nav_profile %}
+Index: website/html/templates/control/getdonations.html
+===================================================================
+--- website/html/templates/control/getdonations.html	(revision 7038)
++++ website/html/templates/control/getdonations.html	(working copy)
+@@ -1,7 +1,7 @@
+ {% extends "control/control_base.html" %}
+ 
+ {% block title %}
+-Get Donations - Seattle Clearinghouse
++Get Donations - The Sensibility Testbed Clearinghouse
+ {% endblock title %}
+ 
+ {% block style %}
+Index: website/html/templates/download/help.html
+===================================================================
+--- website/html/templates/download/help.html	(revision 7038)
++++ website/html/templates/download/help.html	(working copy)
+@@ -1,7 +1,7 @@
+ {% extends "download/download_base.html" %}
+ 
+ {% block title %}
+-Help - Seattle Clearinghouse
++Help - The Sensibility Testbed Clearinghouse
+ {% endblock title %}
+ 
+ {% block style %}
+Index: website/html/templates/download/installers.html
+===================================================================
+--- website/html/templates/download/installers.html	(revision 7038)
++++ website/html/templates/download/installers.html	(working copy)
+@@ -1,7 +1,7 @@
+ {% extends "download/download_base.html" %}
+ 
+ {% block title %}
+-Get Donations - Seattle Clearinghouse
++Get Donations - The Sensibility Testbed Clearinghouse
+ {% endblock title %}
+ 
+ {% block style %}
+Index: website/html/templates/500.html
+===================================================================
+--- website/html/templates/500.html	(revision 7038)
++++ website/html/templates/500.html	(working copy)
+@@ -1,7 +1,7 @@
+ {% extends "accounts/accounts_base.html" %}
+ 
+ {% block title %}
+-Internal Error - Seattle Clearinghouse
++Internal Error - Sensibility Clearinghouse
+ {% endblock title %}
+ 
+ {% block content %}
+Index: website/html/templates/common/geni_base.html
+===================================================================
+--- website/html/templates/common/geni_base.html	(revision 7038)
++++ website/html/templates/common/geni_base.html	(working copy)
+@@ -32,7 +32,7 @@
+ <html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+-	<title>{% block title %}Seattle Clearinghouse using Seattle{% endblock title%}</title>
++	<title>{% block title %}Sensibility Testbed Clearinghouse{% endblock title%}</title>
+ 
+   {% block style %}	
+ 	  <link href="{{ MEDIA_URL }}css/common.css" rel="stylesheet" type="text/css" />
+@@ -46,8 +46,8 @@
+ <body>
+   {% block header %}	
+ 	  <div id="header">
+-  		<span id="logo"><a href="{% url profile %}">Seattle Clearinghouse</a></span>
+-  		<span id="caption">Formerly known as SeattleGENI.  Learn about <a href="https://seattle.cs.washington.edu">Seattle</a></span>	
++  		<span id="logo"><a href="{% url profile %}">Sensibility Testbed Clearinghouse</a></span>
++  		<span id="caption">Learn about <a href="https://sensibilitytestbed.com/">Sensibility Testbed</a></span>	
+   	</div>
+ 	{% endblock header%}	
+ 
+Index: website/html/templates/common/installers.html
+===================================================================
+--- website/html/templates/common/installers.html	(revision 7038)
++++ website/html/templates/common/installers.html	(working copy)
+@@ -7,14 +7,14 @@
+         
+ 			<table id="downloads">
+ 				<tr id="android">
+-					<td><a href="market://details?id=com.seattletestbed&referrer=utm_source%3D{{domain}}{% url android_installer username %}%26utm_medium%3Ddownload%26utm_content%3D{{ username }}%26utm_campaign%3Dseattle"><img src="{{ MEDIA_URL }}images/android.png" alt="android" /></a></td>
++					<td><a href="market://details?id=com.sensibilitytestbed&referrer=utm_source%3D{{domain}}{% url android_installer username %}%26utm_medium%3Ddownload%26utm_content%3D{{ username }}%26utm_campaign%3Dseattle"><img src="{{ MEDIA_URL }}images/android.png" alt="android" /></a></td>
+ 					<td>
+-						<a href="market://details?id=com.seattletestbed&referrer=utm_source%3D{{domain}}{% url android_installer username %}%26utm_medium%3Ddownload%26utm_content%3D{{ username }}%26utm_campaign%3Dseattle">Download installer for Android</a>
++						<a href="market://details?id=com.sensibilitytestbed&referrer=utm_source%3D{{domain}}{% url android_installer username %}%26utm_medium%3Ddownload%26utm_content%3D{{ username }}%26utm_campaign%3Dseattle">Download installer for Android</a>
+ 						<p>
+ 							<strong>Instructions:</strong>
+ 						</p>
+ 						<ol>
+-							<li>On your Android device, tap the icon to the left to download Seattle Testbed via Google Play. (If that doesn't work, please try <a href="https://play.google.com/store/apps/details?id=com.seattletestbed&referrer=utm_source%3D{{domain}}{% url android_installer username %}%26utm_medium%3Ddownload%26utm_content%3D{{ username }}%26utm_campaign%3Dseattle">this alternative link</a>.)</li> 
++							<li>On your Android device, tap the icon to the left to download Seattle Testbed via Google Play. (If that doesn't work, please try <a href="https://play.google.com/store/apps/details?id=com.sensibilitytestbed&referrer=utm_source%3D{{domain}}{% url android_installer username %}%26utm_medium%3Ddownload%26utm_content%3D{{ username }}%26utm_campaign%3Dseattle">this alternative link</a>.)</li> 
+ 							<li>In the Google Play app, tap Install and review the requested permissions.</li> 
+ 							<li>Start the app and follow the on-screen instructions to complete the installation. Depending on the speed of your device, the process can take a few minutes to finish.</li> 
+ 						</ol>
+Index: website/html/templates/common/help_contact.html
+===================================================================
+--- website/html/templates/common/help_contact.html	(revision 7038)
++++ website/html/templates/common/help_contact.html	(working copy)
+@@ -1,30 +1,25 @@
+ 			<h2><a name="contact">Who to contact for more help</a></h2>
+ 			
+-			<p>The Seattle Clearinghouse portal is being actively worked
++			<p>The Sensibility Testbed Clearinghouse portal is being actively worked
+ 			on. We solicit and appreciate your comments
+ 			concerning any aspect of your experience with
+-			using the web site and Seattle more
++			using the web site and the Sensibility Testbed more
+ 			generally.</p>
+ 
+ 			<h3>Use our mailing list</h3>
+ 			
+-			<p>Email Seattle users mailing list
+-			  at <a href="https://mailman.cs.washington.edu/mailman/listinfo/seattle-users">seattle-users@cs.washington.edu</a>
+-			  with any further questions about Seattle Clearinghouse,
+-			  Seattle or anything else. We love receiving
++			<p>Email the Sensibility Testbed users mailing list
++			  at <a href="mailto:sensibility-testbed-users@googlegroups.com">sensibility-testbed-users@googlegroups.com</a>
++			  with any further questions about the Sensibility Clearinghouse,
++			  the Sensibility Testbed or anything else. We love receiving
+ 			  feedback and hearing from our users. If you
+ 			  have a highly technical question, also email
+ 			  our developers list
+-			  at <a href="https://mailman.cs.washington.edu/mailman/listinfo/seattle-devel">seattle-devel@cs.washington.edu</a>.</p>
++			  at <a href="mailto:sensibility-testbed@googlegroups.com">sensibility-testbed@googlegroups.com</a>.</p>
+ 			
+ 			<h3>Read our Wiki</h3>
+ 			
+ 			<p>We have a growing collection of helpful
+-			  resources for users of Seattle, Seattle Clearinghouse, and Repy
+-			  (the Seattle programming language). Visit our
+-			  <a href="https://seattle.cs.washington.edu/">main
+-			    page</a> to get started, or jump to more
+-			  specific area of the site intended for
+-			  <a href="https://seattle.cs.washington.edu/wiki/ProgrammersPage">programmers</a>, 
+-			  <a href="https://seattle.cs.washington.edu/wiki/EducatorsPage">educators</a>,
+-			  and <a href="https://seattle.cs.washington.edu/wiki/ContributorsPage">contributors</a>.</p>
++			  resources for users of the Sensibility Testbed, Sensibility Clearinghouse. Visit our
++			  <a href="https://sensibilitytestbed.com/">main page</a> to get started, or jump to more
++			  specific page for <a href="https://sensibilitytestbed.com/projects/project/wiki/demo">a demo</a>.</p>
+Index: website/html/templates/404.html
+===================================================================
+--- website/html/templates/404.html	(revision 7038)
++++ website/html/templates/404.html	(working copy)
+@@ -1,7 +1,7 @@
+ {% extends "accounts/accounts_base.html" %}
+ 
+ {% block title %}
+-Page not found - Seattle Clearinghouse
++Page not found - Sensibility Clearinghouse
+ {% endblock title %}
+ 
+ {% block content %}
+Index: website/settings.py
+===================================================================
+--- website/settings.py	(revision 7038)
++++ website/settings.py	(working copy)
+@@ -39,7 +39,8 @@
+ SEATTLECLEARINGHOUSE_STATE_KEYS_DIR = os.path.join(SEATTLECLEARINGHOUSE_WEBSITE_ROOT, '..', 'node_state_transitions', 'statekeys')
+ 
+ # The XML-RPC interface to the Custom Installer Builder.
+-SEATTLECLEARINGHOUSE_INSTALLER_BUILDER_XMLRPC = "https://custombuilder.poly.edu/custom_install/xmlrpc/"
++#SEATTLECLEARINGHOUSE_INSTALLER_BUILDER_XMLRPC = "https://custombuilder.poly.edu/custom_install/xmlrpc/"
++SEATTLECLEARINGHOUSE_INSTALLER_BUILDER_XMLRPC = "https://sensibilityclearinghouse.poly.edu/custominstallerbuilder/xmlrpc/"
+ 
+ # Not currently used. This is left in for legacy installs
+ # The directory where the base installers named seattle_linux.tgz, seattle_mac.tgz,
+@@ -75,7 +76,9 @@
+ # the site when DEBUG = False (that is, in production). Leave this to be empty
+ # if nobody should receive an email. 
+ ADMINS = (
+-    # ('Your Name', 'your_email@domain.com'),
++    ('Albert Rafetseder', 'albert.rafetseder+sensibilityclearinghouse@univie.ac.at'),
++    ('Leonard Law', 'leon.wlaw@gmail.com'),
++  # ('Your Name', 'your_email@domain.com'),
+ )
+ 
+ # To be able to send mail to ADMINS when there is an error, django needs to
+@@ -95,9 +98,9 @@
+ MANAGERS = ADMINS
+ 
+ DATABASE_ENGINE = 'mysql'      # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+-DATABASE_NAME = 'FILL_THIS_IN' # Or path to database file if using sqlite3.
+-DATABASE_USER = 'FILL_THIS_IN' # Not used with sqlite3.
+-DATABASE_PASSWORD = 'FILL_THIS_IN' # Not used with sqlite3.
++DATABASE_NAME = 'seattlegeni' # Or path to database file if using sqlite3.
++DATABASE_USER = 'seattlegeni' # Not used with sqlite3.
++DATABASE_PASSWORD = 'Barben127-Fazit' # Not used with sqlite3.
+ DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
+ DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+ 
+@@ -106,14 +109,14 @@
+ 
+ # Make this unique, and don't share it with anybody.
+ # Fill this in!
+-SECRET_KEY = ''
++SECRET_KEY = 'wYdjExFJbtOYfqspF9JsNDBr7aCbL3sep5VUzjTg38lalZP2pfeAQY1REeNNa61pxcEdb9uAXjCMjtnT3wmM2BPEY6lWiHFkI8hPePPVup8bz7R9qA2KKaA9t73gmQMbCYE6YzynbJUiHscbq8ZjJ2Q4M8WNYt17kAxmNkMnhWtA45FdaEuYDF8uiJKFIcqmlmDD7uIpvnL1KpdAp9VNZzFd9DSUo1wATMOnh2I13ydrWxHRJgy3YaLhWK2SUfcP8qH0R0EtlHzuvRrxjUa8qrGZZ2GQBE5rGttFNer22zcRd7xU4YD88k4e9pDzPdjNgOsXROmvzylNIXz3nBeKDC2bbZx5KQkbUT0l9ZYIuBxfVUuCuLNc8pyLk3SDLcrv9WUjFbk2WRysT54xKRYMxGuCLZlNGTWqfV2ouPJHUrBpOsNXMIm44dnuVcCJGBQiv8eoT50red3I7JHY4lKpqlx72tZpodzHHb5C1j3FS6Le8giNTRTS4Jts2EdvEqsKcjJYdMeBbud7IpHaPa2FjqF9VatgsD32gtzCK55pEbO6UBnPDXQJMHkBSDSVjNL0Q6Eyt6Pg0UP2zoNe9lAhJmmVMLEVYlHoMbDXTRNV9mLDYB8fjKlt1TsLbHeMHBC712S7TnPMmOizOyiLiDyydVHqU4EBoCJUhPIXoewADqTb6HV2Kqzv9zI0t4YNFSVzNOEh6wdDjeWjfRj4fcdsyHs03UYAX1jYrjTh1gdBP6BgDlPRLyssFuo9V67yjyReTf9nZPi1xhR1ss0x8aSzvf8e9d3JmFIl'
+ 
+ # Local time zone for this installation. Choices can be found here:
+ # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+ # although not all choices may be available on all operating systems.
+ # If running in a Windows environment this must be set to the same as your
+ # system time zone.
+-TIME_ZONE = 'America/Los_Angeles'
++TIME_ZONE = 'America/New_York'
+ 
+ # Language code for this installation. All choices can be found here:
+ # http://www.i18nguy.com/unicode/language-identifiers.html
+Index: node_state_transitions/transition_canonical_to_twopercent.py
+===================================================================
+--- node_state_transitions/transition_canonical_to_twopercent.py	(revision 7038)
++++ node_state_transitions/transition_canonical_to_twopercent.py	(working copy)
+@@ -25,7 +25,7 @@
+ 
+ import os
+ 
+-from seattlegeni.node_state_transitions import node_transition_lib
++import node_transition_lib
+ 
+ 
+ 
+Index: node_state_transitions/transition_donation_to_canonical.py
+===================================================================
+--- node_state_transitions/transition_donation_to_canonical.py	(revision 7038)
++++ node_state_transitions/transition_donation_to_canonical.py	(working copy)
+@@ -25,7 +25,7 @@
+ """
+ 
+ 
+-from seattlegeni.node_state_transitions import node_transition_lib
++import node_transition_lib
+ 
+ 
+ 
+Index: node_state_transitions/transition_onepercentmanyevents_to_canonical.py
+===================================================================
+--- node_state_transitions/transition_onepercentmanyevents_to_canonical.py	(revision 7038)
++++ node_state_transitions/transition_onepercentmanyevents_to_canonical.py	(working copy)
+@@ -34,7 +34,7 @@
+ 
+ from seattlegeni.common.util.decorators import log_function_call
+ 
+-from seattlegeni.node_state_transitions import node_transition_lib
++import node_transition_lib
+ 
+ 
+ 
+Index: node_state_transitions/transition_twopercent_to_twopercent.py
+===================================================================
+--- node_state_transitions/transition_twopercent_to_twopercent.py	(revision 7038)
++++ node_state_transitions/transition_twopercent_to_twopercent.py	(working copy)
+@@ -23,7 +23,7 @@
+ """
+ 
+ 
+-from seattlegeni.node_state_transitions import node_transition_lib
++import node_transition_lib
+ 
+ 
+ def main():
+Index: node_state_transitions/node_transition_lib.py
+===================================================================
+--- node_state_transitions/node_transition_lib.py	(revision 7038)
++++ node_state_transitions/node_transition_lib.py	(working copy)
+@@ -47,8 +47,7 @@
+ import django.db
+ 
+ from seattle import runonce
+-from seattle import repyhelper
+-from seattle import repyportability
++from repyportability import *
+ 
+ import seattlegeni.common.util.log
+ 
+@@ -67,11 +66,12 @@
+ from seattlegeni.website import settings
+ 
+ # Import all the repy files.
+-repyhelper.translate_and_import('advertise.repy')
+-repyhelper.translate_and_import('rsa.repy')
+-repyhelper.translate_and_import('listops.repy')
+-repyhelper.translate_and_import('parallelize.repy')
+-repyhelper.translate_and_import('random.repy')
++add_dy_support(locals())
++dy_import_module_symbols('advertise.repy')
++dy_import_module_symbols('rsa.repy')
++dy_import_module_symbols('listops.repy')
++dy_import_module_symbols('parallelize.repy')
++dy_import_module_symbols('random.repy')
+ 
+ 
+ 
+@@ -307,7 +307,9 @@
+ 
+     # Write to the log for all the nodes that had an exception.
+     for nodename, exceptionstring in nodeprocessresults['exception']:
+-      log("Failure on node "+nodename+"\nException String: "+exceptionstring+"\n")
++      import traceback
++      
++      log("Failure on node "+nodename+"\nException String: "+exceptionstring+"\nTraceback: "+traceback.format_exc()+"\n")
+       failure_count += 1
+ 
+   

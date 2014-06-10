@@ -1,0 +1,27 @@
+Testing module: repyv2api
+        Running: ut_repyv2api_connectionsendremoteclose.py          [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+---
+Uncaught exception!
+---
+Following is a full traceback, and a user traceback.
+The user traceback excludes non-user modules. The most recent call is displayed last.
+Full debugging traceback:
+  "repy.py", line 222, in main
+  "C:\Users\Moshe\seattle\repy_v2\prepared_tests\virtual_namespace.py", line 113, in evaluate
+  "C:\Users\Moshe\seattle\repy_v2\prepared_tests\safe.py", line 337, in safe_run
+  "ut_repyv2api_connectionsendremoteclose.py", line 27, in <module>
+  "C:\Users\Moshe\seattle\repy_v2\prepared_tests\namespace.py", line 945, in __do_func_call
+  "C:\Users\Moshe\seattle\repy_v2\prepared_tests\namespace.py", line 1206, in wrapped_function
+  "C:\Users\Moshe\seattle\repy_v2\prepared_tests\emulcomm.py", line 2009, in send
+User traceback:
+  "ut_repyv2api_connectionsendremoteclose.py", line 27, in <module>
+Exception (with class 'exception_hierarchy.SocketClosedLocal'): The socket has encountered an unexpected error! Err
+0053, 'Software caused connection abort')
+---
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+

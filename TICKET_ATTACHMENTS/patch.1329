@@ -1,0 +1,224 @@
+Index: nodemanager/nmmain.py
+===================================================================
+--- nodemanager/nmmain.py	(revision 7090)
++++ nodemanager/nmmain.py	(working copy)
+@@ -300,7 +300,7 @@
+               servicelogger.log("[INFO]: Current advertised Affix string: " + str(affix_stack_string))
+             else:
+               affix_enabled = False
+-          except AdvertiseError:
++          except (AdvertiseError, TimeoutError), e:
+             affix_enabled = False
+             # Raise error on debug mode.
+             if DEBUG_MODE:
+@@ -701,9 +701,8 @@
+             servicelogger.log('[WARN]:At ' + str(time.time()) + ' affix string chaged to: ' + affix_stack_string_lookup)
+             node_reset_config['reset_accepter'] = True
+             accepter_thread.close_serversocket()
+-      except (AdvertiseError, IndexError, ValueError):
+-        # IndexError and ValueError will occur if the advertise lookup
+-        # returns an empty list.
++      except (AdvertiseError, TimeoutError):
++        # The advertise lookup failed.   We will retry this later once it works
+         pass
+       except Exception, err:
+         servicelogger.log('[Exception]:At ' + str(time.time()) + ' Uncaught exception: ' + str(err))
+Index: shims/natpunchshim.repy
+===================================================================
+--- shims/natpunchshim.repy	(revision 7090)
++++ shims/natpunchshim.repy	(working copy)
+@@ -376,7 +376,7 @@
+     else:
+       try:
+         forwarder_list = self.forwarder_cache.lookup(NAT_FORWARDER_KEY, graceperiod=5, timeout=15)
+-      except AdvertiseError:
++      except (AdvertiseError,TimeoutError):
+         return None
+ 
+ 
+Index: seattlelib/tcp_time.repy
+===================================================================
+--- seattlelib/tcp_time.repy	(revision 7091)
++++ seattlelib/tcp_time.repy	(working copy)
+@@ -102,9 +102,9 @@
+   while attemptretrieval < 2:
+     try:
+       serveraddresses = advertise_lookup("time_server")
+-    except Exception:
++    except TimeoutError:
+       attemptretrieval = attemptretrieval + 1
+-      sleep(2)                 # Look up the value again in 10 seconds
++      sleep(2)                 # Look up the value again later
+     else:
+       if serveraddresses != [] and serveraddresses[0] != '':
+         gotval = True	        # Successfully obtained the value
+Index: seattlelib/advertise.repy
+===================================================================
+--- seattlelib/advertise.repy	(revision 7091)
++++ seattlelib/advertise.repy	(working copy)
+@@ -302,8 +302,15 @@
+       After this many seconds (can be a float or int type), give up.
+ 
+   <Exceptions>
+-    AdvertiseError if something goes wrong.
++    TimeoutError if no service returns an answer and at least one service
++    has a timeout.
+ 
++    AdvertiseError if something goes wrong with *all* services, such as a bad 
++    argument.  *** THIS DOES NOT HAPPEN NOW IN ALL CASES. SEE #1329. ***
++
++    If some services timeout and others have different errors, a TimeoutError
++    will be raised.  If one succeeds, no exception is raised.
++
+   <Side Effects>
+     Spawns as many worker events as concurrentevents specifies, limited by the
+     number of services in lookuptype.
+@@ -342,20 +349,41 @@
+   # success, and then continue.
+   while not parallelize_isfunctionfinished(ph):
+     sleep(0.015)
+-    if getruntime() - start_time > timeout or \
+-        (getruntime() - start_time > graceperiod and onefinished[0]):
++    if getruntime() - start_time > timeout:
++      # This timed out.   Time to abort.   Fix for #1329.
+       parallelize_abortfunction(ph)
++      raise TimeoutError("Advertise lookup timed out without contacting any service")
++    if (getruntime() - start_time > graceperiod and onefinished[0]):
++      # This hit the grace period.   (At least one service worked, but not
++      # as many as were requested.)
++      parallelize_abortfunction(ph)
+       break
+ 
+-  parallel_results = parallelize_getresults(ph)['returned']
++
++  all_parallel_results = parallelize_getresults(ph)
++  parallel_results = all_parallel_results['returned']
+   results = []
+ 
++  atleastonecorrectresult = False
++
+   # Construct a list of return results
+   for parallel_result in parallel_results:
+-    junk, return_value = parallel_result
+-    results += return_value
++    requestinfo, return_value = parallel_result
++    # Did this succeed?
++    if requestinfo[3] == [True]:
++      atleastonecorrectresult = True
+ 
++      results += return_value
++
+   parallelize_closefunction(ph)
+ 
+-  # Filter results and return.
+-  return listops_uniq(results)
++  if atleastonecorrectresult:
++    # Filter results and return.
++    return listops_uniq(results)
++
++  else:
++    # JAC: I should check the errors here and raise TimeoutError only if
++    # timeout was actually the issue.   However with the way this is written 
++    # with the helper function, all exception information is lost.   
++    raise TimeoutError('Error performing lookup.   No services succeeded.')
++ 
+Index: seattlelib/advertise_objects.repy
+===================================================================
+--- seattlelib/advertise_objects.repy	(revision 7091)
++++ seattlelib/advertise_objects.repy	(working copy)
+@@ -72,8 +72,9 @@
+     <Returns>
+       a list of unique values advertised at the key
+ 
+-    <Excpetions>
++    <Exceptions>
+       see advertise_lookup from advertise.repy
++      These will result in the values not being changed
+     """ 
+     
+     if key not in self.cache:
+@@ -90,7 +91,7 @@
+       # if the key is in the cache see how old it is
+       time_expired = getruntime() - self.cache[key]['time']
+       if time_expired > self.refresh_time or time_expired < 0:
+-        # refresh the cache value if its old or the time doesnt make since
++        # refresh the cache value if it is old or the time does not make sense
+         results = advertise_lookup(key, maxvals, lookuptype,concurrentevents,
+                                             graceperiod, timeout)
+         if len(results) > 0:
+Index: affix/natpunchaffix.repy
+===================================================================
+--- affix/natpunchaffix.repy	(revision 7090)
++++ affix/natpunchaffix.repy	(working copy)
+@@ -378,7 +378,7 @@
+         # We will randomize the forwarder list to try and distribute servers
+         # across all the forwarders.
+         forwarder_list = random_sample(forwarder_list, len(forwarder_list))
+-      except AdvertiseError:
++      except (AdvertiseError, TimeoutError):
+         return None
+ 
+ 
+Index: seash/command_callbacks.py
+===================================================================
+--- seash/command_callbacks.py	(revision 7090)
++++ seash/command_callbacks.py	(working copy)
+@@ -1045,7 +1045,14 @@
+     raise seash_exceptions.UserError("Error, must browse as an identity with a public key")
+ 
+ 
+-  nodelist = advertise_lookup(seash_global_variables.keys[environment_dict['currentkeyname']]['publickey'], graceperiod = 3)
++  try:
++    nodelist = advertise_lookup(seash_global_variables.keys[environment_dict['currentkeyname']]['publickey'], graceperiod = 3)
++  except (AdvertiseError, TimeoutError), e:
++    # print the error and return to the user.   Let them decide what to do.
++    print "Error:",e
++    print "Retry or check network connection."
++    return
++    
+ 
+ 
+   # If there are no vessels for a user, the lookup may return ''
+@@ -1103,8 +1110,15 @@
+   type_list = command_key.split()
+ 
+ 
+-  # they are trying to only do some types of lookup...
+-  nodelist = advertise_lookup(seash_global_variables.keys[environment_dict['currentkeyname']]['publickey'],lookuptype=type_list)
++  try:
++    # they are trying to only do some types of lookup...
++    nodelist = advertise_lookup(seash_global_variables.keys[environment_dict['currentkeyname']]['publickey'],lookuptype=type_list)
++  except (AdvertiseError, TimeoutError), e:
++    # print the error and return to the user.   Let them decide what to do.
++    print "Error:",e
++    print "Retry or check network connection."
++    return
++    
+ 
+ 
+   # If there are no vessels for a user, the lookup may return ''
+Index: seattlegeni/stats/scripts/print_data_point.py
+===================================================================
+--- seattlegeni/stats/scripts/print_data_point.py	(revision 7090)
++++ seattlegeni/stats/scripts/print_data_point.py	(working copy)
+@@ -204,17 +204,10 @@
+     The number of nodes found using the public key.
+   """
+ 
+-  # Lookup nodes using publickey
++  # Lookup nodes using publickey.   If it timesout or fails, this is okay.  
++  # just log it, return -1 (to print that in the log) and continue
+   try:
+-    # We only do a central lookup instead of both a central lookup 
+-    # and an opendht lookup because the opendht lookup could be somewhat
+-    # unstable and often times takes a long time to do the lookup.
+-    # The opendht lookup may hang and even be waiting upto hours for a
+-    # lookup result to return. Since this is a script meant to monitor swiftly
+-    # we are going to use just a central lookup because its swift and has most
+-    # of the same data as the opendht. Also the central lookup is more stable
+-    # and the central advertise server is almost always up.
+-    node_list = advertise_lookup(node_state_pubkey, maxvals = 10*1024*1024, lookuptype=["central"])
++    node_list = advertise_lookup(node_state_pubkey, maxvals = 10*1024*1024)
+   except Exception, e:
+     print >> sys.stderr, e
+     return -1

@@ -1,0 +1,350 @@
+Index: command_callbacks.py
+===================================================================
+--- command_callbacks.py	(revision 7151)
++++ command_callbacks.py	(working copy)
+@@ -2444,7 +2444,172 @@
+ 
+ 
+ 
++# dyrunv2 file [args...]    -- Uploads file and dependencies and start
++def dyrunv2_localfn(input_dict, environment_dict):
+ 
++  command_key = input_dict.keys()[0]
++
++  # Iterates through the dictionary to retrieve the repy version to run
++  while input_dict[command_key]['name'] is not 'run':
++    input_dict = input_dict[command_key]['children']
++    command_key = input_dict.keys()[0]
++
++  command = command_key
++
++  # Iterates through the dictionary to retrieve the user's filename
++  while input_dict[command_key]['name'] is not 'filename':
++    input_dict = input_dict[command_key]['children']
++    command_key = input_dict.keys()[0]
++
++  # Handle '~' in file names
++  fileandpath = os.path.expanduser(command_key)
++  onlypath, onlyfilename = os.path.split(fileandpath)
++
++  argstring = " ".join([onlyfilename] + [command_key])
++
++  if not environment_dict['currenttarget']:
++    raise seash_exceptions.UserError("Must specify a target")
++
++  prog_platform = seash_helper.get_execution_platform(command,
++    onlyfilename)
++
++  dependencies = seash_helper.find_r2py_dependencies(fileandpath)
++  files_to_upload = ['dylink.repy', onlyfilename] + dependencies
++
++  for filename in files_to_upload:
++    uploadfileandpath = onlypath + filename
++    # read the local file...
++    fileobj = open(uploadfileandpath,"r")
++    filedata = fileobj.read()
++    fileobj.close()
++
++    # to prevent timeouts during file uploads on slow connections,
++    # temporarily sets the timeout count on all vessels to be the
++    # time needed upload the file with the current globaluploadrate
++    seash_helper.set_upload_timeout(filedata)
++
++    faillist = []
++    goodlist = []
++
++    retdict = seash_helper.contact_targets(
++      seash_global_variables.targets[environment_dict['currenttarget']],
++      seash_helper.upload_target, filename, filedata)
++
++  # Dylink expects the program we're running as the first argument.
++  argstring = 'dylink.repy ' + argstring
++
++  retdict = seash_helper.contact_targets(
++    seash_global_variables.targets[environment_dict['currenttarget']],
++    seash_helper.start_target, argstring,
++    prog_platform)
++
++  for longname in retdict:
++    if retdict[longname][0]:
++      goodlist.append(longname)
++    else:
++      faillist.append(longname)
++
++  seash_helper.print_vessel_errors(retdict)
++
++  # update the groups
++  if goodlist and faillist:
++    seash_global_variables.targets['rungood'] = goodlist
++    seash_global_variables.targets['runfail'] = faillist
++    print "Added group 'rungood' with "+str(len(seash_global_variables.targets['rungood']))+" targets and 'runfail' with "+str(len(seash_global_variables.targets['runfail']))+" targets"
++
++
++  # resets the timeout count on all vessels to globalseashtimeout
++  seash_helper.reset_vessel_timeout()
++
++
++
++
++
++# dyrunv2 file args    -- Uploads file and dependencies and start
++def dyrunv2_localfn_arg(input_dict, environment_dict):
++
++  command_key = input_dict.keys()[0]
++
++  # Iterates through the dictionary to retrieve the repy version to run
++  while input_dict[command_key]['name'] is not 'run':
++    input_dict = input_dict[command_key]['children']
++    command_key = input_dict.keys()[0]
++
++  command = command_key
++
++  # Iterates through the dictionary to retrieve the user's filename
++  while input_dict[command_key]['name'] is not 'filename':
++    input_dict = input_dict[command_key]['children']
++    command_key = input_dict.keys()[0]
++
++  # Handle '~' in file names
++  fileandpath = os.path.expanduser(command_key)
++  onlypath, onlyfilename = os.path.split(fileandpath)
++
++  # Iterates down one more level to retrieve the argument string
++  input_dict = input_dict[command_key]['children']
++  command_key = input_dict.keys()[0]
++
++  argstring = " ".join([onlyfilename] + [command_key])
++
++  if not environment_dict['currenttarget']:
++    raise seash_exceptions.UserError("Must specify a target")
++
++  prog_platform = seash_helper.get_execution_platform(command,
++    onlyfilename)
++
++  dependencies = seash_helper.find_r2py_dependencies(fileandpath)
++  files_to_upload = ['dylink.repy', onlyfilename] + dependencies
++
++  for filename in files_to_upload:
++    uploadfileandpath = onlypath + filename
++    # read the local file...
++    fileobj = open(uploadfileandpath,"r")
++    filedata = fileobj.read()
++    fileobj.close()
++
++    # to prevent timeouts during file uploads on slow connections,
++    # temporarily sets the timeout count on all vessels to be the
++    # time needed upload the file with the current globaluploadrate
++    seash_helper.set_upload_timeout(filedata)
++
++    faillist = []
++    goodlist = []
++
++    retdict = seash_helper.contact_targets(
++      seash_global_variables.targets[environment_dict['currenttarget']],
++      seash_helper.upload_target, filename, filedata)
++
++  # Dylink expects the program we're running as the first argument.
++  argstring = 'dylink.repy ' + argstring
++
++  retdict = seash_helper.contact_targets(
++    seash_global_variables.targets[environment_dict['currenttarget']],
++    seash_helper.start_target, argstring,
++    prog_platform)
++
++  for longname in retdict:
++    if retdict[longname][0]:
++      goodlist.append(longname)
++    else:
++      faillist.append(longname)
++
++  seash_helper.print_vessel_errors(retdict)
++
++  # update the groups
++  if goodlist and faillist:
++    seash_global_variables.targets['rungood'] = goodlist
++    seash_global_variables.targets['runfail'] = faillist
++    print "Added group 'rungood' with "+str(len(seash_global_variables.targets['rungood']))+" targets and 'runfail' with "+str(len(seash_global_variables.targets['runfail']))+" targets"
++
++
++  # resets the timeout count on all vessels to globalseashtimeout
++  seash_helper.reset_vessel_timeout()
++
++
++
++
++
+ #split resourcefn            -- Split off of each vessel another vessel
+ def split_resourcefn(input_dict, environment_dict):
+ 
+Index: seash_dictionary.py
+===================================================================
+--- seash_dictionary.py	(revision 7151)
++++ seash_dictionary.py	(working copy)
+@@ -833,6 +833,51 @@
+   }},
+ 
+ 
++  'dyrunv2':{
++    'name':'run', 'callback':None, 'example':'file [args ...]',
++    'summary':'Upload a file and dependencies and start executing it as repyV2', 'help_text':"""
++Uploads a repy V2 program and its dependencies to a vessel and starts
++it running.  The arguments listed will be passed to the command when it
++is started.
++
++This is a shortcut for uploading dylink.repy, your program file, and its
++dependencies, and starting your program through dylink.repy.
++
++Example:
++
++exampleuser@browsegood !> show log
++Log from '192.x.x.2:1224:v3':
++
++Log from '193.x.x.42:1224:v18':
++
++Log from '219.x.x.62:1224:v4':
++
++Log from '192.x.x.2:1224:v12':
++
++exampleuser@browsegood !> dyrunv2 uses_math_library.r2py
++exampleuser@browsegood !> show log
++Log from '192.x.x.2:1224:v3':
++I use the math library to do rounding!
++
++Log from '193.x.x.42:1224:v18':
++I use the math library to do rounding!
++
++Log from '219.x.x.62:1224:v4':
++I use the math library to do rounding!
++
++Log from '192.x.x.2:1224:v12':
++I use the math library to do rounding!
++
++""", 'children':{
++      '[FILENAME]':{
++        'name':'filename', 'callback':command_callbacks.dyrunv2_localfn, 'example':'[arg1, arg2, ...]',
++        'summary': 'Uploads the file and dependencies to the vessels and starts running them, passing arguments if specified.',
++        'help_text':'','children':{
++          '[ARGUMENT]':{'name':'args', 'callback':command_callbacks.dyrunv2_localfn_arg, 'help_text':'', 'children':{}},
++      }},
++  }},
++
++
+   'move':{
+     'name':'move', 'callback':None, 'example': 'target to group',
+     'summary': 'Add target to group, remove target from default', 'cmdgroup': 'extended', 'help_text':"""
+Index: seash_helper.py
+===================================================================
+--- seash_helper.py	(revision 7151)
++++ seash_helper.py	(working copy)
+@@ -9,6 +9,9 @@
+ 
+ ###Helper Methods###
+ 
++# Used to find a script's dependencies
++import re
++
+ import seash_global_variables
+ 
+ import seash_exceptions
+@@ -1093,3 +1096,44 @@
+     except OSError, e:
+       if not "cannot find the file" in str(e):
+         raise
++
++
++def find_r2py_dependencies(filepath):
++  """
++  <Purpose>
++    Returns a r2py script's dependencies.
++
++  <Arguments>
++    filepath:
++      String representing the full path to the file to check.
++
++  <Side Effects>
++    The specified file and its dependencies will be opened and examined
++    for their dependencies.
++
++  <Exceptions>
++    None
++
++  <Returns>
++    The list of filenames containing what dependencies the specified
++    script has.
++
++    i.e. if a.r2py depends on b.r2py, and b.r2py depends on c.r2py, this
++      function returns ['b.r2py', 'c.r2py'].
++  """
++
++  path = os.path.dirname(filepath)
++
++  # read the local file...
++  fileobj = open(filepath,"r")
++  filedata = fileobj.read()
++  fileobj.close()
++
++  dependencies = re.findall('dy_import_module_symbols\([\'"](.*)[\'"]\)', filedata)
++
++  # Can't modify a list while iterating, so we make a copy
++  for dependency in dependencies[:]:
++    dependencies += find_r2py_dependencies(path + dependency)
++
++  return dependencies
++
+Index: tests/dependency_upload_test_script.r2py
+===================================================================
+--- tests/dependency_upload_test_script.r2py	(revision 0)
++++ tests/dependency_upload_test_script.r2py	(working copy)
+@@ -0,0 +1,7 @@
++"""
++Simple test script that uses the math library.
++"""
++dy_import_module_symbols('math.repy')
++
++log(str(math_ceil(0.1)) + '\n')
++log(str(callargs) + '\n')
+Index: tests/help_test_results.txt
+===================================================================
+--- tests/help_test_results.txt	(revision 7151)
++++ tests/help_test_results.txt	(working copy)
+@@ -11,6 +11,8 @@
+ cat remotefn                 -- Display the contents of a remote file
+ delete remotefn              -- Delete a file.
+ download remotefn (localfn)  -- Download a file (to multiple local files)
++dyrunv2 file [args ...]      -- Upload a file and dependencies and start 
++                                executing it as repyV2
+ exit                         -- Exits the shell
+ list                         -- Update and display information about the 
+                                 vessels
+Index: tests/ut_seash_autoupload_dependencies.py
+===================================================================
+--- tests/ut_seash_autoupload_dependencies.py	(revision 0)
++++ tests/ut_seash_autoupload_dependencies.py	(working copy)
+@@ -0,0 +1,28 @@
++"""
++Tests automatic uploading of dependencies for r2py script dependencies.
++
++"""
++import os
++import seash
++
++import seash_dictionary
++
++# dependency_upload_test_script.r2py imports math.repy, then prints out
++# 1.0 and callargs.
++
++#pragma out 1.0
++#pragma out 1.0
++#pragma out helloworld
++
++commands = [
++  'loadkeys guest0',
++  'as guest0',
++  'browse',
++  'on %1',
++  'reset',
++  'dyrunv2 dependency_upload_test_script.r2py',
++  'dyrunv2 dependency_upload_test_script.r2py helloworld',
++  'show log',
++  ]
++
++seash.command_loop(commands)

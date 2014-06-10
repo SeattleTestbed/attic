@@ -1,0 +1,53 @@
+# integration test to ensure the following three constraints are ment
+# 1. At least 8 time servers are operation
+
+# 2. The consecutime times returned by multiple time_update / get requests
+#    is within a modest time constraint
+
+# 3. The time returned by the tcp method reasonably compares with that of
+#    udp (ntp) method
+
+# assumes port 12345 is an allowed udp port
+
+
+
+include time.repy
+include centralizedadvertise.repy
+
+if callfunc == 'initialize':
+
+
+  # verify that there are at least 8 time servers running
+  servers = centralizedadvertise_lookup("time_server")
+  if len(servers) < 8:
+    print 'WARNING: only '+str(len(servers))+' timeservers are running!'
+    
+
+  # compare multiple calls to get_time using tcp / timeservers
+  
+  t1 = getruntime()
+  times = []
+  time_set_pref(['tcp'])
+  for i in range (5):
+    time_updatetime(12345)
+    times.append(time_gettime())
+  t2 = getruntime()
+
+  diff = max(times) - min(times)
+  if diff > .5 + (t2 - t1):  
+    print 'WARNING large descrepancy between times: '+str(diff)
+  
+
+  # compare ntp time to the tcp time method
+  time_set_pref(['ntp'])
+  time_updatetime(12345)
+  ntp_time = time_gettime()
+  
+  t3 = getruntime()
+
+  diff = ntp_time - max(times)
+  if diff > (.5 + t3 - t2):
+    print 'WARNING: descrepancy between ntp and tcp times: ' +str(diff)
+ 
+
+  

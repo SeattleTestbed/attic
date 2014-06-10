@@ -1,0 +1,82 @@
+Index: tests/uniqueid_testlib1.py
+===================================================================
+--- tests/uniqueid_testlib1.py	(revision 0)
++++ tests/uniqueid_testlib1.py	(working copy)
+@@ -0,0 +1,17 @@
++"""
++<Purpose>
++  Test script to be used by ut_seattlelib_uniqueid.py.  It simply
++  provides a wrapper for uniqueid_getid().
++
++  This module is duplicated so that we can verify that uniqueid
++  functions correctly when imported from two different locations.
++
++"""
++
++from repyportability import *
++add_dy_support(locals())
++
++dy_import_module_symbols("uniqueid.repy")
++
++def getuniqueid():
++  return uniqueid_getid()
+Index: tests/uniqueid_testlib2.py
+===================================================================
+--- tests/uniqueid_testlib2.py	(revision 0)
++++ tests/uniqueid_testlib2.py	(working copy)
+@@ -0,0 +1,17 @@
++"""
++<Purpose>
++  Test script to be used by ut_seattlelib_uniqueid.py.  It simply
++  provides a wrapper for uniqueid_getid().
++
++  This module is duplicated so that we can verify that uniqueid
++  functions correctly when imported from two different locations.
++
++"""
++
++from repyportability import *
++add_dy_support(locals())
++
++dy_import_module_symbols("uniqueid.repy")
++
++def getuniqueid():
++  return uniqueid_getid()
+Index: tests/ut_seattlelib_uniqueid.py
+===================================================================
+--- tests/ut_seattlelib_uniqueid.py	(revision 0)
++++ tests/ut_seattlelib_uniqueid.py	(working copy)
+@@ -0,0 +1,13 @@
++"""
++<Purpose>
++  Test that unique ID provides unique values when imported from
++  different locations.
++
++  This test is inspired by ticket #1318 and #1319.
++"""
++
++import uniqueid_testlib1
++import uniqueid_testlib2
++
++if uniqueid_testlib1.getuniqueid() == uniqueid_testlib2.getuniqueid():
++  print "Did not get a unique ID!"
+Index: uniqueid.repy
+===================================================================
+--- uniqueid.repy	(revision 7251)
++++ uniqueid.repy	(working copy)
+@@ -14,14 +14,8 @@
+ 
+ """
+ 
+-# This is a list to prevent using part of the user's mycontext dict
+-# We use getruntime() instead of a list starting with 0, as this 
+-# library may get imported multiple times. 
+-# See ticket #1319 and #1318 for more details.
++uniqueid_idlist = [0]
+ 
+-current_time = getruntime()
+-uniqueid_idlist = [int((current_time - int(current_time))  * 2**32)]
+- 
+ uniqueid_idlock = createlock()
+ 
+ def uniqueid_getid():

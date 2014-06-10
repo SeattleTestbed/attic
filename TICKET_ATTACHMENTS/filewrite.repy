@@ -1,0 +1,7 @@
+if callfunc == 'initialize':
+  # open an already existing file
+  myfile = openfile("existing file",False)
+  data = "will be at beginning if r+b used else will be at end if a+ used \n"
+  myfile.writeat(data,0)
+  myfile.close()
+

@@ -1,0 +1,23 @@
+--- C:\Users\Leonard\Dropbox\Seattle\seattle\trunk\seash\seash_dictionary.py	Fri Jan  3 01:30:14 2014
++++ C:\Users\Leonard\Dropbox\Seattle\seattle\branches\repy_v2\seash\seash_dictionary.py	Fri Jan 31 13:37:27 2014
+@@ -21,6 +21,20 @@
+ arguments of similar type need different 'name' field in its command dictionary
+ to help distinguish one from the other.
+ """
++
++# repyportability destroys the built-in type variable, so we need to
++# restore the python built-in type function in order for python
++# libraries to work.
++
++# The unit tests often import seash_dictionary directly instead of going
++# through seash, so let's re-insert here so that we cover as much ground
++# as possible..
++originaltype = type
++import repyportability
++import abc
++import warnings
++abc.type = originaltype
++warnings.type = originaltype
+ 
+ 
+ # for access to list of targets

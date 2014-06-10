@@ -1,0 +1,188 @@
+Index: seattlelib/advertise.repy
+===================================================================
+--- seattlelib/advertise.repy	(revision 6879)
++++ seattlelib/advertise.repy	(working copy)
+@@ -21,7 +21,7 @@
+ 
+ # All the names of services we can support.
+ # As of January 2012, openDHT is no longer a default service.
+-_advertise_all_services = ("central", "central_v2", "UDP")
++_advertise_all_services = ("central", "central_v2")
+ 
+ 
+ nodemanager_announce_context = {}
+Index: seattlelib/centralizedadvertise.repy
+===================================================================
+--- seattlelib/centralizedadvertise.repy	(revision 6879)
++++ seattlelib/centralizedadvertise.repy	(working copy)
+@@ -17,7 +17,7 @@
+ 
+ # Hmm, perhaps I should make an initialization call instead of hardcoding this?
+ # I suppose it doesn't matter since one can always override these values
+-servername = "satya.cs.washington.edu"
++servername = "advertiseserver.poly.edu"
+ # This port is updated to use the new port (legacy port is 10101)
+ serverport = 10102
+ 
+Index: seattlelib/centralizedadvertise_v2.repy
+===================================================================
+--- seattlelib/centralizedadvertise_v2.repy	(revision 6879)
++++ seattlelib/centralizedadvertise_v2.repy	(working copy)
+@@ -17,7 +17,7 @@
+ 
+ # Hmm, perhaps I should make an initialization call instead of hardcoding this?
+ # I suppose it doesn't matter since one can always override these values
+-v2servername = "betaseattleclearinghouse.poly.edu"
++v2servername = "advertiseserver_v2.poly.edu"
+ # This port is updated to use the new port (legacy port is 10101)
+ v2serverport = 10102
+ 
+Index: seattlelib/tests/restrictions.advertise
+===================================================================
+--- seattlelib/tests/restrictions.advertise	(revision 0)
++++ seattlelib/tests/restrictions.advertise	(working copy)
+@@ -0,0 +1,63 @@
++resource cpu .10
++resource memory 15000000   # 15 Million bytes
++resource diskused 100000000 # 100 MB
++resource events 10
++resource filewrite 100000
++resource fileread 100000
++resource filesopened 5
++resource insockets 5
++resource outsockets 5
++resource netsend 10000
++resource netrecv 10000
++resource loopsend 1000000
++resource looprecv 1000000
++resource lograte 30000
++resource random 100
++resource messport <messport>
++resource connport <connport>
++resource messport 63100
++resource connport 63100
++
++call gethostbyname_ex allow
++call sendmess allow
++call stopcomm allow 			# it doesn't make sense to restrict
++call recvmess allow
++call openconn allow
++call waitforconn allow
++call socket.close allow 		# let's not restrict
++call socket.send allow 			# let's not restrict
++call socket.recv allow 			# let's not restrict
++# open and file.__init__ both have built in restrictions...
++call open arg 0 is junk_test.out allow 	# can write to junk_test.out
++call open arg 1 is r allow 		# allow an explicit read
++call open arg 1 is rb allow 		# allow an explicit read
++call open noargs is 1 allow 		# allow an implicit read 
++call file.__init__ arg 0 is junk_test.out allow # can write to junk_test.out
++call file.__init__ arg 1 is r allow 	# allow an explicit read
++call file.__init__ arg 1 is rb allow 	# allow an explicit read
++call file.__init__ noargs is 1 allow 	# allow an implicit read 
++call file.close allow 			# shouldn't restrict
++call file.flush allow 			# they are free to use
++call file.next allow 			# free to use as well...
++call file.read allow 			# allow read
++call file.readline allow 		# shouldn't restrict
++call file.readlines allow 		# shouldn't restrict
++call file.seek allow 			# seek doesn't restrict
++call file.write allow 			# shouldn't restrict (open restricts)
++call file.writelines allow 		# shouldn't restrict (open restricts)
++call sleep allow			# harmless
++call settimer allow			# we can't really do anything smart
++call canceltimer allow			# should be okay
++call exitall allow			# should be harmless 
++
++call log.write allow
++call log.writelines allow
++call getmyip allow			# They can get the external IP address
++call listdir allow			# They can list the files they created
++call removefile allow			# They can remove the files they create
++call randomfloat allow			# can get random numbers
++call getruntime allow			# can get the elapsed time
++call getlock allow			# can get a mutex
++call get_thread_name allow        # Allow getting the thread name
++call VirtualNamespace allow     # Allow using VirtualNamespace's
++
+Index: seattlelib/tests/ut_seattlelibtests_testadvertise.py
+===================================================================
+--- seattlelib/tests/ut_seattlelibtests_testadvertise.py	(revision 0)
++++ seattlelib/tests/ut_seattlelibtests_testadvertise.py	(working copy)
+@@ -0,0 +1,16 @@
++from repyportability import *
++_context = locals()
++add_dy_support(_context)
++
++dy_import_module_symbols('advertise.repy')
++
++# restrictions.advertise is identical to restrictions.default save for two 
++# altered lines allowing sending and receiving over port 63100. This 
++# allowance is necessary for testing the UDP client.
++
++# Not throwing an exception means we're happy.
++advertise_announce("some_really_super_random_value?", "valuehere", 60)
++vals = advertise_lookup("some_really_super_random_value?")
++
++if not "valuehere" in vals:
++  log("This shouldn't happen!")
+Index: seattlelib/tests/ut_seattlelibtests_testadvertise_central.py
+===================================================================
+--- seattlelib/tests/ut_seattlelibtests_testadvertise_central.py	(revision 0)
++++ seattlelib/tests/ut_seattlelibtests_testadvertise_central.py	(working copy)
+@@ -0,0 +1,16 @@
++from repyportability import *
++_context = locals()
++add_dy_support(_context)
++
++dy_import_module_symbols('centralizedadvertise.repy')
++
++# restrictions.advertise is identical to restrictions.default save for two 
++# altered lines allowing sending and receiving over port 63100. This 
++# allowance is necessary for testing the UDP client.
++
++# Not throwing an exception means we're happy.
++centralizedadvertise_announce("some_really_super_random_value?", "valuehere", 60)
++vals = centralizedadvertise_lookup("some_really_super_random_value?")
++
++if not "valuehere" in vals:
++  log("This shouldn't happen!")
+Index: seattlelib/tests/ut_seattlelibtests_testadvertise_centralv2.py
+===================================================================
+--- seattlelib/tests/ut_seattlelibtests_testadvertise_centralv2.py	(revision 0)
++++ seattlelib/tests/ut_seattlelibtests_testadvertise_centralv2.py	(working copy)
+@@ -0,0 +1,16 @@
++from repyportability import *
++_context = locals()
++add_dy_support(_context)
++
++dy_import_module_symbols('centralizedadvertise_v2.repy')
++
++# restrictions.advertise is identical to restrictions.default save for two 
++# altered lines allowing sending and receiving over port 63100. This 
++# allowance is necessary for testing the UDP client.
++
++# Not throwing an exception means we're happy.
++v2centralizedadvertise_announce("some_really_super_random_value?", "valuehere", 60)
++vals = v2centralizedadvertise_lookup("some_really_super_random_value?")
++
++if not "valuehere" in vals:
++  log("This shouldn't happen!")
+Index: seattlelib/tests/ut_seattlelibtests_testadvertisetimeout.py
+===================================================================
+--- seattlelib/tests/ut_seattlelibtests_testadvertisetimeout.py	(revision 0)
++++ seattlelib/tests/ut_seattlelibtests_testadvertisetimeout.py	(working copy)
+@@ -0,0 +1,13 @@
++from repyportability import *
++_context = locals()
++add_dy_support(_context)
++
++dy_import_module_symbols('advertise.repy')
++
++# This isn't nearly long enough to advertise a key
++try:
++  advertise_announce("ut_testkey", "test", 60,timeout=.0001)
++except AdvertiseError:
++  pass
++else:
++  log('Should not be able to advertise so quickly!')

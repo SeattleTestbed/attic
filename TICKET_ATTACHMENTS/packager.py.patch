@@ -1,0 +1,4 @@
+95c95
+<   config_dir_rel = constants.TEMP_DIR_NAMES['config']
+---
+>   config_dir_rel = os.path.join('.', constants.TEMP_DIR_NAMES['config'])

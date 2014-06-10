@@ -1,0 +1,51 @@
+Traceback (most recent call last):
+
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 111, in get_response
+
+  File "/home/clearinghouse/live/seattlegeni/website/html/views.py", line 210, in auto_register
+
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/sessions/backends/base.py", line 47, in __getitem__
+
+KeyError: 'partial_pipeline'
+
+
+<ModPythonRequest
+path:/html/auto_register,
+GET:<QueryDict: {}>,
+POST:<QueryDict: {}>,
+COOKIES:{'__utma': '140910259.1482055712.1378954361.1380936323.1380939036.11',
+ '__utmc': '140910259',
+ '__utmz': '140910259.1380124292.5.3.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=(not%20provided)',
+ 'csrftoken': '4d88e91e86646a22646f3284a8e0b4f3',
+ 's_cc': 'true',
+ 's_sq': '%5B%5BB%5D%5D',
+ 's_vnum': '1383606527372%26vn%3D1',
+ 'sessionid': 'ceb4e67cc84a7f83efe6d892fdd6e3a8',
+ 'wt3_eid': '%3B935649882378213%7C2138101432000379407',
+ 'wt3_sid': '%3B935649882378213'},
+META:{'AUTH_TYPE': None,
+ 'CONTENT_LENGTH': 0,
+ 'CONTENT_TYPE': None,
+ 'CSRF_COOKIE': '4d88e91e86646a22646f3284a8e0b4f3',
+ 'GATEWAY_INTERFACE': 'CGI/1.1',
+ 'HTTP_ACCEPT': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+ 'HTTP_ACCEPT_ENCODING': 'gzip,deflate,sdch',
+ 'HTTP_ACCEPT_LANGUAGE': 'en-US,en;q=0.8',
+ 'HTTP_CONNECTION': 'keep-alive',
+ 'HTTP_COOKIE': '__utma=140910259.1482055712.1378954361.1380936323.1380939036.11; __utmc=140910259; __utmz=140910259.1380124292.5.3.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=(not%20provided); wt3_eid=%3B935649882378213%7C2138101432000379407; s_vnum=1383606527372%26vn%3D1; s_cc=true; s_sq=%5B%5BB%5D%5D; wt3_sid=%3B935649882378213; sessionid=ceb4e67cc84a7f83efe6d892fdd6e3a8; csrftoken=4d88e91e86646a22646f3284a8e0b4f3',
+ 'HTTP_HOST': 'seattleclearinghouse.poly.edu',
+ 'HTTP_REFERER': 'https://www.facebook.com/dialog/oauth/read',
+ 'HTTP_USER_AGENT': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.76 Safari/537.36',
+ 'PATH_INFO': u'/html/auto_register',
+ 'PATH_TRANSLATED': None,
+ 'QUERY_STRING': None,
+ 'REMOTE_ADDR': '68.45.155.191',
+ 'REMOTE_HOST': None,
+ 'REMOTE_IDENT': None,
+ 'REMOTE_USER': None,
+ 'REQUEST_METHOD': 'GET',
+ 'SCRIPT_NAME': '',
+ 'SERVER_NAME': 'www.seattleclearinghouse.poly.edu',
+ 'SERVER_PORT': 443,
+ 'SERVER_PROTOCOL': 'HTTP/1.1',
+ 'SERVER_SOFTWARE': 'mod_python'}>

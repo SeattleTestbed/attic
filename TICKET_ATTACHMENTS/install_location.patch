@@ -1,0 +1,241 @@
+Index: com/sensibilitytestbed/InstallerService.java
+===================================================================
+--- com/sensibilitytestbed/InstallerService.java	(revision 7228)
++++ com/sensibilitytestbed/InstallerService.java	(working copy)
+@@ -138,11 +138,11 @@
+ 	// installInfo log file
+ 	public boolean checkInstallationSuccess() {
+ 		// Prefer installInfo.new to installInfo.old
+-		File f = new File(Environment.getExternalStorageDirectory()
++		File f = new File(ScriptActivity.seattleInstallDirectory
+ 				.getAbsolutePath()
+ 				+ "/sl4a/seattle/seattle_repy/installInfo.new");
+ 		if (!f.exists()) {
+-			f = new File(Environment.getExternalStorageDirectory()
++			f = new File(ScriptActivity.seattleInstallDirectory
+ 					.getAbsolutePath()
+ 					+ "/sl4a/seattle/seattle_repy/installInfo.old");
+ 			if (!f.exists())
+@@ -184,7 +184,7 @@
+ 		instance = this;
+ 		// Set python binary located at
+ 		// /data/data/com.seattleonandroid/files/python/bin/python
+-		pythonBinary = new File(this.getFilesDir().getAbsolutePath()
++		pythonBinary = new File(ScriptActivity.seattleInstallDirectory.getAbsolutePath()
+ 				+ "/python/bin/python");
+ 		packageName = this.getPackageName();
+ 		fileDir = this.getFilesDir();
+@@ -212,17 +212,15 @@
+ 		Thread t = new Thread() {
+ 			public void run() {
+ 				// Create seattle root folder
+-				File seattleFolder = new File(Environment
+-						.getExternalStorageDirectory().getAbsolutePath()
+-						+ "/sl4a/seattle/");
++				File seattleFolder = new File(ScriptActivity.seattleInstallDirectory
++					+ "/sl4a/seattle/");
+ 				if (seattleFolder.mkdirs())
+ 					; // folder created
+ 				else
+ 					; // folder not created
+ 
+-				File archive = new File(Environment
+-						.getExternalStorageDirectory().getAbsolutePath()
+-						+ "/sl4a/seattle.zip");
++				File archive = new File(ScriptActivity.seattleInstallDirectory
++					+ "/sl4a/seattle.zip");
+ 				archive.delete();
+ 
+ 				// String user_hash =
+@@ -390,7 +388,7 @@
+ 				// Unzip archive
+ 				try {
+ 					FileInputStream fis = new FileInputStream(archive);
+-					Utils.unzip(fis, Environment.getExternalStorageDirectory()
++					Utils.unzip(fis, ScriptActivity.seattleInstallDirectory
+ 							.getAbsolutePath() + "/sl4a/", false);
+ 				} catch (Exception e) {
+ 					installerLogger.log(Level.SEVERE,
+@@ -428,8 +426,7 @@
+ 						.getStringArray(ScriptActivity.PERMITTED_INTERFACES);
+ 
+ 				// Get information about cores and storage space
+-				StatFs statfs = new StatFs(Environment
+-						.getExternalStorageDirectory().getPath());
++				StatFs statfs = new StatFs(ScriptActivity.seattleInstallDirectory.getPath());
+ 				int cores = Runtime.getRuntime().availableProcessors();
+ 				long freeSpace = (long) statfs.getAvailableBlocks() *
+ 						(long) statfs.getBlockSize();
+@@ -441,8 +438,7 @@
+ 
+ 				// set python 2.7 environmental variables to pass to interpreter
+ 				env.put("PYTHONPATH",
+-						Environment.getExternalStorageDirectory()
+-								.getAbsolutePath()
++						ScriptActivity.seattleInstallDirectory
+ 								+ "/"
+ 								+ packageName
+ 								+ "/extras/python"
+@@ -453,7 +449,7 @@
+ 								+ fileDir.getAbsolutePath()
+ 								+ "/python/lib/python2.7");
+ 
+-				env.put("TEMP", Environment.getExternalStorageDirectory()
++				env.put("TEMP", ScriptActivity.seattleInstallDirectory
+ 						.getAbsolutePath() + "/" + packageName + "/extras/tmp");
+ 
+ 				env.put("PYTHONHOME", fileDir.getAbsolutePath() + "/python");
+@@ -560,7 +556,7 @@
+ 		}
+ 		installerLogger = Logger.getLogger(getString(R.string.app_name));
+ 		installerLogger.setLevel(Level.INFO);
+-		File logDir = new File(Environment.getExternalStorageDirectory()
++		File logDir = new File(ScriptActivity.seattleInstallDirectory
+ 				+ File.separator + "sl4a" // folder name
+ 				+ File.separator + "seattle" // folder name
+ 				+ File.separator + "seattle_repy"); // folder name
+Index: com/sensibilitytestbed/process/InterpreterProcess.java
+===================================================================
+--- com/sensibilitytestbed/process/InterpreterProcess.java	(revision 7228)
++++ com/sensibilitytestbed/process/InterpreterProcess.java	(working copy)
+@@ -29,6 +29,7 @@
+ import com.googlecode.android_scripting.interpreter.InterpreterConstants;
+ import com.googlecode.android_scripting.interpreter.MyInterpreter;
+ import com.googlecode.android_scripting.jsonrpc.RpcReceiverManagerFactory;
++import com.sensibilitytestbed.ScriptActivity;
+ import com.sensibilitytestbed.ScriptApplication;
+ 
+ /**
+@@ -137,6 +138,6 @@
+   }
+   @Override
+   public String getSdcardPackageDirectory() {
+-    return Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + ScriptApplication.getThePackageName();
++    return ScriptActivity.seattleInstallDirectory.getAbsolutePath() + "/" + ScriptApplication.getThePackageName();
+   }
+ }
+Index: com/sensibilitytestbed/ScriptActivity.java
+===================================================================
+--- com/sensibilitytestbed/ScriptActivity.java	(revision 7228)
++++ com/sensibilitytestbed/ScriptActivity.java	(working copy)
+@@ -108,6 +108,13 @@
+ 	// installation
+ 	private static boolean autostartedAfterInstallation = false;
+ 
++	// This is initialized by the onStart() method.  It needs to be static
++	// as it is referred to in a lot of different classes.  This should be fine
++	// since a ScriptActivity instance will be the first thing instantiated (as
++	// far as anything that uses seattleInstallDirectory is concerned).
++	// This should NOT be modified after initialization.
++	public static File seattleInstallDirectory;
++
+ 	// Message handler used for notifying the activity
+ 	public static MyMessageHandler handler;
+ 
+@@ -117,7 +124,7 @@
+ 	// Not to be confused with seattle_repy directory, which is a subdirectory
+ 	// of seattle-root
+ 	public static String getSeattlePath() {
+-		return Environment.getExternalStorageDirectory().getAbsolutePath()
++		return seattleInstallDirectory.getAbsolutePath()
+ 				+ "/sl4a/seattle/";
+ 	}
+ 
+@@ -731,8 +738,7 @@
+ 				else if (zipName.endsWith(Common.PYTHON_EXTRAS_ZIP_NAME)) {
+ 					Utils.createDirectoryOnExternalStorage("com.sensibilitytestbed/extras");
+ 					Utils.createDirectoryOnExternalStorage("com.sensibilitytestbed/extras/tmp");
+-					Utils.unzip(content, Environment
+-							.getExternalStorageDirectory().getAbsolutePath()
++					Utils.unzip(content, seattleInstallDirectory
+ 							+ "/com.sensibilitytestbed/extras/", true);
+ 				}
+ 			} catch (Exception e) {
+@@ -749,6 +755,10 @@
+ 		// Load settings
+ 		settings = getSharedPreferences(SEATTLE_PREFERENCES,
+ 				MODE_WORLD_WRITEABLE);
++		seattleInstallDirectory = getExternalFilesDir(null);
++		Log.v(Common.LOG_TAG, "Application files will be placed in: " +
++			seattleInstallDirectory.getAbsolutePath());
++
+ 		if (!Environment.getExternalStorageState().equals(
+ 				Environment.MEDIA_MOUNTED)) {
+ 			// External storage device not mounted
+Index: com/sensibilitytestbed/ScriptService.java
+===================================================================
+--- com/sensibilitytestbed/ScriptService.java	(revision 7228)
++++ com/sensibilitytestbed/ScriptService.java	(working copy)
+@@ -155,7 +155,7 @@
+ 		Log.i(Common.LOG_TAG, Common.LOG_INFO_STARTING_SEATTLE_UPDATER);
+ 
+ 		// Get updater script file
+-		File updater = new File(Environment.getExternalStorageDirectory()
++		File updater = new File(ScriptActivity.seattleInstallDirectory
+ 				.getAbsolutePath()
+ 				+ "/sl4a/seattle/seattle_repy/softwareupdater.py");
+ 
+@@ -187,7 +187,7 @@
+ 		env.put("SEATTLE_RUN_SOFTWAREUPDATER_IN_FOREGROUND", "True");
+ 
+ 		// 2.7 set python environmental variables
+-		env.put("PYTHONPATH", Environment.getExternalStorageDirectory()
++		env.put("PYTHONPATH", ScriptActivity.seattleInstallDirectory
+ 				.getAbsolutePath()
+ 				+ "/"
+ 				+ this.getPackageName()
+@@ -199,7 +199,7 @@
+ 				+ this.getFilesDir().getAbsolutePath()
+ 				+ "/python/lib/python2.7");
+ 
+-		env.put("TEMP", Environment.getExternalStorageDirectory()
++		env.put("TEMP", ScriptActivity.seattleInstallDirectory
+ 				.getAbsolutePath()
+ 				+ "/"
+ 				+ this.getPackageName()
+@@ -263,7 +263,7 @@
+ 
+ 		Log.i(Common.LOG_TAG, Common.LOG_INFO_STARTING_SEATTLE_MAIN);
+ 		// Get nodemanager script file
+-		File seattlemain = new File(Environment.getExternalStorageDirectory()
++		File seattlemain = new File(ScriptActivity.seattleInstallDirectory
+ 				.getAbsolutePath() + "/sl4a/seattle/seattle_repy/nmmain.py");
+ 
+ 		// Set arguments
+@@ -280,7 +280,7 @@
+ 
+ 		// set python 2.7 environmental variables to pass to interpreter
+ 		environmentVariables.put("PYTHONPATH",
+-				Environment.getExternalStorageDirectory().getAbsolutePath()
++				ScriptActivity.seattleInstallDirectory.getAbsolutePath()
+ 						+ "/" + this.getPackageName() + "/extras/python" + ":"
+ 						+ this.getFilesDir().getAbsolutePath()
+ 						+ "/python/lib/python2.7/lib-dynload" + ":"
+@@ -288,7 +288,7 @@
+ 						+ "/python/lib/python2.7");
+ 
+ 		environmentVariables.put("TEMP",
+-				Environment.getExternalStorageDirectory().getAbsolutePath()
++				ScriptActivity.seattleInstallDirectory.getAbsolutePath()
+ 						+ "/" + this.getPackageName() + "/extras/tmp");
+ 
+ 		environmentVariables.put("PYTHONHOME", this.getFilesDir()
+Index: com/sensibilitytestbed/Utils.java
+===================================================================
+--- com/sensibilitytestbed/Utils.java	(revision 7228)
++++ com/sensibilitytestbed/Utils.java	(working copy)
+@@ -135,12 +135,12 @@
+ 
+ 	public static void createDirectoryOnExternalStorage(String path) {
+ 		try {
+-			File file = new File(Environment.getExternalStorageDirectory(), path);
++			File file = new File(ScriptActivity.seattleInstallDirectory, path);
+ 			if (!file.exists()) {
+ 				try {
+ 					file.mkdirs();
+ 					Log.i(Common.LOG_TAG, "createDirectoryOnExternalStorage created "
+-							+ Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + path);
++							+ ScriptActivity.seattleInstallDirectory.getAbsolutePath() + "/" + path);
+ 				} catch (Exception e) {
+ 					Log.e(Common.LOG_TAG, "createDirectoryOnExternalStorage error: ", e);
+ 				}

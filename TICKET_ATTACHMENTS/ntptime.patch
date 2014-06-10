@@ -1,0 +1,47 @@
+Index: seattlelib/ntp_time.repy
+===================================================================
+--- seattlelib/ntp_time.repy	(revision 6805)
++++ seattlelib/ntp_time.repy	(working copy)
+@@ -70,6 +70,10 @@
+ 
+   timeservers = ["time-a.nist.gov", "time-b.nist.gov", "time-a.timefreq.bldrdoc.gov", "time-b.timefreq.bldrdoc.gov", "time-c.timefreq.bldrdoc.gov", "utcnist.colorado.edu", "time.nist.gov", "time-nw.nist.gov", "nist1.symmetricom.com", "nist1-dc.WiTime.net", "nist1-ny.WiTime.net", "nist1-sj.WiTime.net", "nist1.aol-ca.symmetricom.com", "nist1.aol-va.symmetricom.com", "nist1.columbiacountyga.gov", "nist.expertsmi.com", "nist.netservicesgroup.com"]
+ 
++  # As we're picking 5 servers by random, there's not much benefit
++  # from caching this list for re-use, so we can empty it.
++  mycontext['ntp_time_server_ips'] = []
++
+   listenhandle = recvmess(ip,localport, _time_decode_NTP_packet)
+   mycontext['ntp_time_got_time'] = False
+ 
+@@ -80,6 +84,15 @@
+   try: 
+     # try five random servers times...
+     for servername in random_sample(timeservers,5):
++      try:
++        # These are the IPs of the servers that we're expecting
++        # responses from...
++        mycontext['ntp_time_server_ips'].extend(gethostbyname_ex(servername)[2])
++      except Exception, e:
++        # Could be a DNS resolution error, in that case we skip...
++        if "nodename nor servname provided, or not known" in e:
++          continue
++        raise
+ 
+       # this sends a request, version 3 in "client mode"
+       ntp_request_string = chr(27)+chr(0)*47
+@@ -144,9 +157,12 @@
+ 
+ 
+ def _time_decode_NTP_packet(ip, port, mess, ch):
+-  # I got a time response packet.   Remember it and notify that I got it.
+-  mycontext['ntp_time_received_times'].append(_time_convert_timestamp_to_float(mess[40:48]))
+-  mycontext['ntp_time_got_time'] = True
++  # We need to check who we're getting this message from, as we don't
++  # want to crash from UDP data that we did not request.
++  if ip in mycontext['ntp_time_server_ips']:
++    # I got a time response packet.   Remember it and notify that I got it.
++    mycontext['ntp_time_received_times'].append(_time_convert_timestamp_to_float(mess[40:48]))
++    mycontext['ntp_time_got_time'] = True
+ 
+ 
+ #register the update method

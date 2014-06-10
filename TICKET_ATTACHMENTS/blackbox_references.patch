@@ -1,0 +1,250 @@
+Index: advertiseserver/udpadvertiseserver.repy
+===================================================================
+--- advertiseserver/udpadvertiseserver.repy	(revision 6416)
++++ advertiseserver/udpadvertiseserver.repy	(working copy)
+@@ -14,7 +14,7 @@
+ dy_import_module_symbols("serialize")
+ 
+ serverport = 10102
+-servername = '128.208.4.96' # Blackbox IP
++servername = '128.238.63.50' # Blackbox IP
+ 
+ # These are storage locations for data pertinent to logging.
+ mycontext["get_times"] = []
+Index: deploymentscripts/missing_seattle_install_p.py
+===================================================================
+--- deploymentscripts/missing_seattle_install_p.py	(revision 6416)
++++ deploymentscripts/missing_seattle_install_p.py	(working copy)
+@@ -207,7 +207,6 @@
+   cmd_list.append('rm -rf seattle_linux.tgz')
+   
+   cmd_list.append('wget https://seattlegeni.cs.washington.edu/geni/download/flibble/seattle_linux.tgz')
+-  #cmd_list.append('wget --no-check-certificate https://blackbox.cs.washington.edu/geni/html/tukwila/seattle_linux.tgz')
+ 
+   # 2. Untar
+   cmd_list.append('tar -xf seattle_linux.tgz')
+Index: dist/android/SeattleOnAndroid/src/com/seattletestbed/Common.java
+===================================================================
+--- dist/android/SeattleOnAndroid/src/com/seattletestbed/Common.java	(revision 6416)
++++ dist/android/SeattleOnAndroid/src/com/seattletestbed/Common.java	(working copy)
+@@ -9,7 +9,7 @@
+ 
+ 	// Trusted hostnames
+ 	public static final String[] TRUSTED_DOWNLOAD_HOSTNAMES_WHITELIST = {
+-		"seattleclearinghouse.poly.edu", "betaseattleclearinghouse.poly.edu", "blackbox.cs.washington.edu",
++		"seattleclearinghouse.poly.edu", "betaseattleclearinghouse.poly.edu",
+ 		"blackbox.poly.edu", "custombuilder.poly.edu"
+ 	};
+ 
+Index: dist/push_update_to_all_clients.sh
+===================================================================
+--- dist/push_update_to_all_clients.sh	(revision 6416)
++++ dist/push_update_to_all_clients.sh	(working copy)
+@@ -14,7 +14,7 @@
+ PUBLIC_KEY_FILE=/path/to/softwareupdater.publickey
+ PRIVATE_KEY_FILE=/path/to/softwareupdater.privatekey
+ 
+-UPDATE_URL=http://blackbox.cs.washington.edu/updatesite/
++UPDATE_URL=http://blackbox.poly.edu/updatesite/
+ 
+ UPDATESITE_DIR=/var/www/updatesite
+ DEBUG_UPDATESITE_DIR=$UPDATESITE_DIR-test
+Index: dist/rebuild_base_installers_for_seattlegeni.sh
+===================================================================
+--- dist/rebuild_base_installers_for_seattlegeni.sh	(revision 6416)
++++ dist/rebuild_base_installers_for_seattlegeni.sh	(working copy)
+@@ -10,7 +10,7 @@
+ 
+ VERSION=$1
+ 
+-SOFTWARE_UPDATE_URL=http://blackbox.cs.washington.edu/updatesite/
++SOFTWARE_UPDATE_URL=http://blackbox.poly.edu/updatesite/
+ PUBLIC_KEY_FILE=/path/to/softwareupdater.publickey
+ 
+ e=`cat $PUBLIC_KEY_FILE | cut -d' ' -f 1`
+Index: dist/tuf_migration/migrate_softwareupdater.sh
+===================================================================
+--- dist/tuf_migration/migrate_softwareupdater.sh	(revision 6416)
++++ dist/tuf_migration/migrate_softwareupdater.sh	(working copy)
+@@ -7,13 +7,13 @@
+ trunk_dir=/home/testgeni/trunk
+ 
+ tuf_server_dir=/var/www/tuf_updatesite
+-tuf_server_url="http://blackbox.cs.washington.edu/tuf_updatesite/"
++tuf_server_url="http://blackbox.poly.edu/tuf_updatesite/"
+ 
+ temp_server_dir=/var/www/migrate_updatesite
+-temp_server_url="http://blackbox.cs.washington.edu/migrate_updatesite/"
++temp_server_url="http://blackbox.poly.edu/migrate_updatesite/"
+ 
+ current_server_dir=/var/www/updatesite
+-current_server_url="http://blackbox.cs.washington.edu/updatesite/"
++current_server_url="http://blackbox.poly.edu/updatesite/"
+ 
+ public_key_file=/path/to/pubkey
+ private_key_file=/path/to/privkey
+Index: dist/tuf_migration/rebuild_base_installers_for_seattlegeni_tuf.sh
+===================================================================
+--- dist/tuf_migration/rebuild_base_installers_for_seattlegeni_tuf.sh	(revision 6416)
++++ dist/tuf_migration/rebuild_base_installers_for_seattlegeni_tuf.sh	(working copy)
+@@ -10,7 +10,7 @@
+ 
+ VERSION=$1
+ 
+-SOFTWARE_UPDATE_URL=http://blackbox.cs.washington.edu/tuf_updatesite/
++SOFTWARE_UPDATE_URL=http://blackbox.poly.edu/tuf_updatesite/
+ PUBLIC_KEY_FILE=/home/testgeni/softwareupdater_keys/softwareupdater_tuf_keys.publickey
+ 
+ e=`cat $PUBLIC_KEY_FILE | cut -d' ' -f 1`
+Index: integrationtests/ping_machines/ping_machines.py
+===================================================================
+--- integrationtests/ping_machines/ping_machines.py	(revision 6416)
++++ integrationtests/ping_machines/ping_machines.py	(working copy)
+@@ -36,7 +36,7 @@
+ 
+ 
+ #list of critical machines that should be always up and running 
+-machine_list = ["seattle.cs.washington.edu", "seattlegeni.cs.washington.edu", "blackbox.cs.washington.edu", "testbed-xp2.cs.washington.edu", "testbed-freebsd.cs.washington.edu", "testbed-opensuse.cs.washington.edu", "testbed-mac.cs.washington.edu", "blah.sc.washington.edu"]
++machine_list = ["seattle.cs.washington.edu", "seattlegeni.cs.washington.edu", "blackbox.poly.edu", "testbed-xp2.cs.washington.edu", "testbed-freebsd.cs.washington.edu", "testbed-opensuse.cs.washington.edu", "testbed-mac.cs.washington.edu", "blah.sc.washington.edu"]
+ 
+ 
+ 
+Index: production_nat_new/src/nmpatch/addme.py
+===================================================================
+--- production_nat_new/src/nmpatch/addme.py	(revision 6416)
++++ production_nat_new/src/nmpatch/addme.py	(working copy)
+@@ -13,7 +13,7 @@
+ 
+ if LOCAL:
+   USERNAME = "angela"
+-  DEFAULT_XMLRPC_URL = "http://blackbox.cs.washington.edu:8001/xmlrpc/"
++  DEFAULT_XMLRPC_URL = "http://blackbox.poly.edu:8001/xmlrpc/"
+   API_KEY = "R2J1QXZ604M9HWBIKF3G8CLDP5A7UYTN"
+ else:
+   USERNAME = "danny"
+Index: production_nat_new/src/nmpatch/apply.sh
+===================================================================
+--- production_nat_new/src/nmpatch/apply.sh	(revision 6416)
++++ production_nat_new/src/nmpatch/apply.sh	(working copy)
+@@ -25,8 +25,8 @@
+ #cp ShimStackInterface.repy nmclient.repy sockettimeout.repy ~/seattle/demokit/
+ #echo 'Patch applied to seash.'
+ 
+-# scp -q ShimStackInterface.repy nmclient.repy sockettimeout.repy hdanny@blackbox.cs.washington.edu:~/deploy/seattle
+-# ssh hdanny@blackbox.cs.washington.edu 'rm ~/deploy/seattle/*_repy.py'
++# scp -q ShimStackInterface.repy nmclient.repy sockettimeout.repy hdanny@blackbox.poly.edu:~/deploy/seattle
++# ssh hdanny@blackbox.poly.edu 'rm ~/deploy/seattle/*_repy.py'
+ # echo 'Patch applied to seattlegeni'
+ 
+ # cd ~/seattle
+Index: protogeni_integration/seattleclearinghouse_xmlrpc_server.pl
+===================================================================
+--- protogeni_integration/seattleclearinghouse_xmlrpc_server.pl	(revision 6416)
++++ protogeni_integration/seattleclearinghouse_xmlrpc_server.pl	(working copy)
+@@ -514,9 +514,9 @@
+ 
+   # Create the manifest in XML form.
+   my $manifest = {};
+-  $manifest->{'xmlns'} = "https://blackbox.cs.washington.edu/xmlrpc/";
++  $manifest->{'xmlns'} = "https://blackbox.poly.edu/xmlrpc/";
+   $manifest->{'xmlns:xsi'} = "http://www.w3.org/2001/XMLSchema-instance";
+-  $manifest->{'xsi:schemaLocation'} = "https://blackbox.cs.washington.edu/~geni/seattle_manifest.xsd";
++  $manifest->{'xsi:schemaLocation'} = "https://blackbox.poly.edu/~geni/seattle_manifest.xsd";
+   $manifest->{'generated'} = "today";
+   $manifest->{'generated_by'} = "SeattleGENI";
+   $manifest->{'type'} = "response";
+Index: protogeni_integration/test/test_seattleclearinghouse_xmlrpc.py
+===================================================================
+--- protogeni_integration/test/test_seattleclearinghouse_xmlrpc.py	(revision 6416)
++++ protogeni_integration/test/test_seattleclearinghouse_xmlrpc.py	(working copy)
+@@ -17,7 +17,7 @@
+ 
+ 
+ 
+-server_address = "https://blackbox.cs.washington.edu:443/xmlrpc/"
++server_address = "https://blackbox.poly.edu:443/xmlrpc/"
+ certificate_file = "/path/to/certificate/emulab.pem"
+ certificate_key = "/path/to/certificate/emulab.pem"
+ slice_urn = "urn:publicid:IDN+SeattleGENI+slice+mytestslice"
+Index: protogeni_integration/xml_manifest_schema/seattle_manifest.xsd
+===================================================================
+--- protogeni_integration/xml_manifest_schema/seattle_manifest.xsd	(revision 6416)
++++ protogeni_integration/xml_manifest_schema/seattle_manifest.xsd	(working copy)
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="https://blackbox.cs.washington.edu/xmlrpc/" xmlns:rspec="https://blackbox.cs.washington.edu/xmlrpc">
++<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="https://blackbox.poly.edu/xmlrpc/" xmlns:rspec="https://blackbox.poly.edu/xmlrpc">
+   <xs:include schemaLocation="any-extension-schema.xsd"/>
+   <!--
+       This is the xml schema for the return of the manifest by CreateSliver
+Index: seattlegeni/README.txt
+===================================================================
+--- seattlegeni/README.txt	(revision 6416)
++++ seattlegeni/README.txt	(working copy)
+@@ -255,8 +255,8 @@
+ 
+     # Redirect requests for the server index page or that are geni-related
+     # to the https site.
+-    RedirectMatch ^/$ https://blackbox.cs.washington.edu/geni/html/register
+-    RedirectMatch ^/geni https://blackbox.cs.washington.edu/geni/html/register
++    RedirectMatch ^/$ https://blackbox.poly.edu/geni/html/register
++    RedirectMatch ^/geni https://blackbox.poly.edu/geni/html/register
+ 
+ Lines added to a secure https vhost that users are redirected to:
+ 
+@@ -283,12 +283,12 @@
+     </Location>
+ 
+     # Make sure various locations people might request redirect somewhere that works.
+-    RedirectMatch ^/$ https://blackbox.cs.washington.edu/geni/html/register
+-    RedirectMatch ^/geni/?$ https://blackbox.cs.washington.edu/geni/html/register
+-    RedirectMatch ^/geni/html/?$ https://blackbox.cs.washington.edu/geni/html/register
++    RedirectMatch ^/$ https://blackbox.poly.edu/geni/html/register
++    RedirectMatch ^/geni/?$ https://blackbox.poly.edu/geni/html/register
++    RedirectMatch ^/geni/html/?$ https://blackbox.poly.edu/geni/html/register
+ 
+     # Don't require a slash on the end of the admin url.
+-    RedirectMatch ^/geni/admin$ https://blackbox.cs.washington.edu/geni/admin/
++    RedirectMatch ^/geni/admin$ https://blackbox.poly.edu/geni/admin/
+       
+ ------------------------------------------------------------------------------
+ 
+Index: seattlegeni/website/settings.py
+===================================================================
+--- seattlegeni/website/settings.py	(revision 6416)
++++ seattlegeni/website/settings.py	(working copy)
+@@ -53,7 +53,7 @@
+ 
+ # Not currently used. This is left in for legacy installs
+ #The url that corresponds to SEATTLECLEARINGHOUSE_USER_INSTALLERS_DIR
+-#SEATTLECLEARINGHOUSE_USER_INSTALLERS_URL = "https://blackbox.cs.washington.edu/dist/geni"
++#SEATTLECLEARINGHOUSE_USER_INSTALLERS_URL = "https://blackbox.poly.edu/dist/geni"
+ 
+ # Need to specify the LOGIN_URL, as our login page isn't at the default login
+ # location (the default is /accounts/login).
+Index: seattlelib/udpcentralizedadvertise.repy
+===================================================================
+--- seattlelib/udpcentralizedadvertise.repy	(revision 6416)
++++ seattlelib/udpcentralizedadvertise.repy	(working copy)
+@@ -16,7 +16,7 @@
+ 
+ # Hmm, perhaps I should make an initialization call instead of hardcoding this?
+ # I suppose it doesn't matter since one can always override these values
+-udpservername = "blackbox.cs.washington.edu"
++udpservername = "blackbox.poly.edu"
+ udpserverport = 10102
+ 
+ # how long to wait for timeouts...
+Index: tuf/seattle_tuf_softwareupdater.py
+===================================================================
+--- tuf/seattle_tuf_softwareupdater.py	(revision 6416)
++++ tuf/seattle_tuf_softwareupdater.py	(working copy)
+@@ -63,7 +63,7 @@
+ tuf.conf.settings.repo_meta_dir = "."
+ 
+ # where to get updates from
+-seattle_url = "http://blackbox.cs.washington.edu/tuf_updatesite/"
++seattle_url = "http://blackbox.poly.edu/tuf_updatesite/"
+ 
+ # Whether the nodemanager should be told not to daemonize when it is restarted.
+ # This is only to assist our automated tests.

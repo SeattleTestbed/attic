@@ -1,0 +1,208 @@
+python utf.py -m repyv2api
+Testing module: repyv2api
+	Running: ut_repyv2api_connectionrecvlocalclose.py           [ PASS ]
+	Running: ut_repyv2api_listenforconn-badport.py              [ PASS ]
+	Running: ut_repyv2api_sendmessagecheckstypes.py             [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0x24e06d0>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_sendmessage-exceptions.py             [ PASS ]
+	Running: ut_repyv2api_unicodedisallowed.py                  [ PASS ]
+	Running: ut_repyv2api_listenforconn-addrbinding.py          [ PASS ]
+	Running: ut_repyv2api_listencloselisten.py                  [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0x28fa750>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_tcpserver_wouldblock.py               [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0xd6c7d0>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_getresourcedataisvalid.py             [ PASS ]
+	Running: ut_repyv2api_listenforconn-args.py                 [ PASS ]
+	Running: ut_repyv2api_connectionserversendblocks.py         [ PASS ]
+	Running: ut_repyv2api_randombytesissane.py                  [ PASS ]
+	Running: ut_repyv2api_multipleopenconnections2.py           [ PASS ]
+	Running: ut_repyv2api_openconnectionalreadyalistening.py    [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0x1dc9790>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_openfileduplicatefilefails.py         [ PASS ]
+	Running: ut_repyv2api_stoptimesaresane.py                   [ PASS ]
+	Running: ut_repyv2api_openfileconsumesfilehandles.py        [ PASS ]
+	Running: ut_repyv2api_virtualnamespace-init.py              [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0xf496d0>> ignored
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0xf497d0>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_listfilesbasictest.py                 [ PASS ]
+	Running: ut_repyv2api_openfilesanitychecksargs.py           [ PASS ]
+	Running: ut_repyv2api_listenforconn-resources.py            [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0x2bce810>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_removefileperformsresourceaccounting.py [ PASS ]
+	Running: ut_repyv2api_getlasterrorworks.py                  [ PASS ]
+	Running: ut_repyv2api_connectionduplicateclose.py           [ PASS ]
+	Running: ut_repyv2api_virtualnamespace-eval.py              [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0xd61750>> ignored
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0xd61850>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_filereadatbasictest.py                [ PASS ]
+	Running: ut_repyv2api_listenclosesend.py                    [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0x1b707d0>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_connectionsendwillnotblock.py         [ PASS ]
+	Running: ut_repyv2api_virtualnamespacecontextsafety.py      [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0x19eb650>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_connectionrecvremoteclose.py          [ PASS ]
+	Running: ut_repyv2api_listenforconn-cleanup.py              [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0xd96750>> ignored
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0xd96890>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_openconnectiontimeout.py              [ PASS ]
+	Running: ut_repyv2api_listenformessage-exceptions.py        [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0x2932790>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_createlocknonblocking.py              [ PASS ]
+	Running: ut_repyv2api_openfileperformsresourceaccounting.py [ PASS ]
+	Running: ut_repyv2api_listenforconn-dup.py                  [ PASS ]
+	Running: ut_repyv2api_exitallstopscurrentthread.py          [ PASS ]
+	Running: ut_repyv2api_connectionsendremoteclose.py          [ PASS ]
+	Running: ut_repyv2api_removefileissane.py                   [ PASS ]
+	Running: ut_repyv2api_getthreadnamebasictest.py             [ PASS ]
+	Running: ut_repyv2api_filereadatsanitychecksargs.py         [ PASS ]
+	Running: ut_repyv2api_initialusevaluesaresane.py            [ PASS ]
+	Running: ut_repyv2api_listenformessage-distinctfromtcp.py   [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0x18d4790>> ignored
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0x18d4790>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_filewriteatbasictest.py               [ PASS ]
+	Running: ut_repyv2api_createthreadhasresourcecontrols.py    [ PASS ]
+	Running: ut_repyv2api_connectionsendwilleventuallyblock.py  [ PASS ]
+	Running: ut_repyv2api_randombytesisresourcelimited.py       [ PASS ]
+	Running: ut_repyv2api_openconnectionduplicatetuple.py       [ PASS ]
+	Running: ut_repyv2api_filecloseconcurrecy.py                [ PASS ]
+	Running: ut_repyv2api_createlockblocks.py                   [ PASS ]
+	Running: ut_repyv2api_fileclosereleasesresource.py          [ PASS ]
+	Running: ut_repyv2api_openconnectionwithbadlocalip.py       [ PASS ]
+	Running: ut_repyv2api_openconnectionresourceforbidden.py    [ PASS ]
+	Running: ut_repyv2api_listfilesperformsresourceaccounting.py [ PASS ]
+	Running: ut_repyv2api_nannyupdatesresourceconsumption.py    [ PASS ]
+	Running: ut_repyv2api_connectionsendlocalclose.py           [ PASS ]
+	Running: ut_repyv2api_createthreadissane.py                 [ PASS ]
+	Running: ut_repyv2api_fileclosemakesothercallsfail.py       [ PASS ]
+	Running: ut_repyv2api_connectionrecvwouldblock.py           [ PASS ]
+	Running: ut_repyv2api_multipleopenconnections.py            [ PASS ]
+	Running: ut_repyv2api_sendmessagebasictest.py               [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0xec0710>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_filereadatperformsresourceaccounting.py [ PASS ]
+	Running: ut_repyv2api_filereadatpastendoffile.py            [ PASS ]
+	Running: ut_repyv2api_filewriteatperformsresourceaccounting.py [ PASS ]
+	Running: ut_repyv2api_openconnectionsanitychecksargs.py     [ PASS ]
+	Running: ut_repyv2api_sendmessage5ktest.py                  [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0x1d07710>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_listencloselisten2.py                 [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0x1dbe790>> ignored
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0x1dbe6d0>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_filewriteatsanitychecksargs.py        [ PASS ]
+	Running: ut_repyv2api_exitallstopsanotherthread.py          [ PASS ]
+	Running: ut_repyv2api_listenformessage-reopening.py         [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0x1940710>> ignored
+Exception exception_hierarchy.RunBuiltinException: RunBuiltinException() in <bound method Popen.__del__ of <subprocess.Popen object at 0x1940650>> ignored
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_repyv2api_openconnectionfailswithoutlisten.py   [ PASS ]
+	Running: ut_repyv2api_sleepbasictest.py                     [ PASS ]

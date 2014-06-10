@@ -1,0 +1,22 @@
+include advertise.repy
+
+
+def main():
+  
+  
+  nodes = advertise_lookup("ERICTEST1",lookuptype=['central'])
+
+  nodes2 = advertise_lookup("ERICTEST2",lookuptype=['central'])
+
+  print 'NODES1 ADVERTISING'
+  for node in nodes:
+    print '  '+str(node)
+
+  print 'NODES2 ADVERTISING'
+  for node in nodes2:
+    print '  '+str(node)
+
+
+
+if callfunc == 'initialize':
+  main()

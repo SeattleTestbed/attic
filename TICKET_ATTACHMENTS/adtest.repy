@@ -1,0 +1,27 @@
+ 
+include advertise.repy
+
+
+def put(key,value):
+  while True:
+    sleep(20)
+    try:
+      advertise_announce(key,value,100)
+    except Exception,e:
+      print str(getruntime()-start)+' '+str(e)
+    else:
+      print str(getruntime()-start)+ ' advertised'
+      
+
+
+
+if callfunc == 'initialize':
+
+  start = getruntime()
+  ip = getmyip()
+  
+  key1 = 'ERICTEST1'
+  key2 = 'ERICTEST2'
+
+  settimer(10,put,[key1,ip])
+  put(key2,ip)

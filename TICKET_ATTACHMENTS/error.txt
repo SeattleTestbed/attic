@@ -1,0 +1,461 @@
+python run_tests.py
+Running test rn_restrictions.loose_testtoomanymess.py           [FAILED]
+Running test rn_restrictions.loose_testtoomanyconn.py           [FAILED]
+Running test rn_restrictions.loose_testnetmessportreuse.py      [FAILED]
+Running test rn_restrictions.veryslownetsend_testloopsend.py    [FAILED]
+Running test rn_restrictions.veryslownetsend_testrecv.py        [FAILED]
+Running test rn_restrictions.veryslowlooprecv_testsend.py       [FAILED]
+Running test rz_restrictions.fewevents_testtoomanymess.py       [FAILED]
+Running test rz_restrictions.veryslowloopsend_testsend.py       [ PASS ]
+Running test rz_restrictions.veryslowwrite_test.py              [FAILED]
+Running test rz_restrictions.veryslownetrecv_testrecv.py        [FAILED]
+Running test rz_restrictions.fewevents_testtoomanyconn.py       [FAILED]
+Running test rz_restrictions.loose_testtoomanyopenfiles.py      [ PASS ]
+Running test rz_restrictions.slowrandom_test.py                 [FAILED]
+Running test rz_restrictions.loose_testnetmesstoomany.py        [FAILED]
+Running test rz_restrictions.fewevents_selectorstops.py         [FAILED]
+Running test rz_restrictions.veryslowlooprecv_testrecv.py       [FAILED]
+Running test rz_restrictions.loose_testnetconntoomany.py        [FAILED]
+Running test rz_restrictions.comment_test.py                    [ PASS ]
+Running test rz_restrictions.loose_testnetmixtoomany.py         [FAILED]
+Running test rz_restrictions.veryslowread_test.py               [FAILED]
+Running test rz_restrictions.veryslownetsend_testsend.py        [ PASS ]
+Running test rz_restrictions.callwithands_test.py               [ PASS ]
+Running test rz_restrictions.loose_testnetwaitstopwait.py       [ PASS ]
+Running test rz_restrictions.loose_testremovefilepy.py          [ PASS ]
+Running test rb_restrictions.slowlog_testprint.py               [ PASS ]
+Running test re_restrictions.badcallruleargis_test.py           [ PASS ]
+Running test re_restrictions.badcallname_test.py                [ PASS ]
+Running test re_restrictions.badcallruleargval_test.py          [ PASS ]
+Running test re_restrictions.badcallrulenoargis_test.py         [ PASS ]
+Running test re_restrictions.commentedout_test.py               [ PASS ]
+Running test re_restrictions.fewevents_testlotsoftimers.py      [ PASS ]
+Running test re_restrictions.callorder_test.py                  [ PASS ]
+Running test re_restrictions.dup_test.py                        [ PASS ]
+Running test re_restrictions.empty_testrequiredresources.py     [ PASS ]
+Running test re_restrictions.severalports_testnetconntoomany.py [ PASS ]
+Running test re_restrictions.badresource_test.py                [ PASS ]
+Running test re_restrictions.badcallrulenoargval_test.py        [ PASS ]
+Running test re_restrictions.callomit_test.py                   [ PASS ]
+Running test re_restrictions.severalports_testnetmixtoomany.py  [ PASS ]
+Running test re_restrictions.badresource2_test.py               [ PASS ]
+Running test re_restrictions.tinydisk_testdiskquota.py          [ PASS ]
+Running test re_restrictions.nolog_test.py                      [ PASS ]
+Running test re_restrictions.severalports_testnetmesstoomany.py [ PASS ]
+Running test re_restrictions.badcallrulenoargnum_test.py        [ PASS ]
+Running test re_restrictions.badresourceval_test.py             [ PASS ]
+Running test re_restrictions.badcallruleargnum_test.py          [ PASS ]
+Running test re_restrictions.missing_test.py                    [ PASS ]
+Running test re_restrictions.firsttoken_test.py                 [ PASS ]
+Running test rl_restrictions.looselog_testlogging4.py           [FAILED]
+Running test s_testseek.py                                      [ PASS ]
+Running test s_testopen.py                                      [ PASS ]
+Running test s_testwrite2.py                                    [ PASS ]
+Running test s_testreadlines.py                                 [ PASS ]
+Running test s_testclose.py                                     [ PASS ]
+Running test s_testnext.py                                      [ PASS ]
+Running test s_testfileinit.py                                  [ PASS ]
+Running test s_testflush.py                                     [ PASS ]
+Running test s_testread.py                                      [ PASS ]
+Running test s_testwritelines.py                                [ PASS ]
+Running test s_testwrite.py                                     [ PASS ]
+Running test s_testreadline.py                                  [ PASS ]
+Running test n_testexit.py                                      [ PASS ]
+Running test n_testtimerconcurrency.py                          [FAILED]
+Running test n_testmycontext2.py                                [FAILED]
+Running test n_selectorstops.py                                 [FAILED]
+Running test n_testinit.py                                      [ PASS ]
+Running test n_testlotsoftimers.py                              [FAILED]
+Running test n_testtimerargs.py                                 [FAILED]
+Running test n_testtimersettingtimer.py                         [FAILED]
+Running test n_testprint.py                                     [ PASS ]
+Running test n_testnetsendrecvmess.py                           [FAILED]
+Running test n_testtryfinally.py                                [ PASS ]
+Running test n_slowreadtest.py                                  [FAILED]
+Running test n_testmycontext.py                                 [FAILED]
+Running test n_testinterruptsockets.py                          [FAILED]
+Running test n_slowwritetest.py                                 [FAILED]
+Running test n_testtimer.py                                     [FAILED]
+Running test n_testwaitingfortimers.py                          [FAILED]
+Running test n_testsleep3.py                                    [FAILED]
+Running test n_testtimermoreargs.py                             [FAILED]
+Running test n_randomratetest.py                                [FAILED]
+Running test n_testloopbacksendrecvmess.py                      [FAILED]
+Running test z_testnetconnclose.py                              [FAILED]
+Running test z_testnetconndupgoodhandle.py                      [FAILED]
+Running test z_testlistdir2.py                                  [ PASS ]
+Running test z_testrandom.py                                    [ PASS ]
+Running test z_testcanceltimer.py                               [FAILED]
+Running test z_testsleep2.py                                    [FAILED]
+Running test z_testnetmessdup.py                                [FAILED]
+Running test z_testlistdir.py                                   [ PASS ]
+Running test z_testnetmessdupgoodhandle.py                      [FAILED]
+Running test z_testconcurrentopenconns.py                       [FAILED]
+Running test z_testcomment.py                                   [ PASS ]
+Running test z_testnetbothdup.py                                [FAILED]
+Running test z_testraise.py                                     [ PASS ]
+Running test z_testgetruntime2.py                               [FAILED]
+Running test z_testgetruntime.py                                [ PASS ]
+Running test z_testinterruptsockets.py                          [FAILED]
+Running test z_testlock2.py                                     [FAILED]
+Running test z_testnetconndup2.py                               [FAILED]
+Running test z_testexitall2.py                                  [ PASS ]
+Running test z_testgetruntime3.py                               [ PASS ]
+Running test z_testloopbackconn.py                              [FAILED]
+Running test z_testlock.py                                      [FAILED]
+Running test z_testexit.py                                      [ PASS ]
+Running test z_testmanyopenfileswithcloses.py                   [ PASS ]
+Running test z_testgethostbyname_ex.py                          [ PASS ]
+Running test z_testgetmyip.py                                   [ PASS ]
+Running test z_testsleep.py                                     [ PASS ]
+Running test z_testchrord.py                                    [ PASS ]
+Running test z_testexitall.py                                   [ PASS ]
+Running test z_testopenpy.py                                    [ PASS ]
+Running test z_testtryexcept.py                                 [ PASS ]
+Running test z_testloopbind.py                                  [FAILED]
+Running test z_teststringwith__.py                              [ PASS ]
+Running test z_testnetconndup.py                                [FAILED]
+Running test z_testnetconn.py                                   [FAILED]
+Running test z_teststopcomm2.py                                 [FAILED]
+Running test z_testremovefile.py                                [ PASS ]
+Running test z_teststopcomm.py                                  [FAILED]
+Running test e_testnetconntoomany.py                            [ PASS ]
+Running test e_testsetattrsys.py                                [ PASS ]
+Running test e_global.py                                        [ PASS ]
+Running test e_testmemoryquota.py                               [ PASS ]
+Running test e_testtoomanyopenfiles.py                          [ PASS ]
+Running test e_testopendot.py                                   [ PASS ]
+Running test e_testmemoryallocwithexceptions.py                 [ PASS ]
+Running test e_testremovefilefnf.py                             [ PASS ]
+Running test e_testopendotdot.py                                [ PASS ]
+Running test e_testopenparentdir.py                             [ PASS ]
+Running test e_exec.py                                          [ PASS ]
+Running test e_testnullip.py                                    [ PASS ]
+Running test e_testzeroip.py                                    [ PASS ]
+Running test e_testremoveopenfile.py                            [ PASS ]
+Running test e_eval.py                                          [ PASS ]
+Running test e_import.py                                        [ PASS ]
+Running test e_testopenoddchars.py                              [ PASS ]
+Running test l_testlogging3.py                                  [ PASS ]
+Running test l_testlogging2.py                                  [ PASS ]
+Running test l_testlogging.py                                   [ PASS ]
+Running test py_z_test_callfunc.py                              [ PASS ]
+Running test py_z_test_recursion.py                             [ PASS ]
+Running test py_z_test_callargs2.py                             [ PASS ]
+Running test py_z_test_callargs.py                              [ PASS ]
+Running test py_z_test_callargs_escaping.py                     [ PASS ]
+Running test py_z_test_mycontext_shared.py                      [ PASS ]
+Running test py_z_test_name.py                                  [ PASS ]
+Running test py_z_test_mycontext_unique.py                      [ PASS ]
+Running test py_z_test_filechecks.py                            [ PASS ]
+Running test Stop Test 1                                        [FAILED]
+Running test Stop Test 2                                        [ PASS ]
+Running test Stop Test 3                                        [FAILED]
+96 tests passed, 56 tests failed
+rn_restrictions.loose_testtoomanymess.py
+out:If the event count is <=2, this is an error
+err:Disk use '11288167' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+rn_restrictions.loose_testtoomanyconn.py
+out:Should have exited before this connection was accepted
+err:Disk use '11292263' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+rn_restrictions.loose_testnetmessportreuse.py
+out:err:Seattle Traceback (most recent call last):
+  "rn_restrictions.loose_testnetmessportreuse.py", line 11, in <module>
+  "rn_restrictions.loose_testnetmessportreuse.py", line 1, in bind
+Exception (with class 'socket.error'): [Errno 98] Address already in use
+Terminated
+
+
+rn_restrictions.veryslownetsend_testloopsend.py
+out:127.0.0.1 52172 Hello, this is too long for such a short time MainThread:1
+
+err:Disk use '11288167' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+rn_restrictions.veryslownetsend_testrecv.py
+out:127.0.0.1 39417 Hello, this is too long for such a short time MainThread:1
+
+err:Disk use '11292263' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+rn_restrictions.veryslowlooprecv_testsend.py
+out:127.0.0.1hi 
+60075 hi MainThread:1
+err:Disk use '11292263' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+rz_restrictions.fewevents_testtoomanymess.py
+out:err:Disk use '11292263' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+rz_restrictions.veryslowwrite_test.py
+out:err:Disk use '11288167' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+rz_restrictions.veryslownetrecv_testrecv.py
+out:err:Disk use '11288167' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+rz_restrictions.fewevents_testtoomanyconn.py
+out:err:Disk use '11292263' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+rz_restrictions.slowrandom_test.py
+out:err:Disk use '11292263' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+rz_restrictions.loose_testnetmesstoomany.py
+out:err:Seattle Traceback (most recent call last):
+  "rz_restrictions.loose_testnetmesstoomany.py", line 13, in <module>
+  "rz_restrictions.loose_testnetmesstoomany.py", line 1, in bind
+Exception (with class 'socket.error'): [Errno 98] Address already in use
+Terminated
+
+
+rz_restrictions.fewevents_selectorstops.py
+out:err:Disk use '11292263' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+rz_restrictions.veryslowlooprecv_testrecv.py
+out:err:Disk use '11292263' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+rz_restrictions.loose_testnetconntoomany.py
+out:err:Disk use '11292263' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+rz_restrictions.loose_testnetmixtoomany.py
+out:err:Seattle Traceback (most recent call last):
+  "rz_restrictions.loose_testnetmixtoomany.py", line 19, in <module>
+  "rz_restrictions.loose_testnetmixtoomany.py", line 1, in bind
+Exception (with class 'socket.error'): [Errno 98] Address already in use
+Terminated
+
+
+rz_restrictions.veryslowread_test.py
+out:err:Disk use '11288167' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+rl_restrictions.looselog_testlogging4.py
+Had output or errput! out:err:Disk use '11314764' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_testtimerconcurrency.py
+out:err:Disk use '11318985' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_testmycontext2.py
+out:err:Disk use '11318985' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_selectorstops.py
+out:err:Disk use '11314889' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_testlotsoftimers.py
+out:err:Disk use '11314889' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_testtimerargs.py
+out:Hello!
+err:Disk use '11318985' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_testtimersettingtimer.py
+out:err:Disk use '11314889' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_testnetsendrecvmess.py
+out:172.16.75.69 35252 hi MainThread:1
+err:Disk use '11318985' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_slowreadtest.py
+out:Never going to see this!
+err:Disk use '11318985' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_testmycontext.py
+out:err:Disk use '11318985' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_testinterruptsockets.py
+out:err:Disk use '11318985' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_slowwritetest.py
+out:Never gets here
+err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_testtimer.py
+out:OK!
+err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_testwaitingfortimers.py
+out:err:Disk use '11318982' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_testsleep3.py
+out:Hi
+err:Disk use '11318982' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_testtimermoreargs.py
+out:hi 7 None 3.2
+err:Disk use '11318982' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_randomratetest.py
+out:This should be reached when there aren't time restrictions
+err:Disk use '11318982' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+n_testloopbacksendrecvmess.py
+out:127.0.0.1 47050 hi MainThread:1
+err:Disk use '11318982' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testnetconnclose.py
+out:err:Disk use '11318982' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testnetconndupgoodhandle.py
+out:err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testcanceltimer.py
+out:err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testsleep2.py
+out:err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testnetmessdup.py
+out:err:Disk use '11310790' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testnetmessdupgoodhandle.py
+out:err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testconcurrentopenconns.py
+out:err:Disk use '11310790' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testnetbothdup.py
+out:err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testgetruntime2.py
+out:err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testinterruptsockets.py
+out:err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testlock2.py
+out:err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testnetconndup2.py
+out:err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testloopbackconn.py
+out:err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testlock.py
+out:err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testloopbind.py
+out:err:Disk use '11310790' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testnetconndup.py
+out:err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_testnetconn.py
+out:err:Disk use '11310790' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_teststopcomm2.py
+out:err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+z_teststopcomm.py
+out:err:Disk use '11314886' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+Stop Test 1
+output or errput! out:err:Disk use '11376806' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+Stop Test 3
+output or errput! out:err:Disk use '11376806' over limit '10000000.0'. Impolitely killing child!
+Terminated
+
+
+

@@ -1,0 +1,6 @@
+# Repy V2 Security Layer Sample - Function - Test
+# slacker_sleep_test.repy
+
+log("Start")
+sleep(0.000000001)
+log("Finish")

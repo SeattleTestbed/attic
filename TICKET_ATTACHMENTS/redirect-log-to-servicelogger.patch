@@ -1,0 +1,10 @@
+110a111,119
+> 
+> # Overwrite log() so that Affix debug messages end up in the nodemanager's 
+> # log file (nodemanager.old or .new in the service vessel directory)
+> def log(*args):
+>   chunks = []
+>   for arg in args:
+>     chunks.append(str(arg))
+>   servicelogger.log(" ".join(chunks))
+> 

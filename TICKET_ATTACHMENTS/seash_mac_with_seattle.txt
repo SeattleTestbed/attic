@@ -1,0 +1,108 @@
+Tests-Mac-mini:seashtest leonwlaw$ python utf.py -m seash
+Testing module: seash
+Now starting subprocess: ut_seash_subprocess.py
+Generating key...
+Writing config file...
+Writing vessel dictionary...
+	Running: ut_seash_fileoperations.py                         [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Traceback (most recent call last):
+  File "ut_seash_fileoperations.py", line 35, in <module>
+    seash.command_loop(command_list)
+  File "/Users/leonwlaw/seashtest/seash.py", line 158, in command_loop
+    cmd_input = seash_dictionary.parse_command(command_strings)
+  File "/Users/leonwlaw/seashtest/seash_dictionary.py", line 1399, in parse_command
+    raise seash_exceptions.ParseError("Target does not exist")
+seash_exceptions.ParseError: Target does not exist
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+Standard out :
+..............................Produced..............................
+
+..............................Expected..............................
+Failure 'Node Manager error 'Error, File Not Found'' downloading from
+--------------------------------------------------------------------------------
+	Running: ut_seash_genkeys.py                                [ PASS ]
+	Running: ut_seash_help.py                                   [ PASS ]
+	Running: ut_seash_loadkeys.py                               [ PASS ]
+	Running: ut_seash_parseerror.py                             [ PASS ]
+	Running: ut_seash_parsing.py                                [ PASS ]
+	Running: ut_seash_savestate.py                              [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Traceback (most recent call last):
+  File "ut_seash_savestate.py", line 18, in <module>
+    seash.command_loop(command_list)
+  File "/Users/leonwlaw/seashtest/seash.py", line 158, in command_loop
+    cmd_input = seash_dictionary.parse_command(command_strings)
+  File "/Users/leonwlaw/seashtest/seash_dictionary.py", line 1399, in parse_command
+    raise seash_exceptions.ParseError("Target does not exist")
+seash_exceptions.ParseError: Target does not exist
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_seash_setandshow.py                             [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Traceback (most recent call last):
+  File "ut_seash_setandshow.py", line 49, in <module>
+    seash.command_loop(command_list)
+  File "/Users/leonwlaw/seashtest/seash.py", line 158, in command_loop
+    cmd_input = seash_dictionary.parse_command(command_strings)
+  File "/Users/leonwlaw/seashtest/seash_dictionary.py", line 1399, in parse_command
+    raise seash_exceptions.ParseError("Target does not exist")
+seash_exceptions.ParseError: Target does not exist
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_seash_splitjoin.py                              [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Traceback (most recent call last):
+  File "ut_seash_splitjoin.py", line 21, in <module>
+    seash.command_loop(command_list)
+  File "/Users/leonwlaw/seashtest/seash.py", line 158, in command_loop
+    cmd_input = seash_dictionary.parse_command(command_strings)
+  File "/Users/leonwlaw/seashtest/seash_dictionary.py", line 1399, in parse_command
+    raise seash_exceptions.ParseError("Target does not exist")
+seash_exceptions.ParseError: Target does not exist
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+	Running: ut_seash_targetmanipulation.py                     [ FAIL ]
+--------------------------------------------------------------------------------
+Standard error :
+..............................Produced..............................
+Traceback (most recent call last):
+  File "ut_seash_targetmanipulation.py", line 23, in <module>
+    seash.command_loop(command_list)
+  File "/Users/leonwlaw/seashtest/seash.py", line 158, in command_loop
+    cmd_input = seash_dictionary.parse_command(command_strings)
+  File "/Users/leonwlaw/seashtest/seash_dictionary.py", line 1399, in parse_command
+    raise seash_exceptions.ParseError("Target does not exist")
+seash_exceptions.ParseError: Target does not exist
+
+..............................Expected..............................
+None
+--------------------------------------------------------------------------------
+Now stopping subprocess: ut_seash_subprocess.py
+Removing: v1
+Removing: v10
+Removing: v2
+Removing: v3
+Removing: v4
+Removing: v5
+Removing: v6
+Removing: v7
+Removing: v8
+Removing: v9

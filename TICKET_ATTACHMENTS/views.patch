@@ -1,0 +1,21 @@
+Index: views.py
+===================================================================
+--- views.py	(revision 5150)
++++ views.py	(working copy)
+@@ -145,6 +145,7 @@
+ 
+ 
+ 
++@sensitive_post_parameters('password1')
+ def register(request):
+   try:
+     # check to see if a user is already logged in. if so, redirect them to profile.
+@@ -243,7 +244,7 @@
+   
+   
+   
+-
++@sensitive_post_parameters('password')
+ def login(request):
+   try:
+     # check to see if a user is already logged in. if so, redirect them to profile.

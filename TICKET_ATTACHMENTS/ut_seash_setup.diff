@@ -1,0 +1,28 @@
+--- D:\Dropbox\Seattle\seattle\trunk\seash\tests\ut_seash_setup.py	Mon Sep 16 22:43:17 2013
++++ D:\Dropbox\Seattle\seattle\branches\repy_v2\seash\tests\ut_seash_setup.py	Fri Feb 14 18:02:33 2014
+@@ -6,6 +6,10 @@
+ Also disables all modules so that individual module tests can assume a clean
+ module system before running.
+ """
++
++# Needed so that the built-in type function is restored to the python
++# abc library
++import seash_dictionary
+ 
+ # Disable all modules.
+ # We pass in an empty dict because we only care that the .disabled file gets 
+@@ -18,9 +22,11 @@
+     continue
+   seash_modules.disable({}, module)
+ 
+-import repyhelper
+-repyhelper.translate_and_import('rsa.repy')
+-repyhelper.translate_and_import('advertise.repy')
++from repyportability import *
++add_dy_support(locals())
++
++dy_import_module_symbols('rsa.repy')
++dy_import_module_symbols('advertise.repy')
+ 
+ for guestnum in xrange(4):
+   guestkey = rsa_file_to_publickey('guest'+str(guestnum)+'.publickey')
